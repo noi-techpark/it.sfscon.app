@@ -62,7 +62,7 @@
       "installation": "production"
     },
     "runtimeVersion": {
-      "policy": "sdkVersion"
+      "policy": "nativeVersion"
     }
   }
 }
