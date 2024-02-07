@@ -2,7 +2,6 @@ import {
   SET_TOAST_MESSAGE,
   SET_SHOW_LOADER,
   SET_HIDE_LOADER,
-  SET_LAST_VISITED_ROUTE,
 } from "../constants/UtilsConstants";
 
 const initialState = {

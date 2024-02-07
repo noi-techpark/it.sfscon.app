@@ -11,16 +11,7 @@ import {
   GET_RATING_FAIL,
   SET_RATING_SUCCESS,
   SET_RATING_FAIL,
-  SET_SESSION_MEASUREMENT,
-  SET_ASK_QUESTION,
-  GET_SESSION_QUESTIONS,
-  SET_SESSION_QUESTIONS,
   RESET_TRACKS_AND_DAY,
-  TOGGLE_QUESTION_LIKE,
-  COUNT_MESSAGES,
-  DELETE_MESSAGE,
-  GET_UPDATED_DATA,
-  SET_UPDATE_DATA_COUNTER,
 } from "../constants/AppConstants";
 
 import {
@@ -66,8 +57,6 @@ export const getSfsCon =
       const getConferenceById = await api.get(url, { params });
       const { data } = getConferenceById;
 
-      dispatch(setUpdateDataCounter(data.next_try_in_ms));
-
       if (!data?.conference) return;
 
       Object.keys(data?.conference?.db?.sessions).forEach((id) => {
@@ -102,7 +91,6 @@ export const setSelectedTracks = (tracks, defaultFilter) => (dispatch) => {
     tracks = [...tracks, defaultFilter];
   }
 
-  console.log("TRACKS", tracks);
   dispatch({ type: SET_SELECTED_TRACKS, payload: tracks });
 };
 
@@ -179,71 +167,6 @@ export const getRatings = (sessionId) => async (dispatch) => {
   }
 };
 
-export const getQuestions = (sessionId) => async (dispatch) => {
-  try {
-    const url = `/api/conferences/sessions/${sessionId}/messages`;
-    const response = await api.get(url, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
-    const { data } = response;
-    dispatch({ type: GET_SESSION_QUESTIONS, payload: data });
-  } catch (error) {
-    console.log("errror", error);
-  }
-};
-
-export const toggleQuestionLike = (messageId) => async (dispatch) => {
-  try {
-    const url = `/api/messenger/messages/${messageId}/like/toggle`;
-    await api.patch(url, {});
-
-    dispatch({ type: TOGGLE_QUESTION_LIKE });
-  } catch (error) {}
-};
-
-export const deleteMessage = (messageId) => async (dispatch) => {
-  try {
-    const url = `/api/messenger/messages/${messageId}`;
-    await api.delete(url);
-    dispatch({ type: DELETE_MESSAGE });
-    dispatch({
-      type: SET_TOAST_MESSAGE,
-      payload: {
-        message: "Message succesfully deleted",
-        type: "info",
-      },
-    });
-  } catch (error) {
-    dispatch({
-      type: SET_TOAST_MESSAGE,
-      payload: {
-        message: "Error deleting message",
-        type: "error",
-      },
-    });
-  }
-};
-
-export const countMessages = (sessionId) => async (dispatch) => {
-  try {
-    const url = `/api/conferences/sessions/${sessionId}/messages/count`;
-    const response = await api.get(url);
-
-    const {
-      data: { count, miliseconds_till_next_check },
-    } = response;
-
-    dispatch({
-      type: COUNT_MESSAGES,
-      payload: { count, miliseconds_till_next_check },
-    });
-  } catch (error) {}
-};
-
 export const resetTracksAndDaysSelected = () => (dispatch) => {
   dispatch({ type: RESET_TRACKS_AND_DAY });
-};
-
-export const setUpdateDataCounter = (next_try_in_ms) => (dispatch) => {
-  dispatch({ type: SET_UPDATE_DATA_COUNTER, payload: next_try_in_ms });
 };

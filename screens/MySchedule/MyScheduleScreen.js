@@ -7,7 +7,6 @@ import {
   Platform,
 } from "react-native";
 import WrapperComponent from "../../components/Wrapper/WrapperComponent";
-import { storageGetItem } from "../../tools/secureStore";
 import AuthorizedScreen from "../Authorized/AuthorizedScreen";
 import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
@@ -78,7 +77,6 @@ export default MyscheduleScreen = ({ navigation }) => {
             <Text bold stylesProp={styles.title}>
               My Schedule
             </Text>
-            {/* <DaysComponent /> */}
           </View>
           <View style={styles.scollViewContainer}>
             {Object.keys(schedules).length > 0 ? (

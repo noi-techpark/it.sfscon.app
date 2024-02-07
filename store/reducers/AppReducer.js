@@ -32,15 +32,6 @@ const initialState = {
   myRate: null,
   ratingAdded: 0,
   measurements: [],
-  questions: {},
-  questionAdded: 0,
-  questionLiked: 0,
-  count: 0,
-  forceReloadCounter: 0,
-  nextCheck: 2000,
-  updatedDataCounter: 0,
-  lastTimeUpdated: "2020-11-02 09:59:08.792982",
-  nextTryInMs: null,
 };
 
 export default AppReducer = (state = initialState, action) => {
@@ -49,13 +40,6 @@ export default AppReducer = (state = initialState, action) => {
       return {
         ...state,
         theme: action.payload,
-      };
-
-    case SET_UPDATE_DATA_COUNTER:
-      return {
-        ...state,
-        nextTryInMs: action.payload,
-        updatedDataCounter: state.updatedDataCounter + 1,
       };
 
     case GET_CONFERENCE_SUCCESS:
@@ -128,24 +112,6 @@ export default AppReducer = (state = initialState, action) => {
         measurements: action.payload,
       };
 
-    case SET_SESSION_QUESTIONS:
-      return {
-        ...state,
-        questionAdded: state.questionAdded + 1,
-      };
-
-    case GET_SESSION_QUESTIONS:
-      return {
-        ...state,
-        questions: action.payload,
-      };
-
-    case TOGGLE_QUESTION_LIKE:
-      return {
-        ...state,
-        questionLiked: state.questionLiked + 1,
-      };
-
     case RESET_TRACKS_AND_DAY:
       const defaultDay = state.db?.conference?.idx.days[0];
       return {
@@ -155,15 +121,6 @@ export default AppReducer = (state = initialState, action) => {
         questions: [],
         questionAdded: 0,
         questionLiked: 0,
-      };
-
-    case COUNT_MESSAGES:
-      const { count, miliseconds_till_next_check } = action.payload;
-      return {
-        ...state,
-        count,
-        nextCheck: miliseconds_till_next_check,
-        forceReloadCounter: state.forceReloadCounter + 1,
       };
 
     default:

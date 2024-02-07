@@ -9,7 +9,6 @@ import {
   MaterialCommunityIcons,
   Feather,
 } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 import WebViewComponent from "../../components/WebViewComponent";
 import Text from "../../components/TextComponent";
@@ -18,7 +17,6 @@ export default AuthorDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const author = route.params.author;
-  const isFocused = useIsFocused();
 
   const navigateBack = () => {
     navigation.goBack();

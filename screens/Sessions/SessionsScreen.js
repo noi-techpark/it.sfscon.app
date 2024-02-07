@@ -34,19 +34,6 @@ export default SessionsComponent = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedTimeIndex, setSelectedTimeIndex] = useState(0);
   const [sessions, setSessions] = useState({});
-  const [sessionMeasurement, setSessionMeasurement] = useState([]);
-  const [hours, setHours] = useState([
-    "08",
-    "09",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-  ]);
 
   const isEventFinished = (time) => {
     const currentTime = moment(new Date()).format("HH:mm");

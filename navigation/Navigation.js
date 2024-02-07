@@ -19,11 +19,6 @@ export default Navigation = () => {
   const dispatch = useDispatch();
   const loggedInUser = useSelector((state) => state.auth.loggedInUser);
   const loader = useSelector((state) => state.utils.loader);
-  const lastTimeUpdated = useSelector((state) => state.app.lastTimeUpdated);
-  const updatedDataCounter = useSelector(
-    (state) => state.app.updatedDataCounter
-  );
-  const nextTryInMs = useSelector((state) => state.app.nextTryInMs);
   const Stack = createNativeStackNavigator();
 
   const [isServerLoaded, setIsServerLoaded] = useState(false);
@@ -53,16 +48,8 @@ export default Navigation = () => {
   }, [isServerLoaded]);
 
   useEffect(() => {
-    if (isServerLoaded) {
-      if (updatedDataCounter) {
-        setTimeout(() => {
-          dispatch(getSfsCon(lastTimeUpdated, loggedInUser));
-        }, nextTryInMs || 120000);
-      } else {
-        dispatch(getSfsCon(lastTimeUpdated, loggedInUser));
-      }
-    }
-  }, [updatedDataCounter, isServerLoaded]);
+    dispatch(getSfsCon(loggedInUser));
+  }, [isServerLoaded]);
 
   if (loader) {
     return <LoaderComponent renderWithTabBarNav />;
