@@ -27,7 +27,7 @@ export default AuthorDetailsScreen = ({ route, navigation }) => {
       const result = await Share.share({
         url: link,
         title: link,
-        message: link,
+        message: "SFSCon",
       });
 
       if (result.action === Share.sharedAction) {

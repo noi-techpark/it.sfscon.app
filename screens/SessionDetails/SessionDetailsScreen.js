@@ -61,8 +61,8 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
 
   const onShare = async (link) => {
     try {
-      const result = await Share.share({
-        message: link,
+      await Share.share({
+        message: "SFSCon",
         title: link,
         url: link,
       });
