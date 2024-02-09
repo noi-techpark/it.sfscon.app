@@ -1,9 +1,9 @@
 node_modules/
 .env
 .expo/
-google-services.json
 dist/
 npm-debug.*
+google-services.json
 *.jks
 *.p8
 *.p12

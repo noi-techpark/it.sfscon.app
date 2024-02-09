@@ -1,3 +1,3 @@
-export const BUILD_VERSION = "4436810"
-export const APP_VERSION = "1.1.15";
-export const BUILD_DATE = "06 Nov 2023 19:21"
+export const BUILD_VERSION = "46cd184"
+export const APP_VERSION = "1.2.9";
+export const BUILD_DATE = "08 Feb 2024 15:04"

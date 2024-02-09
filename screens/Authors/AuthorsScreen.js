@@ -13,14 +13,12 @@ import { useSelector } from "react-redux";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorsScreenStyles";
 import { getTheme } from "../../tools/getTheme";
-import LoaderComponent from "../../components/AppLoader";
 import { Feather } from "@expo/vector-icons";
-import InputComponent from "../../components/UI/InputComponent";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
 
-export default AuthorsScreen = ({ route, navigation }) => {
+export default AuthorsScreen = ({ navigation }) => {
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const isFocused = useIsFocused();

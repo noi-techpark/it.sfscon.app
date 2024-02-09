@@ -16,9 +16,6 @@ const initialState = {
   error: null,
   regError: false,
   registeredUser: null,
-  isInsideTheApp: false,
-  profilePictureLoader: false,
-  disableButton: false,
 };
 
 export default AuthReducer = (state = initialState, action) => {
@@ -60,23 +57,6 @@ export default AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-      };
-
-    case SET_PROFILE_PICTURE:
-      return {
-        ...state,
-        profilePictureLoader: false,
-      };
-
-    case SET_PROFILE_PICTURE_LOADER:
-      return { ...state, profilePictureLoader: true };
-
-    case DELETE_ACCOUNT:
-      const { confirmation_key } = action.payload;
-      return {
-        ...state,
-        isInsideTheApp: false,
-        deleteAccountConfirmationKey: confirmation_key,
       };
 
     case LOGOUT:

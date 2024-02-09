@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { View, TouchableOpacity, Linking } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import getStyles from "./moreScreenStyles";
@@ -8,7 +8,6 @@ import { logout } from "../../store/actions/AuthActions";
 import { useDispatch, useSelector } from "react-redux";
 import Text from "../../components/TextComponent";
 import AppVersionComponent from "../../components/AppVersion/AppVersionComponent";
-import Link from "../../components/Link";
 
 export default MoreScreen = ({ navigation }) => {
   const theme = getTheme();
