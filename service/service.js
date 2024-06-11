@@ -8,7 +8,7 @@ axios.interceptors.request.use(
 
     const configData = {
       ...config,
-      baseURL: server || "https://m.opencon.dev",
+      baseURL: server || "https://webadmin.app.sfscon.testingmachine.eu",
     };
 
     if (!jwt) {

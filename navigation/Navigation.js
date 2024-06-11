@@ -28,7 +28,8 @@ export default Navigation = () => {
       const url = "https://sfscon.s3.eu-central-1.amazonaws.com/opencon.json";
       const response = await fetch(url);
       const data = await response.json();
-      await storageSetItem("server", data?.service_uri);
+      //await storageSetItem("server", data?.service_uri);
+      await storageSetItem("server", "https://webadmin.app.sfscon.testingmachine.eu");
     } catch (error) {
       console.log("ERROR", error);
     } finally {

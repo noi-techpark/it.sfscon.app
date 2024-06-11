@@ -5,9 +5,9 @@ const getServer = function () {
     Constants.manifest2?.extra?.expoClient?.extra?.installation;
   switch (installation) {
     case "test":
-      return "https://stage.opencon.dev";
+      return "https://webadmin.app.sfscon.testingmachine.eu";
     default:
-      return "https://m.opencon.dev";
+      return "https://webadmin.app.sfscon.testingmachine.eu";
   }
 };
 export const server = getServer();

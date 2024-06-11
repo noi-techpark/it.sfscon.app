@@ -2,7 +2,7 @@
   "expo": {
     "name": "sfscon",
     "scheme": "sfscon",
-    "slug": "sfscon",
+    "slug": "sfscon-app",
     "version": "1.1.12",
     "orientation": "portrait",
     "icon": "./assets/logo_blue.png",
@@ -46,7 +46,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "2c92c0e9-c32b-4b82-b024-9b6b97db085b"
+        "projectId": "b1f98b7c-8679-43a0-9596-46363cb697fd"
       },
       "installation": "test"
     },

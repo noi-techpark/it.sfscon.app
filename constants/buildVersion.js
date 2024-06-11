@@ -1,3 +1,3 @@
-export const BUILD_VERSION = "46cd184"
+export const BUILD_VERSION = "7f14e72"
 export const APP_VERSION = "1.2.9";
-export const BUILD_DATE = "08 Feb 2024 15:04"
+export const BUILD_DATE = "11 Jun 2024 13:38"
