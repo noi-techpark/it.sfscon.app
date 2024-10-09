@@ -29,7 +29,6 @@ import {
   setMySchedule,
   getRatings,
 } from "../../store/actions/AppActions";
-import AuthorizedScreen from "../Authorized/AuthorizedScreen";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -101,23 +100,14 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   return (
     <WrapperComponent>
       <ScrollView>
-        {showModal && !registeredUser?.id ? (
-          <Modal>
-            <AuthorizedScreen type={"modal"} setModal={setShowModal} />
-          </Modal>
-        ) : showModal && registeredUser?.id ? (
-          <>
-            {rating.length ? (
-              <RatingsComponent
-                myRate={myRate}
-                session={session.id}
-                showModal={showModal}
-                setShowModal={setShowModal}
-              />
-            ) : null}
-          </>
+        {rating.length ? (
+          <RatingsComponent
+            myRate={myRate}
+            session={session.id}
+            showModal={showModal}
+            setShowModal={setShowModal}
+          />
         ) : null}
-
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerTop}>

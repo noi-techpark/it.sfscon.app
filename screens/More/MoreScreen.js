@@ -4,7 +4,6 @@ import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import getStyles from "./moreScreenStyles";
 import { getTheme } from "../../tools/getTheme";
-import { logout } from "../../store/actions/AuthActions";
 import { useDispatch, useSelector } from "react-redux";
 import Text from "../../components/TextComponent";
 import AppVersionComponent from "../../components/AppVersion/AppVersionComponent";
@@ -62,23 +61,6 @@ export default MoreScreen = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
-
-        {registeredUser?.id ? (
-          <View style={styles.listItemContainer}>
-            <TouchableOpacity
-              style={styles.listItem}
-              onPress={() => dispatch(logout())}
-            >
-              <AntDesign name="logout" size={22} style={styles.itemIcon} />
-              <Text stylesProp={styles.itemText}>Logout</Text>
-              <Ionicons
-                name="chevron-forward"
-                size={22}
-                style={styles.itemSecondIcon}
-              />
-            </TouchableOpacity>
-          </View>
-        ) : null}
 
         <View style={styles.appVersion}>
           <AppVersionComponent />

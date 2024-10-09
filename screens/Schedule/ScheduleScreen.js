@@ -19,7 +19,6 @@ export default ScheduleScreen = ({ navigation }) => {
   const theme = getTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => getStyles(theme), [theme]);
-  const [showModal, setShowModal] = useState(false);
   const [showTracks, setShowTracks] = useState(false);
   const store = useSelector((state) => state?.app?.db?.conference?.db);
   const selectedTracks = useSelector((state) => state?.app?.selectedTracks);

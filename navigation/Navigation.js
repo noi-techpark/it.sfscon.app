@@ -3,14 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigation from "./BottomTabNavigation";
 import { useDispatch, useSelector } from "react-redux";
-import { checkIfTokenIsValid, getIdTenant } from "../store/actions/AuthActions";
 import { getSfsCon } from "../store/actions/AppActions";
-import { showLoader } from "../store/actions/UtilsActions";
 import ToasterComponent from "../components/ToasterComponent";
 import LoaderComponent from "../components/AppLoader";
 import { storageDeleteItem, storageSetItem } from "../tools/secureStore";
-import { getTheme } from "../tools/getTheme";
-import axios from "axios";
 import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
@@ -28,8 +24,12 @@ export default Navigation = () => {
       const url = "https://sfscon.s3.eu-central-1.amazonaws.com/opencon.json";
       const response = await fetch(url);
       const data = await response.json();
+      z`zzz~`;
       //await storageSetItem("server", data?.service_uri);
-      await storageSetItem("server", "https://webadmin.app.sfscon.testingmachine.eu");
+      await storageSetItem(
+        "server",
+        "https://webadmin.app.sfscon.testingmachine.eu"
+      );
     } catch (error) {
       console.log("ERROR", error);
     } finally {
@@ -41,12 +41,6 @@ export default Navigation = () => {
   useEffect(() => {
     getServerFromAmazon();
   }, []);
-
-  useEffect(() => {
-    if (isServerLoaded) {
-      dispatch(checkIfTokenIsValid());
-    }
-  }, [isServerLoaded]);
 
   useEffect(() => {
     dispatch(getSfsCon(loggedInUser));

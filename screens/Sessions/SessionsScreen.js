@@ -40,6 +40,7 @@ export default SessionsComponent = () => {
     const timeToCheck = moment(time).format("HH:mm");
     return timeToCheck < currentTime;
   };
+
   const filterSession = () => {
     if (selectedTracks && selectedTracks.length) {
       const filteredSessions = Object.keys(store?.sessions)
@@ -195,34 +196,32 @@ export default SessionsComponent = () => {
                   >
                     {room.name}
                   </Text>
-                  {registeredUser?.id ? (
-                    <>
-                      {item.bookmarkable ? (
-                        <View style={styles.bookmark}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              dispatch(setMySchedule(item.id));
-                            }}
-                            style={styles.bookmarkBtn}
-                          >
-                            {mySchedules.indexOf(item.id) !== -1 ? (
-                              <Ionicons
-                                name="bookmark"
-                                size={18}
-                                style={styles.bookmarkIcon}
-                              />
-                            ) : (
-                              <Ionicons
-                                name="bookmark-outline"
-                                size={18}
-                                style={styles.bookmarkIconSelected}
-                              />
-                            )}
-                          </TouchableOpacity>
-                        </View>
-                      ) : null}
-                    </>
-                  ) : null}
+                  <>
+                    {item.bookmarkable ? (
+                      <View style={styles.bookmark}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            dispatch(setMySchedule(item.id));
+                          }}
+                          style={styles.bookmarkBtn}
+                        >
+                          {mySchedules.indexOf(item.id) !== -1 ? (
+                            <Ionicons
+                              name="bookmark"
+                              size={18}
+                              style={styles.bookmarkIcon}
+                            />
+                          ) : (
+                            <Ionicons
+                              name="bookmark-outline"
+                              size={18}
+                              style={styles.bookmarkIconSelected}
+                            />
+                          )}
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
+                  </>
                 </View>
               </TouchableOpacity>
             </View>
