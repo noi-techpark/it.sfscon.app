@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { View, Text } from "react-native";
 import getStyles from "./appVersionComponentStyles";
 import { server } from "../../constants/api";
-import { BUILD_VERSION, BUILD_DATE } from "../../constants/buildVersion";
+import { BUILD_VERSION, BUILD_DATE } from "@env";
 import Constants from "expo-constants";
 import { getTheme } from "../../tools/getTheme";
 

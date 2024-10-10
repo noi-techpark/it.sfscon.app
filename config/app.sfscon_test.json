@@ -3,7 +3,7 @@
     "name": "sfscon",
     "scheme": "sfscon",
     "slug": "sfscon-app",
-    "version": "1.1.12",
+    "version": "1.3.1",
     "orientation": "portrait",
     "icon": "./assets/logo_blue.png",
     "userInterfaceStyle": "light",
@@ -22,12 +22,12 @@
         "NSPhotoLibraryUsageDescription": "Allow sfs-con application to access your Photo library, this will allow you to set/change profile picture from your phone's photo library.",
         "NSCameraUsageDescription": "Allow sfs-con application to access Camera, this will allow you to Scan QR codes and also to change a profile picture "
       },
-      "buildNumber": "1.1.12",
+      "buildNumber": "1.3.1",
       "supportsTablet": true,
-      "bundleIdentifier": "com.digitalcube.sfscon"
+      "bundleIdentifier": "com.digitalcube.sfs"
     },
     "android": {
-      "versionCode": 9,
+      "versionCode": 1,
       "permissions": [
         "android.permission.READ_INTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
@@ -39,7 +39,7 @@
         "foregroundImage": "./assets/logo_blue_adaptive.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.digitalcube.sfscon"
+      "package": "com.digitalcube.sfs"
     },
     "web": {
       "favicon": "./assets/favicon.png"

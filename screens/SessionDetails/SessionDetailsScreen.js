@@ -39,7 +39,6 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   const mySchedules = useSelector((state) => state.app.mySchedules);
   const ratingAdded = useSelector((state) => state.app.ratingAdded);
   const scheduleToggled = useSelector((state) => state.app.scheduleToggled);
-  const registeredUser = useSelector((state) => state.auth.registeredUser);
   const myRate = useSelector((state) => state.app.myRate);
 
   const [showModal, setShowModal] = useState(false);
@@ -118,26 +117,25 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                   style={styles.goBackIcon}
                 />
               </TouchableOpacity>
-              {registeredUser?.id && session?.bookmarkable ? (
-                <TouchableOpacity
-                  onPress={() => dispatch(setMySchedule(session.id))}
-                  style={styles.bookmarkBtn}
-                >
-                  {mySchedules.indexOf(session.id) !== -1 ? (
-                    <Ionicons
-                      name="bookmark"
-                      size={18}
-                      style={styles.bookmarkIcon}
-                    />
-                  ) : (
-                    <Ionicons
-                      name="bookmark-outline"
-                      size={18}
-                      style={styles.bookmarkIconSelected}
-                    />
-                  )}
-                </TouchableOpacity>
-              ) : null}
+
+              <TouchableOpacity
+                onPress={() => dispatch(setMySchedule(session.id))}
+                style={styles.bookmarkBtn}
+              >
+                {mySchedules.indexOf(session.id) !== -1 ? (
+                  <Ionicons
+                    name="bookmark"
+                    size={18}
+                    style={styles.bookmarkIcon}
+                  />
+                ) : (
+                  <Ionicons
+                    name="bookmark-outline"
+                    size={18}
+                    style={styles.bookmarkIconSelected}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
             <Text bold stylesProp={styles.title}>
               {session?.title}
