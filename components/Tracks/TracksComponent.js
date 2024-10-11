@@ -55,12 +55,7 @@ export default TracksComponent = ({
     }
   };
   return (
-    <Modal
-      style={styles.modal}
-      visible={showModal}
-      // transparent={true}
-      animationType={"fade"}
-    >
+    <Modal style={styles.modal} visible={showModal} animationType={"fade"}>
       <View
         style={{
           ...styles.container,
