@@ -28,18 +28,9 @@ export default LinksScreen = ({ navigation }) => {
     },
   ];
 
-  const goBack = () => {
-    navigation.navigate("MoreScreen");
-  };
-
   return (
     <WrapperComponent>
       <View style={styles.container}>
-        <HeaderComponent
-          renderWithButton
-          handleGoBack={goBack}
-          title={"Links"}
-        />
         <View style={styles.linksContainer}>
           {links.map(({ label, link, placeholder }, idx) => (
             <Link

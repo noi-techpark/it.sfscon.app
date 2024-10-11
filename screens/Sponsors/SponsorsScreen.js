@@ -18,14 +18,6 @@ export default SponsorsScreen = ({ route, navigation }) => {
   return (
     <WrapperComponent>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <HeaderComponent
-            handleGoBack={() => navigation.goBack()}
-            renderWithButton
-            title={"Our Supporters"}
-          />
-        </View>
-
         <ScrollView
           style={styles.sponsorsContainer}
           showsVerticalScrollIndicator={true}

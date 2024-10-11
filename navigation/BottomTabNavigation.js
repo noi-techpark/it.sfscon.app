@@ -1,10 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AuthorsNavigation from "./AuthorsNavigation";
 import ScheduleNavigation from "./ScheduleNavigation";
-import MoreNavigation from "./MoreNavigation";
 import MyScheduleNavigation from "./MyScheduleNavigation";
 import { getTheme } from "../tools/getTheme";
-import { Feather, EvilIcons } from "@expo/vector-icons";
+import { Feather, EvilIcons, Ionicons, AntDesign } from "@expo/vector-icons";
+import LinksScreen from "../screens/Links/LinksScreen";
+import SponsorsScreen from "../screens/Sponsors/SponsorsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -109,13 +110,13 @@ export default BottomTabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="More"
-        component={MoreNavigation}
+        name="Links"
+        component={LinksScreen}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
-              <EvilIcons
-                name="navicon"
+              <AntDesign
+                name="link"
                 size={18}
                 color={
                   focused
@@ -125,7 +126,18 @@ export default BottomTabNavigation = () => {
               />
             );
           },
-          tabBarLabel: "More",
+          tabBarLabel: "Links",
+        }}
+      />
+
+      <Tab.Screen
+        name="Sponsors"
+        component={SponsorsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => {
+            return <Ionicons name="chevron-forward" size={18} />;
+          },
+          tabBarLabel: "Sponsors",
         }}
       />
     </Tab.Navigator>

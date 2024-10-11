@@ -22,9 +22,7 @@
       "image": "./assets/splash_screen.png",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "infoPlist": {
         "NSPhotoLibraryAddUsageDescription": "Allow sfs-con application to access your Photo library, this will allow you to set/change profile picture from your phone's photo library.",
@@ -48,7 +46,6 @@
         "foregroundImage": "./assets/logo_blue_adaptive.png",
         "backgroundColor": "#FFFFFF"
       },
-      "googleServicesFile": "./google-services.json",
       "package": "com.digitalcube.sfs"
     },
     "web": {
