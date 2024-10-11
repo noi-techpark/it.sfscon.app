@@ -8,11 +8,10 @@ const getStyles = (theme) => {
     },
 
     header: {
-      paddingVertical: 30,
-      minHeight: 100,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      paddingBottom: 24,
     },
 
     headerTitle: {
@@ -22,8 +21,9 @@ const getStyles = (theme) => {
     },
 
     searchInput: {
+      justifyContent: "center",
       borderRadius: 15,
-      paddingVertical: 10,
+      paddingVertical: 8,
       paddingLeft: 40,
       paddingRight: 15,
       flex: 1,

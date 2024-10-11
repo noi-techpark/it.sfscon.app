@@ -6,10 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSfsCon } from "../store/actions/AppActions";
 import ToasterComponent from "../components/ToasterComponent";
 import LoaderComponent from "../components/AppLoader";
-import { storageDeleteItem, storageSetItem } from "../tools/secureStore";
+import { storageSetItem } from "../tools/secureStore";
 import { API_URL } from "@env";
-import { getTheme } from "../tools/getTheme";
-import axios from "axios";
 import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
@@ -22,11 +20,9 @@ export default Navigation = () => {
 
   const [isServerLoaded, setIsServerLoaded] = useState(false);
 
-  const getServerFromAmazon = async () => {
+  const setServerToStore = async () => {
     try {
       const url = API_URL;
-      const response = await fetch(url);
-      const data = await response.json();
       await storageSetItem("server", url);
     } catch (error) {
       console.log("ERROR", error);
@@ -37,11 +33,13 @@ export default Navigation = () => {
   };
 
   useEffect(() => {
-    getServerFromAmazon();
+    setServerToStore();
   }, []);
 
   useEffect(() => {
-    dispatch(getSfsCon(loggedInUser));
+    if (isServerLoaded) {
+      dispatch(getSfsCon());
+    }
   }, [isServerLoaded]);
 
   if (loader) {

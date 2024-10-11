@@ -4,11 +4,12 @@ import axios from "axios";
 axios.interceptors.request.use(
   async (config) => {
     const server = await storageGetItem("server");
+    console.log("STA JE SERVER", server);
     const jwt = await storageGetItem("jwt");
 
     const configData = {
       ...config,
-      baseURL: server || "https://webadmin.app.sfscon.testingmachine.eu",
+      baseURL: server,
     };
 
     if (!jwt) {

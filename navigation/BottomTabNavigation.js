@@ -116,13 +116,13 @@ export default BottomTabNavigation = () => {
           tabBarIcon: ({ focused }) => {
             return (
               <AntDesign
-                name="link"
-                size={18}
                 color={
                   focused
                     ? theme.bottomTabNavActive
                     : theme.bottomTabNavInactive
                 }
+                name="link"
+                size={18}
               />
             );
           },
@@ -131,13 +131,23 @@ export default BottomTabNavigation = () => {
       />
 
       <Tab.Screen
-        name="Sponsors"
+        name="Supporters"
         component={SponsorsScreen}
         options={{
           tabBarIcon: ({ focused }) => {
-            return <Ionicons name="chevron-forward" size={18} />;
+            return (
+              <AntDesign
+                color={
+                  focused
+                    ? theme.bottomTabNavActive
+                    : theme.bottomTabNavInactive
+                }
+                name="staro"
+                size={18}
+              />
+            );
           },
-          tabBarLabel: "Sponsors",
+          tabBarLabel: "Supporters",
         }}
       />
     </Tab.Navigator>

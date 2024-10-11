@@ -3,16 +3,25 @@ import { StyleSheet } from "react-native";
 const getStyles = (theme) => {
   return StyleSheet.create({
     header: {
-      marginTop: 25,
       marginBottom: 18,
       marginLeft: 20,
+    },
+
+    headerTop: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 10,
+    },
+
+    searchContainer: {
+      marginRight: 20,
     },
 
     headerTitle: {
       fontSize: 26,
       fontWeight: "800",
       color: theme.title,
-      marginBottom: 10,
     },
 
     filterContainer: {

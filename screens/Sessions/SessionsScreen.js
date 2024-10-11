@@ -25,7 +25,6 @@ export default SessionsComponent = () => {
   const selectedTracks = useSelector((state) => state.app.selectedTracks);
   const mySchedules = useSelector((state) => state.app.mySchedules);
   const scheduleToggled = useSelector((state) => state.app.scheduleToggled);
-  const registeredUser = useSelector((state) => state?.auth?.registeredUser);
 
   const navigation = useNavigation();
   const scrollRef = useRef();
@@ -35,12 +34,7 @@ export default SessionsComponent = () => {
   const [selectedTimeIndex, setSelectedTimeIndex] = useState(0);
   const [sessions, setSessions] = useState({});
 
-  const isEventFinished = (time) => {
-    const currentTime = moment(new Date()).format("HH:mm");
-    const timeToCheck = moment(time).format("HH:mm");
-    return timeToCheck < currentTime;
-  };
-
+ 
   const filterSession = () => {
     if (selectedTracks && selectedTracks.length) {
       const filteredSessions = Object.keys(store?.sessions)

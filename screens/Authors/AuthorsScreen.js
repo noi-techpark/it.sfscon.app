@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorsScreenStyles";
 import { getTheme } from "../../tools/getTheme";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
@@ -82,9 +82,9 @@ export default AuthorsScreen = ({ navigation }) => {
                   style={styles.searchInput}
                 />
 
-                <Feather
-                  name="search"
-                  size={24}
+                <AntDesign
+                  name="search1"
+                  size={22}
                   style={styles.searchInputIcon}
                 />
 
@@ -112,7 +112,11 @@ export default AuthorsScreen = ({ navigation }) => {
                       : styles.searchBtn
                   }
                 >
-                  <Feather name="search" size={24} style={styles.searchIcon} />
+                  <AntDesign
+                    name="search1"
+                    size={22}
+                    style={styles.searchIcon}
+                  />
                 </TouchableOpacity>
               )}
             </>

@@ -32,29 +32,23 @@ export const setAppTheme = (theme) => (dispatch) => {
 };
 
 export const getSfsCon =
-  (last_update = null, loggedInUser = null) =>
+  (last_update = null) =>
   async (dispatch) => {
     try {
-      const conferenceId = await api.get(
-        `/api/conferences/acronym/sfscon-latest`
-      );
-      const {
-        data: { id },
-      } = conferenceId;
-
-      await storageSetItem("conferenceId", id);
+      const conferenceId = "cc995b1b-bdc3-4395-a4b9-dd4dc96fd0b1";
 
       const params = {
         app_version: APP_VERSION,
         device: Platform.OS,
-        id_user: loggedInUser?.id,
       };
+
       if (last_update) {
         params["last_update"] = last_update;
       }
-      const url = `/api/conferences/${id}`;
 
-      const getConferenceById = await api.get(url, { params });
+      const url = `/api/conferences/${conferenceId}`;
+
+      const getConferenceById = await api.get(url);
       const { data } = getConferenceById;
 
       if (!data?.conference) return;

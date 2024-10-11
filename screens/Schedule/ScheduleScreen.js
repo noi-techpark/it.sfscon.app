@@ -38,10 +38,16 @@ export default ScheduleScreen = ({ navigation }) => {
           setShowModal={setShowTracks}
         />
         <View style={styles.header}>
-          <Text bold stylesProp={styles.headerTitle}>
-            Schedule
-          </Text>
+          <View style={styles.headerTop}>
+            <Text bold stylesProp={styles.headerTitle}>
+              Schedule
+            </Text>
+            <TouchableOpacity style={styles.searchContainer}>
+              <AntDesign name="search1" size={22} color={theme.title} />
+            </TouchableOpacity>
+          </View>
           <DaysComponent />
+
           <View style={styles.filterContainer}>
             <Text stylesProp={styles.filterTitle}>Tracks</Text>
 
