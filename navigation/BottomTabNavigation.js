@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Platform } from "react-native";
 import AuthorsNavigation from "./AuthorsNavigation";
 import ScheduleNavigation from "./ScheduleNavigation";
 import MyScheduleNavigation from "./MyScheduleNavigation";
@@ -26,7 +27,8 @@ export default BottomTabNavigation = () => {
             fontSize: 10,
           },
           tabBarStyle: {
-            paddingBottom: 0,
+            backgroundColor: "#FFF",
+            paddingBottom: Platform.OS === "ios" ? 0 : undefined,
             height: 50,
             borderTopColor: theme.textLight,
             borderTopWidth: 0.3,
