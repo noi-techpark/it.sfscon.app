@@ -48,7 +48,7 @@ export default ScheduleScreen = ({ navigation }) => {
     return <LoaderComponent />;
   }
 
-  return (
+  return store ? (
     <View style={styles.container}>
       <>
         {tracks && Object.keys(tracks)?.length > 0 ? (
@@ -156,5 +156,7 @@ export default ScheduleScreen = ({ navigation }) => {
         />
       </>
     </View>
+  ) : (
+    <></>
   );
 };

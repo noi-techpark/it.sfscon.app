@@ -37,32 +37,6 @@ export default SessionsComponent = ({
   const [sessionsByDay, setSessionsByDay] = useState({});
   const [sessionSet, setSessionSet] = useState(false);
 
-  const filterSessionByTracks = () => {
-    let temp = {};
-    if (selectedTracks?.length) {
-      for (let s in sessionsByDay) {
-        if (selectedTracks.indexOf(sessionsByDay[s].id_track) !== -1) {
-          temp[s] = sessionsByDay[s];
-        }
-      }
-      setSessionsByDay(temp);
-    }
-  };
-
-  const filterSessionBySearchTerm = () => {
-    let temp = {};
-    for (let s in sessions) {
-      if (
-        sessions[s]?.title.toLowerCase()?.indexOf(searchTerm.toLowerCase()) !==
-          -1 &&
-        sessions[s].date === selectedDay
-      ) {
-        temp[s] = sessions[s];
-      }
-    }
-    setSessionsByDay(temp);
-  };
-
   const filterSessionByDay = () => {
     let filteredSessions = { ...sessions };
 
