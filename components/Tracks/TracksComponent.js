@@ -14,12 +14,11 @@ export default TracksComponent = ({
   showModal,
   setShowModal,
   clearFiltersFlag,
+  tracks,
 }) => {
   const theme = getTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => getStyles(theme), [theme]);
-
-  const tracks = useSelector((state) => state?.app?.db?.conference?.db?.tracks);
 
   const sfsConId = "SFSCON";
 

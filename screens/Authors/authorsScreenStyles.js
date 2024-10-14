@@ -52,6 +52,12 @@ const getStyles = (theme) => {
       alignItems: "center",
     },
 
+    emptyScreen: {
+      alignItems: "center",
+      justifyContent: "center",
+      flex: 1,
+    },
+
     flatListContainer: {
       flex: 1,
     },

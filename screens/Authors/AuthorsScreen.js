@@ -17,6 +17,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
+import EmptyScreenSVG from "../../assets/icons/empty.svg";
 
 export default AuthorsScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -103,7 +104,7 @@ export default AuthorsScreen = ({ navigation }) => {
               <Text bold stylesProp={styles.headerTitle}>
                 Authors
               </Text>
-              {!authors ? null : (
+              {!authors || authors?.length === 0 ? null : (
                 <TouchableOpacity
                   onPress={openSearchInput}
                   style={
@@ -123,41 +124,48 @@ export default AuthorsScreen = ({ navigation }) => {
           )}
         </View>
         <View style={styles.flatListContainer}>
-          <FlatList
-            data={authors}
-            contentContainerStyle={styles.flatList}
-            numColumns={2}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.lecturer}
-                  onPress={() => navigateToAuthorDetails(item)}
-                >
-                  <View style={styles.imageContainer}>
-                    {item.profile_picture ? (
-                      <Image
-                        resizeMode="cover"
-                        source={{ uri: item.profile_picture }}
-                        style={styles.lectProfilePic}
-                      />
-                    ) : (
-                      <SVGAvatar width={150} height={175} />
-                    )}
-                  </View>
+          {authors?.length === 0 ? (
+            <View style={styles.emptyScreen}>
+              <EmptyScreenSVG />
+              <Text>No authors found</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={authors}
+              contentContainerStyle={styles.flatList}
+              numColumns={2}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.lecturer}
+                    onPress={() => navigateToAuthorDetails(item)}
+                  >
+                    <View style={styles.imageContainer}>
+                      {item.profile_picture ? (
+                        <Image
+                          resizeMode="cover"
+                          source={{ uri: item.profile_picture }}
+                          style={styles.lectProfilePic}
+                        />
+                      ) : (
+                        <SVGAvatar width={150} height={175} />
+                      )}
+                    </View>
 
-                  <View style={styles.lectInfo}>
-                    <Text numberOfLines={1} stylesProp={styles.lectName}>
-                      {item.display_name}
-                    </Text>
-                    <Text stylesProp={styles.lectCompany}>
-                      {item.company_name ?? ""}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                    <View style={styles.lectInfo}>
+                      <Text numberOfLines={1} stylesProp={styles.lectName}>
+                        {item.display_name}
+                      </Text>
+                      <Text stylesProp={styles.lectCompany}>
+                        {item.company_name ?? ""}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
         </View>
       </Pressable>
     </WrapperComponent>

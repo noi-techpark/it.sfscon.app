@@ -25,6 +25,7 @@ const initialState = {
   error: {},
   loader: false,
   selectedDay: "",
+  allTracks: [],
   selectedTracks: [],
   mySchedules: [],
   scheduleToggled: 0,

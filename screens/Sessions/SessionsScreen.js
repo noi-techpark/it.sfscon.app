@@ -34,7 +34,6 @@ export default SessionsComponent = () => {
   const [selectedTimeIndex, setSelectedTimeIndex] = useState(0);
   const [sessions, setSessions] = useState({});
 
- 
   const filterSession = () => {
     if (selectedTracks && selectedTracks.length) {
       const filteredSessions = Object.keys(store?.sessions)
@@ -74,7 +73,6 @@ export default SessionsComponent = () => {
 
   useEffect(() => {
     filterSession();
-    setLoader(true);
     setTimeout(() => {
       scrollRef?.current?.scrollToOffset({ animated: false, offset: 0 });
     }, 0);
@@ -100,9 +98,9 @@ export default SessionsComponent = () => {
     }
   }, [selectedTime, selectedTimeIndex]);
 
-  if (loader) {
-    return <ComponentLoader />;
-  }
+  // if (loader) {
+  //   return <ComponentLoader />;
+  // }
 
   return store && sessions.length ? (
     <View style={styles.container}>

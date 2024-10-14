@@ -4,7 +4,7 @@ const getStyles = (theme) => {
   return StyleSheet.create({
     header: {
       marginBottom: 18,
-      marginLeft: 20,
+      paddingHorizontal: 20,
     },
 
     headerTop: {
@@ -15,7 +15,31 @@ const getStyles = (theme) => {
     },
 
     searchContainer: {
-      marginRight: 20,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+
+    searchInput: {
+      justifyContent: "center",
+      borderRadius: 15,
+      paddingVertical: 8,
+      paddingLeft: 40,
+      paddingRight: 15,
+      flex: 1,
+      backgroundColor: theme.inputBackground,
+      color: theme.inputColor,
+    },
+
+    searchInputIcon: {
+      position: "absolute",
+      left: 10,
+      color: theme.text,
+    },
+
+    cancelBtnTxt: {
+      fontSize: 12,
+      color: theme.text,
+      marginLeft: 12,
     },
 
     headerTitle: {
@@ -28,7 +52,6 @@ const getStyles = (theme) => {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginRight: 24,
     },
 
     filtersHolder: {
