@@ -27,9 +27,7 @@ const getStyles = (theme) => {
     },
 
     emptyText: {
-      fontSize: 18,
       textAlign: "center",
-      marginTop: 20,
     },
 
     mySchedulesContainer: {

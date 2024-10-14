@@ -16,7 +16,7 @@ export default DaysComponent = () => {
   const currentDate = moment(new Date()).format("YYYY-MM-DD");
 
   useMemo(() => {
-    const index = days.findIndex((d) => moment(currentDate).isSame(d));
+    const index = days?.findIndex((d) => moment(currentDate).isSame(d));
     if (index !== -1) {
       setSelectedBtn(index);
     } else {

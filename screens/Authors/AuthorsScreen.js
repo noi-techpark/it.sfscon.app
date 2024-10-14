@@ -18,6 +18,7 @@ import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
 import EmptyScreenSVG from "../../assets/icons/empty.svg";
+import EmptyScreen from "../../components/EmptyScreen";
 
 export default AuthorsScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -68,7 +69,7 @@ export default AuthorsScreen = ({ navigation }) => {
   };
 
   return (
-    <WrapperComponent>
+    <View style={styles.container}>
       <Pressable style={styles.wrapper} onPress={() => Keyboard.dismiss()}>
         <View style={styles.header}>
           {showSearchInput ? (
@@ -124,11 +125,8 @@ export default AuthorsScreen = ({ navigation }) => {
           )}
         </View>
         <View style={styles.flatListContainer}>
-          {authors?.length === 0 ? (
-            <View style={styles.emptyScreen}>
-              <EmptyScreenSVG />
-              <Text>No authors found</Text>
-            </View>
+          {authors?.length === 0 || !authors ? (
+            <EmptyScreen title="No authors found" />
           ) : (
             <FlatList
               data={authors}
@@ -168,6 +166,6 @@ export default AuthorsScreen = ({ navigation }) => {
           )}
         </View>
       </Pressable>
-    </WrapperComponent>
+    </View>
   );
 };

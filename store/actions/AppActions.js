@@ -14,6 +14,8 @@ import {
   RESET_TRACKS_AND_DAY,
 } from "../constants/AppConstants";
 
+import { showLoader, hideLoader } from "./UtilsActions";
+
 import {
   SET_HIDE_LOADER,
   SET_TOAST_MESSAGE,
@@ -35,8 +37,7 @@ export const getSfsCon =
   (last_update = null) =>
   async (dispatch) => {
     try {
-      const conferenceId = "cc995b1b-bdc3-4395-a4b9-dd4dc96fd0b1";
-
+      dispatch(showLoader());
       const params = {
         app_version: APP_VERSION,
         device: Platform.OS,
@@ -46,7 +47,7 @@ export const getSfsCon =
         params["last_update"] = last_update;
       }
 
-      const url = `/api/conferences/${conferenceId}`;
+      const url = `/api/conference`;
 
       const getConferenceById = await api.get(url);
       const { data } = getConferenceById;
@@ -56,8 +57,8 @@ export const getSfsCon =
       Object.keys(data?.conference?.db?.sessions).forEach((id) => {
         const session = data?.conference?.db?.sessions[id];
         session.rating =
-          id in data?.conference_avg_rating?.rates_by_session
-            ? data?.conference_avg_rating?.rates_by_session[id]
+          id in data?.ratings?.rates_by_session
+            ? data?.ratings?.rates_by_session[id]
             : [0, 0];
       });
 
@@ -69,8 +70,9 @@ export const getSfsCon =
         payload: { message: errMessage, type: "error" },
       });
       dispatch({ type: GET_CONFERENCE_FAIL });
+    } finally {
+      dispatch(hideLoader());
     }
-    dispatch({ type: SET_HIDE_LOADER });
   };
 
 export const setSelectedDay = (day) => (dispatch) => {
@@ -80,13 +82,15 @@ export const setSelectedDay = (day) => (dispatch) => {
   }, 1500);
 };
 
-export const setSelectedTracks = (tracks, defaultFilter) => (dispatch) => {
-  if (tracks.length) {
-    tracks = [...tracks, defaultFilter];
-  }
+export const setSelectedTracks =
+  (tracks, defaultFilter = "SFSCON") =>
+  (dispatch) => {
+    if (tracks.length) {
+      tracks = [...tracks, defaultFilter];
+    }
 
-  dispatch({ type: SET_SELECTED_TRACKS, payload: tracks });
-};
+    dispatch({ type: SET_SELECTED_TRACKS, payload: tracks });
+  };
 
 export const getMySchedules = () => async (dispatch) => {
   try {

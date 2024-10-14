@@ -1,9 +1,7 @@
 import { useMemo } from "react";
 import { View } from "react-native";
-import HeaderComponent from "../../components/Header/HeaderComponent";
 import { getTheme } from "../../tools/getTheme";
 import Link from "../../components/Link";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import getStyles from "./linksScreenStyles";
 
 export default LinksScreen = ({ navigation }) => {
@@ -29,19 +27,12 @@ export default LinksScreen = ({ navigation }) => {
   ];
 
   return (
-    <WrapperComponent>
-      <View style={styles.container}>
-        <View style={styles.linksContainer}>
-          {links.map(({ label, link, placeholder }, idx) => (
-            <Link
-              key={idx}
-              label={label}
-              link={link}
-              placeholder={placeholder}
-            />
-          ))}
-        </View>
+    <View style={styles.container}>
+      <View style={styles.linksContainer}>
+        {links.map(({ label, link, placeholder }, idx) => (
+          <Link key={idx} label={label} link={link} placeholder={placeholder} />
+        ))}
       </View>
-    </WrapperComponent>
+    </View>
   );
 };

@@ -2,6 +2,9 @@ import { StyleSheet } from "react-native";
 
 const getStyles = (theme) => {
   return StyleSheet.create({
+    container: {
+      flex: 1,
+    },
     header: {
       marginBottom: 18,
       paddingHorizontal: 20,

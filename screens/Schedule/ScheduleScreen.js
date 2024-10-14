@@ -20,32 +20,21 @@ export default ScheduleScreen = ({ navigation }) => {
   const theme = getTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => getStyles(theme), [theme]);
-  const [showTracks, setShowTracks] = useState(false);
+
   const store = useSelector((state) => state?.app?.db?.conference?.db);
+
+  const { sessions, tracks } = store || {};
+  const loader = useSelector((state) => state?.utils?.loader);
   const selectedTracks = useSelector((state) => state?.app?.selectedTracks);
-  const [tracks, setTracks] = useState(fromObjectToArray(tracks));
-  const [sessions, setSessions] = useState(store?.sessions);
+
+  const [showTracks, setShowTracks] = useState(false);
   const [clearFilters, setClearFilters] = useState(false);
-  const [tracksSearchValue, setTracksSearchValue] = useState("");
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const inputRef = useRef();
 
   const activeFiltersLabel = selectedTracks?.length > 1 ? "filters" : "filter";
-
-  const filterTracks = (term) => {
-    if (!term) {
-      return;
-    }
-    const filteredSessions = fromObjectToArray(sessions);
-    console.log("FILTERED", filteredSessions);
-
-    // setSessions(
-    //   filteredSessions.filter((track) =>
-    //     track.title.toLowerCase().includes(term.toLowerCase())
-    //   )
-    // );
-  };
 
   useEffect(() => {
     if (inputRef?.current) {
@@ -55,14 +44,16 @@ export default ScheduleScreen = ({ navigation }) => {
     }
   }, [showSearchInput]);
 
-  return !store ? (
-    <LoaderComponent />
-  ) : (
-    <WrapperComponent>
+  if (loader) {
+    return <LoaderComponent />;
+  }
+
+  return (
+    <View style={styles.container}>
       <>
-        {tracks && tracks?.length > 0 ? (
+        {tracks && Object.keys(tracks)?.length > 0 ? (
           <TracksComponent
-            tracks={tracks}
+            tracks={fromObjectToArray(tracks)}
             clearFiltersFlag={clearFilters}
             showModal={showTracks}
             setShowModal={setShowTracks}
@@ -76,11 +67,9 @@ export default ScheduleScreen = ({ navigation }) => {
             {showSearchInput ? (
               <>
                 <TextInput
-                  onChangeText={(term) => {
-                    filterTracks(term);
-                  }}
+                  onChangeText={setSearchTerm}
                   ref={inputRef}
-                  placeholder="Search authors"
+                  placeholder="Search sessions"
                   style={styles.searchInput}
                 />
 
@@ -99,6 +88,7 @@ export default ScheduleScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setShowSearchInput(!showSearchInput);
+                setSearchTerm("");
               }}
               style={styles.searchContainer}
             >
@@ -158,8 +148,12 @@ export default ScheduleScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
-        <SessionsComponent sessions={sessions} store={store} />
+        <SessionsComponent
+          sessions={sessions}
+          store={store}
+          searchTerm={searchTerm}
+        />
       </>
-    </WrapperComponent>
+    </View>
   );
 };

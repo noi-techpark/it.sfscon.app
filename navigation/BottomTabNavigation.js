@@ -3,7 +3,7 @@ import AuthorsNavigation from "./AuthorsNavigation";
 import ScheduleNavigation from "./ScheduleNavigation";
 import MyScheduleNavigation from "./MyScheduleNavigation";
 import { getTheme } from "../tools/getTheme";
-import { Feather, EvilIcons, Ionicons, AntDesign } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import LinksScreen from "../screens/Links/LinksScreen";
 import SponsorsScreen from "../screens/Sponsors/SponsorsScreen";
 
@@ -11,6 +11,7 @@ const Tab = createBottomTabNavigator();
 
 export default BottomTabNavigation = () => {
   const theme = getTheme();
+
   return (
     <Tab.Navigator
       backBehavior="history"
@@ -23,9 +24,10 @@ export default BottomTabNavigation = () => {
           tabBarLabelPosition: "below-icon",
           tabBarLabelStyle: {
             fontSize: 10,
-            top: -4,
           },
           tabBarStyle: {
+            paddingBottom: 0,
+            height: 50,
             borderTopColor: theme.textLight,
             borderTopWidth: 0.3,
           },

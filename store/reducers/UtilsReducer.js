@@ -23,7 +23,6 @@ export default ToastReducer = (state = initialState, action) => {
         ...state,
         loader: true,
       };
-      d;
 
     case SET_HIDE_LOADER:
       return {
