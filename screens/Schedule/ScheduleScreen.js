@@ -148,6 +148,7 @@ export default ScheduleScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
+
         <SessionsComponent
           sessions={sessions}
           store={store}

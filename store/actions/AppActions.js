@@ -12,6 +12,7 @@ import {
   SET_RATING_SUCCESS,
   SET_RATING_FAIL,
   RESET_TRACKS_AND_DAY,
+  SET_UPDATE_DATA_COUNTER,
 } from "../constants/AppConstants";
 
 import { showLoader, hideLoader } from "./UtilsActions";
@@ -28,6 +29,7 @@ import { Platform } from "react-native";
 import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
+import moment from "moment";
 
 export const setAppTheme = (theme) => (dispatch) => {
   dispatch({ type: SET_THEME, payload: theme });
@@ -51,6 +53,15 @@ export const getSfsCon =
 
       const getConferenceById = await api.get(url);
       const { data } = getConferenceById;
+
+      dispatch(setUpdateDataCounter(data.next_try_in_ms));
+
+      // if (data.last_update) {
+      //   await storageSetItem(
+      //     "lastTimeUpdated",
+      //     moment(data.last_update).format("YYYY-MM-DD")
+      //   );
+      // }
 
       if (!data?.conference) return;
 
@@ -167,4 +178,8 @@ export const getRatings = (sessionId) => async (dispatch) => {
 
 export const resetTracksAndDaysSelected = () => (dispatch) => {
   dispatch({ type: RESET_TRACKS_AND_DAY });
+};
+
+export const setUpdateDataCounter = (next_try_in_ms) => (dispatch) => {
+  dispatch({ type: SET_UPDATE_DATA_COUNTER, payload: next_try_in_ms });
 };

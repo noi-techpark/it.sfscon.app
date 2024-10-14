@@ -4,22 +4,18 @@ import {
   GET_CONFERENCE_FAIL,
   SET_SELECTED_DAY,
   SET_SELECTED_TRACKS,
-  GET_MY_SCHEDULE,
   GET_MY_SCHEDULE_SUCCESS,
   TOGGLE_MY_SCHEDULE,
   SET_RATING_SUCCESS,
   SET_SESSION_MEASUREMENT,
-  SET_SESSION_QUESTIONS,
-  GET_SESSION_QUESTIONS,
   RESET_TRACKS_AND_DAY,
-  TOGGLE_QUESTION_LIKE,
-  COUNT_MESSAGES,
   SET_UPDATE_DATA_COUNTER,
   GET_RATING_SUCCESS,
 } from "../constants/AppConstants";
 
 const initialState = {
   language: "en",
+  updateDataCounter: 0,
   theme: "light",
   db: null,
   error: {},
@@ -54,6 +50,12 @@ export default AppReducer = (state = initialState, action) => {
     case GET_CONFERENCE_FAIL:
       return {
         ...state,
+      };
+
+    case SET_UPDATE_DATA_COUNTER:
+      return {
+        ...state,
+        updateDataCounter: state.updateDataCounter + 1,
       };
 
     case SET_SELECTED_DAY:

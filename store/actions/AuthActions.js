@@ -17,6 +17,6 @@ export const authorizeUser = (cb) => async (dispatch) => {
   } catch (error) {
     console.log(error);
   } finally {
-    cb(true);
+    await cb();
   }
 };
