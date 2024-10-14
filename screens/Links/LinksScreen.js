@@ -20,9 +20,14 @@ export default LinksScreen = ({ navigation }) => {
       placeholder: "https://www.sfscon.it/venue",
     },
     {
-      link: "https://www.sfscon.it/programs-archive/",
-      label: "Past editions",
-      placeholder: "https://www.sfscon.it/programs-archive",
+      link: "https://www.sfscon.it/attendee-guide/",
+      label: "Attendee's Guide",
+      placeholder: "https://www.sfscon.it/attendee-guide",
+    },
+    {
+      link: "https://maps.sfscon.it",
+      label: "Conference map",
+      placeholder: "https://maps.sfscon.it",
     },
   ];
 
