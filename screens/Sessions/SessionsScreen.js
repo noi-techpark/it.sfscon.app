@@ -168,6 +168,9 @@ export default SessionsComponent = ({
                             <Text stylesProp={styles.speakerName}>
                               {lecturer.display_name}
                             </Text>
+                            <Text stylesProp={styles.companyName}>
+                              {lecturer.company_name}
+                            </Text>
                             <Text stylesProp={styles.speakerSession}></Text>
                           </View>
                         </View>

@@ -11,6 +11,7 @@ const getStyles = (theme) => {
     },
 
     headerTop: {
+      height: 52,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
@@ -23,6 +24,7 @@ const getStyles = (theme) => {
     },
 
     searchInput: {
+      height: 45,
       justifyContent: "center",
       borderRadius: 15,
       paddingVertical: 8,

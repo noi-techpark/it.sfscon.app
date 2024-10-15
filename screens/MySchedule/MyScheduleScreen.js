@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
 import { useSelector, useDispatch } from "react-redux";

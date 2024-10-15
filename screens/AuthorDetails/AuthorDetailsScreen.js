@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { View, Image, TouchableOpacity, ScrollView, Share } from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorDetailsStyles";
 import { getTheme } from "../../tools/getTheme";
@@ -23,6 +22,7 @@ export default AuthorDetailsScreen = ({ route, navigation }) => {
   };
 
   const onShare = async (link) => {
+    console.log("LINK", link);
     try {
       const result = await Share.share({
         url: link,
@@ -33,11 +33,13 @@ export default AuthorDetailsScreen = ({ route, navigation }) => {
       if (result.action === Share.sharedAction) {
         console.log("Shared");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
-    <WrapperComponent>
+    <View style={styles.listHolder}>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>
@@ -153,6 +155,6 @@ export default AuthorDetailsScreen = ({ route, navigation }) => {
           </View>
         </View>
       </ScrollView>
-    </WrapperComponent>
+    </View>
   );
 };

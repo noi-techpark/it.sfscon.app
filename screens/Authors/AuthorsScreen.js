@@ -8,7 +8,6 @@ import {
   Pressable,
   Keyboard,
 } from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import { useSelector } from "react-redux";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorsScreenStyles";
@@ -80,7 +79,7 @@ export default AuthorsScreen = ({ navigation }) => {
                     filterAuthors(term);
                   }}
                   ref={inputRef}
-                  placeholder="Search authors"
+                  placeholder="Search speakers"
                   style={styles.searchInput}
                 />
 
@@ -103,7 +102,7 @@ export default AuthorsScreen = ({ navigation }) => {
           ) : (
             <>
               <Text bold stylesProp={styles.headerTitle}>
-                Authors
+                Speakers
               </Text>
               {!authors || authors?.length === 0 ? null : (
                 <TouchableOpacity

@@ -113,11 +113,19 @@ const getStyles = (theme) => {
     },
 
     speakerInfo: {
+      borderWidth: 2,
       marginLeft: 6,
-      flexDirection: "row",
+      alignSelf: "center",
+      justifyContent: "center",
+      // flexDirection: "row",
     },
 
     speakerName: {
+      fontSize: 12,
+      color: theme.title,
+    },
+
+    companyName: {
       fontSize: 12,
       color: theme.title,
     },

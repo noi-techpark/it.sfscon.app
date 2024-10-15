@@ -61,7 +61,7 @@ export default BottomTabNavigation = () => {
               />
             );
           },
-          tabBarLabel: "Schedule",
+          tabBarLabel: "Programme",
         }}
       />
       <Tab.Screen
@@ -89,7 +89,7 @@ export default BottomTabNavigation = () => {
               />
             );
           },
-          tabBarLabel: "Authors",
+          tabBarLabel: "Speakers",
         }}
       />
 

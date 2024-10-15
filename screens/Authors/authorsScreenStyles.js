@@ -11,10 +11,11 @@ const getStyles = (theme) => {
     },
 
     header: {
+      height: 52,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingBottom: 24,
+      marginBottom: 24,
     },
 
     headerTitle: {
@@ -24,6 +25,7 @@ const getStyles = (theme) => {
     },
 
     searchInput: {
+      height: 50,
       justifyContent: "center",
       borderRadius: 15,
       paddingVertical: 8,

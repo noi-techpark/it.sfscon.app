@@ -18,6 +18,8 @@ export const usePushNotifications = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
 
+  console.log(Constants.expoConfig.extra.eas.projectId);
+
   const registerForPushNotificationsAsync = async () => {
     let token;
 

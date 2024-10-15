@@ -1,13 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  Share,
-  Modal,
-} from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
+import { View, TouchableOpacity, Image, ScrollView, Share } from "react-native";
 import { getTheme } from "../../tools/getTheme";
 import getStyles from "./sessionDetailsScreenStyles";
 import {
@@ -199,7 +191,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               bold
               stylesProp={{ ...styles.mainTitle, ...styles.streamTitle }}
             >
-              Stream link
+              Location
             </Text>
             <TouchableOpacity
               style={styles.streamBtn}

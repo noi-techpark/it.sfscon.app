@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { TouchableOpacity, View, TextInput } from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import getStyles from "./scheduleScreenStyles";
 import { getTheme } from "../../tools/getTheme";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +47,7 @@ export default ScheduleScreen = ({ navigation }) => {
     return <LoaderComponent />;
   }
 
-  return store ? (
+  return (
     <View style={styles.container}>
       <>
         {tracks && Object.keys(tracks)?.length > 0 ? (
@@ -69,7 +68,7 @@ export default ScheduleScreen = ({ navigation }) => {
                 <TextInput
                   onChangeText={setSearchTerm}
                   ref={inputRef}
-                  placeholder="Search sessions"
+                  placeholder="Search programme"
                   style={styles.searchInput}
                 />
 
@@ -81,7 +80,7 @@ export default ScheduleScreen = ({ navigation }) => {
               </>
             ) : (
               <Text bold stylesProp={styles.headerTitle}>
-                Schedule
+                Programme
               </Text>
             )}
 
@@ -148,15 +147,16 @@ export default ScheduleScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
-
-        <SessionsComponent
-          sessions={sessions}
-          store={store}
-          searchTerm={searchTerm}
-        />
+        {sessions ? (
+          <SessionsComponent
+            sessions={sessions}
+            store={store}
+            searchTerm={searchTerm}
+          />
+        ) : (
+          <></>
+        )}
       </>
     </View>
-  ) : (
-    <></>
   );
 };
