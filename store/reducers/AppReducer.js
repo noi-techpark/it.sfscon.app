@@ -19,14 +19,13 @@ const initialState = {
   theme: "light",
   db: null,
   error: {},
+  sessionRates: [],
   loader: false,
   selectedDay: null,
   selectedTracks: [],
   mySchedules: [],
   scheduleToggled: 0,
   rating: {},
-  myRate: null,
-  ratingAdded: 0,
   measurements: [],
 };
 

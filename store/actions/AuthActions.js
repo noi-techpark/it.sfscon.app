@@ -6,7 +6,7 @@ export const authorizeUser = (cb) => async (dispatch) => {
   try {
     const url = `/api/authorize`;
 
-    const jwt = storageGetItem("jwt");
+    const jwt = await storageGetItem("jwt");
 
     if (jwt) throw new Error();
 

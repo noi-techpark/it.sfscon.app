@@ -8,7 +8,6 @@ export default SponsorsScreen = ({ route, navigation }) => {
   const styles = getStyles();
   const db = useSelector((state) => state.app.db);
   const sponsors = fromObjectToArray(db?.conference?.db?.sponsors);
-  console.log("SPONSORS", sponsors);
 
   const slicePxs = (str) => {
     return Number(str.slice(0, str.length - 2));

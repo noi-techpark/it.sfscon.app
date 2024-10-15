@@ -20,7 +20,7 @@ const getStyles = (theme) => {
 
     headerTitle: {
       color: theme.title,
-      fontWeight: "600",
+      fontWeight: "800",
       fontSize: 26,
     },
 

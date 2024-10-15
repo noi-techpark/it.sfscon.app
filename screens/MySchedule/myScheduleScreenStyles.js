@@ -7,27 +7,20 @@ const getStyles = (theme) => {
     },
 
     header: {
-      paddingHorizontal: 20,
+      marginHorizontal: 20,
+      height: 52,
+      justifyContent: "center",
     },
 
     title: {
       fontSize: 26,
+      fontWeight: "800",
+      color: theme.title,
     },
 
     scollViewContainer: {
       flex: 1,
       justifyContent: "center",
-    },
-
-    emptyContainer: {
-      position: "absolute",
-      alignItems: "center",
-      justifyContent: "center",
-      alignSelf: "center",
-    },
-
-    emptyText: {
-      textAlign: "center",
     },
 
     mySchedulesContainer: {

@@ -16,47 +16,39 @@ import WebViewComponent from "../../components/WebViewComponent";
 import RatingsComponent from "../../components/Ratings/RatingsComponent";
 import Text from "../../components/TextComponent";
 import * as Linking from "expo-linking";
-import {
-  getMySchedules,
-  setMySchedule,
-  getRatings,
-} from "../../store/actions/AppActions";
+import { getMySchedules, setMySchedule } from "../../store/actions/AppActions";
+import { useShare } from "../../tools/useShare";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => getStyles(theme), [theme]);
 
-  const db = useSelector((state) => state.app.db);
-  const mySchedules = useSelector((state) => state.app.mySchedules);
-  const ratingAdded = useSelector((state) => state.app.ratingAdded);
+  const speakers = useSelector(
+    (state) => state.app.db?.conference?.db?.lecturers
+  );
+  const ratings = useSelector((state) => state.app.db?.ratings);
+  const mySchedules = useSelector((state) => state.app.db?.bookmarks);
   const scheduleToggled = useSelector((state) => state.app.scheduleToggled);
-  const myRate = useSelector((state) => state.app.myRate);
+
+  const { session = {}, track = {} } = route?.params || {};
+  const { rates_by_session = {}, my_rate_by_session = {} } = ratings || {};
 
   const [showModal, setShowModal] = useState(false);
-  const [rating, setRating] = useState([]);
-  const [loader, setLoader] = useState(true);
+  const [rating, setRating] = useState([0, 0]);
 
-  const session = route?.params?.session;
-  const track = route?.params?.track;
-  const speakers = db?.conference?.db?.lecturers;
   const reviews = new Array(5).fill(0);
 
-  const findSessionAndDisplayRate = () => {
-    const rates = db?.conference?.db?.sessions;
-    if (Object.keys(rates).length > 0) {
-      setRating(rates[session.id]?.rating);
+  const { share } = useShare();
+
+  const findSession = () => {
+    if (session?.id in rates_by_session) {
+      setRating(rates_by_session[session?.id]);
     }
   };
 
   const onShare = async (link) => {
-    try {
-      await Share.share({
-        message: "SFSCon",
-        title: link,
-        url: link,
-      });
-    } catch (error) {}
+    await share({ url: link, title: "SFSCon", message: "SFSCon" });
   };
 
   const handleGoBack = () => {
@@ -67,22 +59,8 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    dispatch(getRatings(session.id));
-  }, []);
-
-  useEffect(() => {
-    if (db?.conference?.db?.sessions) {
-      findSessionAndDisplayRate();
-    }
-  }, [ratingAdded]);
-
-  useEffect(() => {
-    if (loader) {
-      setTimeout(() => {
-        setLoader(false);
-      }, 800);
-    }
-  }, [session.id]);
+    findSession();
+  }, [session.id, rates_by_session]);
 
   useEffect(() => {
     dispatch(getMySchedules());
@@ -90,14 +68,11 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView>
-      {rating.length ? (
-        <RatingsComponent
-          myRate={myRate}
-          session={session.id}
-          showModal={showModal}
-          setShowModal={setShowModal}
-        />
-      ) : null}
+      <RatingsComponent
+        session={session.id}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
@@ -226,9 +201,9 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                 Speakers
               </Text>
 
-              {session.id_lecturers.map((s, idx) => {
+              {session?.id_lecturers.map((s, idx) => {
                 const speaker = getData(speakers, s);
-                return (
+                return speaker ? (
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate("AuthorDetails", {
@@ -239,7 +214,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                     style={styles.speaker}
                   >
                     <View style={styles.imageContainer}>
-                      {speaker.profile_picture ? (
+                      {speaker?.profile_picture ? (
                         <Image
                           source={{ uri: speaker.profile_picture }}
                           style={styles.profilePicture}
@@ -253,6 +228,8 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                       {speaker.display_name}
                     </Text>
                   </TouchableOpacity>
+                ) : (
+                  <></>
                 );
               })}
             </View>

@@ -6,14 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import Text from "../TextComponent";
 import SecondaryButtonComponent from "../UI/SecondaryButtonComponent";
-import { postRatings, getRatings } from "../../store/actions/AppActions";
+import { postRatings } from "../../store/actions/AppActions";
 
-export default RatingsComponent = ({
-  session,
-  myRate,
-  showModal,
-  setShowModal,
-}) => {
+export default RatingsComponent = ({ session, showModal, setShowModal }) => {
   const dispatch = useDispatch();
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
@@ -27,12 +22,6 @@ export default RatingsComponent = ({
     "Excellent",
   ]);
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(-1);
-
-  useEffect(() => {
-    if (myRate) {
-      setSelectedRatingIndex(myRate - 1);
-    }
-  }, [session, myRate]);
 
   return (
     <Modal

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { View, Image, TouchableOpacity, ScrollView, Share } from "react-native";
+import { View, Image, TouchableOpacity, ScrollView } from "react-native";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorDetailsStyles";
 import { getTheme } from "../../tools/getTheme";
@@ -11,32 +11,21 @@ import {
 import * as Linking from "expo-linking";
 import WebViewComponent from "../../components/WebViewComponent";
 import Text from "../../components/TextComponent";
+import { useShare } from "../../tools/useShare";
 
 export default AuthorDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const author = route.params.author;
 
+  const { share } = useShare();
+
   const navigateBack = () => {
     navigation.goBack();
   };
 
   const onShare = async (link) => {
-    console.log("LINK", link);
-    try {
-      const isAvailable = await Share.isAvai
-      const result = await Share.share({
-        url: link,
-        title: link,
-        message: "SFSCon",
-      });
-
-      if (result.action === Share.sharedAction) {
-        console.log("Shared");
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    await share({ url: link, title: "SFSCon", message: "SFSCon" });
   };
 
   return (

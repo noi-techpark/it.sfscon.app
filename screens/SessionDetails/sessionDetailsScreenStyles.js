@@ -6,6 +6,7 @@ const getStyles = (theme) => {
       marginHorizontal: 20,
       marginBottom: 20,
     },
+
     header: {
       marginTop: 20,
     },
@@ -81,6 +82,10 @@ const getStyles = (theme) => {
 
     streamLink: {
       color: theme.primary,
+    },
+
+    descriptionContainer: {
+      marginBottom: 24,
     },
 
     description: {

@@ -147,35 +147,23 @@ export const setMySchedule = (sessionId) => async (dispatch) => {
 
 export const postRatings = (sessionId, rate) => async (dispatch) => {
   try {
-    const url = `/api/conferences/sessions/${sessionId}/rate`;
-    const response = await api.post(url, { rate: rate });
+    const url = `/api/sessions/${sessionId}/rate`;
+    const response = await api.post(url, { rating: rate });
     const { data } = response;
     const { avg, nr, my_rate } = data;
     dispatch({
       type: SET_RATING_SUCCESS,
       payload: { avg, nr, sessionId, my_rate },
     });
+
+    dispatch(getSfsCon(null, false));
     dispatch({
       type: SET_TOAST_MESSAGE,
       payload: { message: "Thank you for your feedback", type: "info" },
     });
   } catch (error) {
+    console.log("ERROR JE ", error);
     dispatch({ type: SET_RATING_FAIL });
-  }
-};
-
-export const getRatings = (sessionId) => async (dispatch) => {
-  try {
-    const url = `/api/conferences/sessions/${sessionId}/rate`;
-    const response = await api.get(url);
-    const { data } = response;
-    const { avg, nr, my_rate } = data;
-    dispatch({
-      type: GET_RATING_SUCCESS,
-      payload: { avg, nr, sessionId, my_rate },
-    });
-  } catch (error) {
-    dispatch({ type: GET_RATING_FAIL });
   }
 };
 
