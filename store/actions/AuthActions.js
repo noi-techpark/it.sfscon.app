@@ -1,10 +1,15 @@
 import { AUTHORIZE_USER } from "../constants/AuthConstants";
 import api from "../../service/service";
-import { storageSetItem } from "../../tools/secureStore";
+import { storageGetItem, storageSetItem } from "../../tools/secureStore";
 
 export const authorizeUser = (cb) => async (dispatch) => {
   try {
     const url = `/api/authorize`;
+
+    const jwt = storageGetItem("jwt");
+
+    if (jwt) throw new Error();
+
     const response = await api.get(url);
 
     const {
@@ -12,7 +17,6 @@ export const authorizeUser = (cb) => async (dispatch) => {
     } = response;
 
     await storageSetItem("jwt", token);
-
     dispatch({ type: AUTHORIZE_USER, payload: token });
   } catch (error) {
     console.log(error);

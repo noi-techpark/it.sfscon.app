@@ -27,15 +27,14 @@ export default SessionsComponent = ({
 
   const selectedDay = useSelector((state) => state.app.selectedDay);
   const selectedTracks = useSelector((state) => state.app.selectedTracks);
-  const mySchedules = useSelector((state) => state.app.mySchedules);
-  const scheduleToggled = useSelector((state) => state.app.scheduleToggled);
+
+  const mySchedules = useSelector((state) => state.app.db?.bookmarks);
 
   const navigation = useNavigation();
   const scrollRef = useRef();
 
   const [loader, setLoader] = useState(false);
   const [sessionsByDay, setSessionsByDay] = useState({});
-  const [sessionSet, setSessionSet] = useState(false);
 
   const filterSessionByDay = () => {
     let filteredSessions = { ...sessions };
@@ -73,10 +72,6 @@ export default SessionsComponent = ({
 
     setSessionsByDay(filteredSessions);
   };
-
-  useEffect(() => {
-    dispatch(getMySchedules());
-  }, [scheduleToggled]);
 
   useEffect(() => {
     if (loader) {

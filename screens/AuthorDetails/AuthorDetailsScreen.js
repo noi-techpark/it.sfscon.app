@@ -24,6 +24,7 @@ export default AuthorDetailsScreen = ({ route, navigation }) => {
   const onShare = async (link) => {
     console.log("LINK", link);
     try {
+      const isAvailable = await Share.isAvai
       const result = await Share.share({
         url: link,
         title: link,

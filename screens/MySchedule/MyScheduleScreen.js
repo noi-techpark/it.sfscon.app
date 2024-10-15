@@ -16,7 +16,7 @@ export default MyscheduleScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
-  const mySchedules = useSelector((state) => state.app.mySchedules);
+  const mySchedules = useSelector((state) => state.app.db?.bookmarks);
   const store = useSelector((state) => state.app?.db?.conference?.db);
 
   const { sessions, rooms, lecturers, tracks } = store || {};

@@ -87,7 +87,6 @@ const getStyles = (theme) => {
 
     speaker: {
       flexDirection: "row",
-      alignItems: "center",
       marginBottom: 8,
     },
 
@@ -98,8 +97,8 @@ const getStyles = (theme) => {
     },
 
     imageContainer: {
-      width: 32,
-      height: 32,
+      width: 40,
+      height: 40,
       borderRadius: 100,
       overflow: "hidden",
       alignItems: "center",
@@ -113,11 +112,9 @@ const getStyles = (theme) => {
     },
 
     speakerInfo: {
-      borderWidth: 2,
+      flex: 1,
       marginLeft: 6,
-      alignSelf: "center",
       justifyContent: "center",
-      // flexDirection: "row",
     },
 
     speakerName: {
@@ -127,7 +124,8 @@ const getStyles = (theme) => {
 
     companyName: {
       fontSize: 12,
-      color: theme.title,
+      flex: 1,
+      color: theme.textLight,
     },
 
     timelapseText: {

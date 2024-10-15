@@ -20,7 +20,7 @@ const initialState = {
   db: null,
   error: {},
   loader: false,
-  selectedDay: "",
+  selectedDay: null,
   selectedTracks: [],
   mySchedules: [],
   scheduleToggled: 0,
@@ -39,7 +39,11 @@ export default AppReducer = (state = initialState, action) => {
       };
 
     case GET_CONFERENCE_SUCCESS:
-      const selectedDay = action.payload.conference?.idx.days[0];
+      const days = action.payload.conference?.idx?.days || [];
+      const selectedDayFromStore = state.selectedDay;
+      const findIdx = days.indexOf(selectedDayFromStore);
+      const selectedDay = findIdx > -1 ? days[findIdx] : days[0];
+
       return {
         ...state,
         db: action.payload,

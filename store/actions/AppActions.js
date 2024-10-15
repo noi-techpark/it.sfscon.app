@@ -36,10 +36,12 @@ export const setAppTheme = (theme) => (dispatch) => {
 };
 
 export const getSfsCon =
-  (last_update = null) =>
+  (last_update = null, loader = true) =>
   async (dispatch) => {
     try {
-      dispatch(showLoader());
+      if (loader) {
+        dispatch(showLoader());
+      }
       const params = {
         app_version: APP_VERSION,
         device: Platform.OS,
@@ -117,7 +119,7 @@ export const getMySchedules = () => async (dispatch) => {
 
 export const setMySchedule = (sessionId) => async (dispatch) => {
   try {
-    const url = `/api/conferences/sessions/${sessionId}/toggle-bookmark`;
+    const url = `/api/sessions/${sessionId}/bookmarks/toggle`;
     const response = await api.post(url, {});
 
     const {
@@ -132,6 +134,7 @@ export const setMySchedule = (sessionId) => async (dispatch) => {
         type: "info",
       },
     });
+    dispatch(getSfsCon(null, false));
     dispatch({ type: TOGGLE_MY_SCHEDULE });
   } catch (error) {
     const errMessage = errorHandler(error);

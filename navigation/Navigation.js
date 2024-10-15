@@ -7,6 +7,7 @@ import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
 import { authorizeUser } from "../store/actions/AuthActions";
 import moment from "moment";
+import { storageGetItem } from "../tools/secureStore";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,6 +16,8 @@ export default Navigation = () => {
 
   const appInfo = useSelector((state) => state.app.db);
   const updateDataCounter = useSelector((state) => state.app.updateDataCounter);
+
+  const [loadTokenFromStore, setLoadTokenFromStore] = useState(false);
 
   const { last_updated, next_try_in_ms } = appInfo || {};
 
@@ -28,6 +31,8 @@ export default Navigation = () => {
   useEffect(() => {
     dispatch(authorizeUser(init));
   }, []);
+
+  // ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiMDlhNGQzMGUtYTJiZC00NTk0LThjYTAtZTU2ZjFkNDY1NDZjIiwiZXhwIjoxNzkyMDYyNTE4fQ.smNtE2OuUVgV-n_wHW1c73LPYfeP0jZDbzM3XneMnE4");
 
   useEffect(() => {
     if (authorizedLoader) {
