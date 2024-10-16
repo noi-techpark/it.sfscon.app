@@ -7,6 +7,8 @@ import { getTheme } from "../tools/getTheme";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import LinksScreen from "../screens/Links/LinksScreen";
 import SponsorsScreen from "../screens/Sponsors/SponsorsScreen";
+import CustomTabBar from "../components/CustomTabBar/CustomTabBar";
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,26 +17,12 @@ export default BottomTabNavigation = () => {
 
   return (
     <Tab.Navigator
+      tabBar={(props) => {
+        return <CustomTabBar {...props} />;
+      }}
       backBehavior="history"
       initialRouteName="Schedule"
-      screenOptions={({ route }) => {
-        return {
-          tabBarActiveTintColor: theme.bottomTabNavActive,
-          headerShown: false,
-          tabBarInactiveTintColor: theme.bottomTabNavInactive,
-          tabBarLabelPosition: "below-icon",
-          tabBarLabelStyle: {
-            fontSize: 10,
-          },
-          tabBarStyle: {
-            backgroundColor: "#FFF",
-            paddingBottom: Platform.OS === "ios" ? 0 : undefined,
-            height: 50,
-            borderTopColor: theme.textLight,
-            borderTopWidth: 0.3,
-          },
-        };
-      }}
+      screenOptions={{ headerShown: false }}
     >
       <Tab.Screen
         name="Schedule"

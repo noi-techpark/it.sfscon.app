@@ -3,8 +3,19 @@ import { StyleSheet } from "react-native";
 const getStyles = (theme) => {
   return StyleSheet.create({
     container: {
-      margin: 20,
       flex: 1,
+    },
+
+    header: {
+      marginHorizontal: 20,
+      height: 52,
+      justifyContent: "center",
+    },
+
+    headerTitle: {
+      fontSize: 26,
+      fontWeight: "800",
+      color: theme.title,
     },
 
     linksContainer: {

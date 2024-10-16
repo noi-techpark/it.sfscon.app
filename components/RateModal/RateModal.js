@@ -1,14 +1,14 @@
 import { useState, useMemo, useEffect } from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { getTheme } from "../../tools/getTheme";
-import getStyles from "./ratingsComponentsStyles";
+import getStyles from "./rateModalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import Text from "../TextComponent";
 import SecondaryButtonComponent from "../UI/SecondaryButtonComponent";
 import { postRatings } from "../../store/actions/AppActions";
 
-export default RatingsComponent = ({ session, showModal, setShowModal }) => {
+export default RateModal = ({ session, showModal, setShowModal }) => {
   const dispatch = useDispatch();
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);

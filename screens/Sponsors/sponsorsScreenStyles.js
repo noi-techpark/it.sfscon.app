@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-const getStyles = () => {
+const getStyles = (theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -8,13 +8,18 @@ const getStyles = () => {
 
     header: {
       marginHorizontal: 20,
-      marginTop: 20,
-      marginBottom: 0,
+      height: 52,
+      marginBottom: 16,
+      justifyContent: "center",
     },
 
-    sponsorsContainer: {
-      marginTop: 32,
+    headerTitle: {
+      fontSize: 26,
+      fontWeight: "800",
+      color: theme.title,
     },
+
+    sponsorsContainer: {},
 
     sponsor: {
       alignItems: "center",

@@ -11,10 +11,12 @@ import {
   RESET_TRACKS_AND_DAY,
   SET_UPDATE_DATA_COUNTER,
   GET_RATING_SUCCESS,
+  TOGGLE_TAB_BAR_VISIBILITY,
 } from "../constants/AppConstants";
 
 const initialState = {
   language: "en",
+  tabBarVisibility: "show",
   updateDataCounter: 0,
   theme: "light",
   db: null,
@@ -126,6 +128,12 @@ export default AppReducer = (state = initialState, action) => {
         questions: [],
         questionAdded: 0,
         questionLiked: 0,
+      };
+
+    case TOGGLE_TAB_BAR_VISIBILITY:
+      return {
+        ...state,
+        tabBarVisibility: action.payload,
       };
 
     default:

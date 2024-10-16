@@ -1,11 +1,15 @@
 import { View, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
+import Text from "../../components/TextComponent";
 import getStyles from "./sponsorsScreenStyles";
 import { fromObjectToArray } from "../../tools/sessions";
 import * as Linking from "expo-linking";
+import { getTheme } from "../../tools/getTheme";
+import { useMemo } from "react";
 
 export default SponsorsScreen = ({ route, navigation }) => {
-  const styles = getStyles();
+  const theme = getTheme();
+  const styles = useMemo(() => getStyles(theme), [theme]);
   const db = useSelector((state) => state.app.db);
   const sponsors = fromObjectToArray(db?.conference?.db?.sponsors);
 
@@ -15,6 +19,11 @@ export default SponsorsScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text bold stylesProp={styles.headerTitle}>
+          Supporters
+        </Text>
+      </View>
       <ScrollView
         style={styles.sponsorsContainer}
         showsVerticalScrollIndicator={true}

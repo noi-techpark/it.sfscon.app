@@ -3,34 +3,32 @@ import { StyleSheet } from "react-native";
 const getStyles = (theme) => {
   return StyleSheet.create({
     container: {
-      marginHorizontal: 20,
-      marginBottom: 20,
+      flex: 1,
     },
 
     header: {
-      marginTop: 20,
-    },
-
-    headerTop: {
-      justifyContent: "space-between",
       flexDirection: "row",
       alignItems: "center",
+      marginVertical: 16,
+      paddingHorizontal: 20,
     },
 
-    bookmarkButton: {
-      paddingHorizontal: 5,
-      paddingVertical: 5,
+    scrollView: {
+      paddingHorizontal: 20,
     },
 
     bookmarkIcon: {
       color: theme.ratingSelected,
     },
 
+    titleContainer: {
+      flex: 1,
+      marginHorizontal: 8,
+    },
+
     title: {
       color: theme.title,
-      fontWeight: "600",
-      fontSize: 26,
-      marginTop: 14,
+      fontSize: 18,
     },
 
     reviewContainer: {
@@ -52,7 +50,12 @@ const getStyles = (theme) => {
 
     eventDetail: {
       flexDirection: "row",
+      alignItems: "center",
       marginBottom: 20,
+    },
+
+    roadSvgHolder: {
+      marginLeft: -4,
     },
 
     eventText: {
@@ -119,10 +122,19 @@ const getStyles = (theme) => {
       borderRadius: 100,
     },
 
+    speakerInfo: {
+      marginLeft: 12,
+    },
+
     displayName: {
       fontSize: 15,
       color: theme.textMedium,
-      marginLeft: 12,
+    },
+
+    companyName: {
+      fontSize: 12,
+      flex: 1,
+      color: theme.textLight,
     },
 
     footerHeading: {
@@ -134,6 +146,7 @@ const getStyles = (theme) => {
 
     footerTop: {
       flexDirection: "row",
+      paddingBottom: 16,
     },
 
     actionButton: {
@@ -151,140 +164,6 @@ const getStyles = (theme) => {
 
     btnLabel: {
       color: theme.primaryButtonTextColor,
-    },
-
-    askAQuestionBtnLabel: {
-      color: theme.secondaryButtonTextColor,
-    },
-
-    askQuestionBtn: {
-      alignSelf: "flex-start",
-      backgroundColor: theme.secondaryButtonBackgroundColor,
-    },
-
-    questions: {
-      marginTop: 30,
-      alignItems: "flex-start",
-    },
-
-    questionsHeader: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 24,
-    },
-
-    questionsTitle: {
-      fontSize: 18,
-      marginRight: 5,
-    },
-
-    numOfQuestions: {
-      fontSize: 18,
-      color: theme.textLight,
-    },
-
-    question: {
-      flexDirection: "row",
-      alignItems: "flex-start",
-      marginBottom: 16,
-    },
-
-    avatar: {
-      backgroundColor: theme.avatarContainer,
-      borderRadius: 100,
-      padding: 5,
-      alignItems: "center",
-      justifyContent: "center",
-      width: 38,
-      height: 38,
-    },
-
-    myQuestionAvatar: {
-      backgroundColor: "rgba(115, 196, 239, 0.05)",
-    },
-
-    questionInfo: {
-      marginLeft: 7,
-      flex: 1,
-    },
-
-    infoTop: {
-      flexDirection: "row",
-      alignItems: "flex-end",
-    },
-
-    name: {
-      fontSize: 12,
-      color: theme.textDark,
-    },
-
-    myName: {
-      color: theme.secondaryTitle,
-    },
-
-    timePosted: {
-      fontSize: 9,
-      marginHorizontal: 5,
-      color: "rgba(0, 0, 0, 0.4)",
-    },
-
-    myTimePosted: {
-      color: theme.secondaryTitle,
-    },
-
-    likeIconBtn: {
-      bottom: 1,
-      flexDirection: "row",
-      alignItems: "flex-end",
-      paddingTop: 5,
-    },
-
-    likeIconDefault: {
-      color: "rgba(0, 0, 0, 0.4)",
-    },
-
-    myLikeIcon: {
-      color: theme.secondaryTitle,
-    },
-
-    likeIconSelected: {
-      color: theme.primary,
-    },
-
-    numberOfLikes: {
-      fontSize: 10,
-      marginLeft: 3,
-      color: theme.secondaryTitle,
-      bottom: -1,
-    },
-
-    deleteIconBtn: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      flex: 1,
-    },
-
-    deleteIcon: {
-      top: 1,
-      color: theme.secondaryTitle,
-    },
-
-    deleteText: {
-      color: theme.secondaryTitle,
-      fontSize: 10,
-      marginLeft: 2,
-      top: 1,
-    },
-
-    questionDescription: {
-      color: theme.textMedium,
-      fontSize: 15,
-      marginTop: 4,
-    },
-
-    myQuestionDescription: {
-      color: theme.secondaryTitle,
     },
   });
 };

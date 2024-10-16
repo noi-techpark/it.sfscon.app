@@ -1,23 +1,29 @@
 import { useState, useEffect, useMemo } from "react";
-import { View, TouchableOpacity, Image, ScrollView, Share } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Linking,
+} from "react-native";
 import { getTheme } from "../../tools/getTheme";
 import getStyles from "./sessionDetailsScreenStyles";
-import {
-  MaterialIcons,
-  Feather,
-  Ionicons,
-  FontAwesome,
-} from "@expo/vector-icons";
+import { MaterialIcons, Feather, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../../tools/sessions";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import WebViewComponent from "../../components/WebViewComponent";
-import RatingsComponent from "../../components/Ratings/RatingsComponent";
+import RatingsComponent from "../../components/RateModal/RateModal";
 import Text from "../../components/TextComponent";
-import * as Linking from "expo-linking";
-import { getMySchedules, setMySchedule } from "../../store/actions/AppActions";
+import {
+  getMySchedules,
+  setMySchedule,
+  toggleTabBarVisibility,
+} from "../../store/actions/AppActions";
 import { useShare } from "../../tools/useShare";
+import StarRating from "../../components/RatingStars/RatingStars";
+import RoadSVG from "../../assets/road.svg";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -33,6 +39,21 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
 
   const { session = {}, track = {} } = route?.params || {};
   const { rates_by_session = {}, my_rate_by_session = {} } = ratings || {};
+
+  const handleUrl = async () => {
+    try {
+      if (session?.stream_link) {
+        const splitStreamLink = session?.stream_link.split("- ")[1];
+        const canOpen = await Linking.canOpenURL(splitStreamLink);
+
+        if (!canOpen) throw new Error("Unable to open link");
+
+        await Linking.openURL(splitStreamLink);
+      }
+    } catch (error) {
+      console.log("ERR", error);
+    }
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [rating, setRating] = useState([0, 0]);
@@ -52,6 +73,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   };
 
   const handleGoBack = () => {
+    dispatch(toggleTabBarVisibility("show"));
     const lastVisited = route?.params?.lastVisited;
     lastVisited
       ? navigation.navigate(lastVisited, { session, track })
@@ -67,7 +89,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   }, [scheduleToggled]);
 
   return (
-    <ScrollView>
+    <>
       <RatingsComponent
         session={session.id}
         showModal={showModal}
@@ -75,201 +97,185 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
       />
       <View style={styles.container}>
         <View style={styles.header}>
-          <View style={styles.headerTop}>
-            <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
-              <MaterialIcons
-                name="arrow-back-ios"
-                size={20}
-                style={styles.goBackIcon}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => dispatch(setMySchedule(session.id))}
-              style={styles.bookmarkBtn}
-            >
-              {mySchedules.indexOf(session.id) !== -1 ? (
-                <Ionicons
-                  name="bookmark"
-                  size={18}
-                  style={styles.bookmarkIcon}
-                />
-              ) : (
-                <Ionicons
-                  name="bookmark-outline"
-                  size={18}
-                  style={styles.bookmarkIconSelected}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-          <Text bold stylesProp={styles.title}>
-            {session?.title}
-          </Text>
-        </View>
-        {session?.rateable ? (
-          <View style={styles.reviewContainer}>
-            {reviews.map((r, idx) => {
-              return (
-                <TouchableOpacity
-                  disabled
-                  key={idx}
-                  style={styles.reviewIconBtn}
-                >
-                  <FontAwesome
-                    size={20}
-                    name="star"
-                    color={
-                      idx + 1 > rating[0] ? "rgba(0, 0, 0, 0.1)" : "#FEC82E"
-                    }
-                  />
-                </TouchableOpacity>
-              );
-            })}
-            <Text stylesProp={styles.reviewCount}>
-              {rating && rating[0] > -1
-                ? `${rating[0]} (${rating[1]} reviews)`
-                : ""}
-            </Text>
-          </View>
-        ) : null}
-
-        <View style={styles.eventDetailsContainer}>
-          <View style={styles.eventDetail}>
-            <Feather name="calendar" size={18} style={styles.eventIcon} />
-            <Text numberOfLines={1} stylesProp={styles.eventText}>
-              {moment(session?.date).format("DD MMM YYYY")}
-            </Text>
-          </View>
-          <View style={styles.eventDetail}>
-            <Feather name="clock" size={18} style={styles.eventIcon} />
-            <Text numberOfLines={1} stylesProp={styles.eventText}>
-              {`${moment(session.start).format("HH:mm")} - ${moment(
-                session.start
-              )
-                .add(session.duration, "seconds")
-                .format("HH:mm")}`}
+          <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
+            <MaterialIcons
+              name="arrow-back-ios"
+              size={24}
+              color={theme.textMedium}
+              style={styles.goBackIcon}
+            />
+          </TouchableOpacity>
+          <View style={styles.titleContainer}>
+            <Text numberOfLines={2} bold stylesProp={styles.title}>
+              {session?.title}
             </Text>
           </View>
 
-          <View style={styles.eventDetail}>
-            <Feather name="home" size={18} style={styles.eventIcon} />
-            <Text numberOfLines={1} stylesProp={styles.eventText}>
-              {track?.name ?? ""}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.main}>
-          <View style={styles.streamContainer}>
-            <Text
-              bold
-              stylesProp={{ ...styles.mainTitle, ...styles.streamTitle }}
-            >
-              Location
-            </Text>
-            <TouchableOpacity
-              style={styles.streamBtn}
-              onPress={() => Linking.openURL(session?.stream_link)}
-            >
-              <Text numberOfLines={1} stylesProp={styles.streamLink}>
-                {session?.stream_link || ""}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.descriptionContainer}>
-            <Text bold stylesProp={styles.mainTitle}>
-              Description
-            </Text>
-            {session.description ? (
-              <WebViewComponent source={session?.description} margin={20} />
+          <TouchableOpacity
+            onPress={() => dispatch(setMySchedule(session.id))}
+            style={styles.bookmarkBtn}
+          >
+            {mySchedules.indexOf(session.id) !== -1 ? (
+              <Ionicons name="bookmark" size={18} style={styles.bookmarkIcon} />
             ) : (
-              <Text>No description</Text>
+              <Ionicons
+                name="bookmark-outline"
+                size={18}
+                style={styles.bookmarkIconSelected}
+              />
             )}
-          </View>
-
-          {session?.id_lecturers.length ? (
-            <View style={styles.speakersContainer}>
-              <Text
-                bold
-                stylesProp={{
-                  ...styles.mainTitle,
-                  ...styles.speakersTitle,
-                }}
-              >
-                Speakers
-              </Text>
-
-              {session?.id_lecturers.map((s, idx) => {
-                const speaker = getData(speakers, s);
-                return speaker ? (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("AuthorDetails", {
-                        author: speaker,
-                      })
-                    }
-                    key={idx}
-                    style={styles.speaker}
-                  >
-                    <View style={styles.imageContainer}>
-                      {speaker?.profile_picture ? (
-                        <Image
-                          source={{ uri: speaker.profile_picture }}
-                          style={styles.profilePicture}
-                        />
-                      ) : (
-                        <SVGAvatar width={32} height={32} />
-                      )}
-                    </View>
-
-                    <Text stylesProp={styles.displayName}>
-                      {speaker.display_name}
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <></>
-                );
-              })}
+          </TouchableOpacity>
+        </View>
+        <ScrollView bounces={false} style={styles.scrollView}>
+          {session?.rateable ? (
+            <View style={styles.reviewContainer}>
+              <StarRating rating={rating[0]} numberOfReviews={rating[1]} />
             </View>
           ) : null}
-          <View style={styles.ratingsFooter}>
-            <Text bold stylesProp={styles.footerHeading}>
-              What do you think about this lecture?
-            </Text>
-            <Text stylesProp={styles.footerSecondaryHeading}>
-              We are interested in hearing your feedback
-            </Text>
-            <View style={styles.footerTop}>
-              {session?.rateable ? (
-                <TouchableOpacity
-                  style={{ ...styles.actionButton, ...styles.rateBtn }}
-                  onPress={() => {
-                    setShowModal(true);
-                  }}
-                >
-                  <Text bold stylesProp={styles.btnLabel}>
-                    Rate the lecture
-                  </Text>
-                </TouchableOpacity>
-              ) : null}
-              {session.can_share ? (
-                <TouchableOpacity
-                  onPress={() =>
-                    onShare(session?.share_link || "https://www.sfscon.it/")
-                  }
-                  style={{ ...styles.actionButton, ...styles.shareBtn }}
-                >
-                  <Text bold stylesProp={styles.btnLabel}>
-                    Share the lecture
-                  </Text>
-                </TouchableOpacity>
-              ) : null}
+
+          <View style={styles.eventDetailsContainer}>
+            <View style={styles.eventDetail}>
+              <Feather name="calendar" size={18} style={styles.eventIcon} />
+              <Text numberOfLines={1} stylesProp={styles.eventText}>
+                {moment(session?.date).format("DD MMM YYYY")}
+              </Text>
+            </View>
+            <View style={styles.eventDetail}>
+              <Feather name="clock" size={18} style={styles.eventIcon} />
+              <Text numberOfLines={1} stylesProp={styles.eventText}>
+                {`${moment(session.start).format("HH:mm")}`}
+              </Text>
+            </View>
+
+            <View style={styles.eventDetail}>
+              <View style={styles.roadSvgHolder}>
+                <RoadSVG />
+              </View>
+              {/* <Feather name="home" size={18} style={styles.eventIcon} /> */}
+              <Text numberOfLines={1} stylesProp={styles.eventText}>
+                {track?.name ?? ""}
+              </Text>
             </View>
           </View>
-        </View>
+
+          <View style={styles.main}>
+            {session?.stream_link ? (
+              <View style={styles.streamContainer}>
+                <Text
+                  bold
+                  stylesProp={{ ...styles.mainTitle, ...styles.streamTitle }}
+                >
+                  Location
+                </Text>
+
+                <TouchableOpacity style={styles.streamBtn} onPress={handleUrl}>
+                  <Text numberOfLines={1} stylesProp={styles.streamLink}>
+                    {session?.stream_link}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <></>
+            )}
+
+            <View style={styles.descriptionContainer}>
+              <Text bold stylesProp={styles.mainTitle}>
+                Description
+              </Text>
+              {session.description ? (
+                <WebViewComponent source={session?.description} margin={20} />
+              ) : (
+                <Text>No description</Text>
+              )}
+            </View>
+
+            {session?.id_lecturers.length ? (
+              <View style={styles.speakersContainer}>
+                <Text
+                  bold
+                  stylesProp={{
+                    ...styles.mainTitle,
+                    ...styles.speakersTitle,
+                  }}
+                >
+                  Speakers
+                </Text>
+
+                {session?.id_lecturers.map((s, idx) => {
+                  const speaker = getData(speakers, s);
+                  return speaker ? (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("AuthorDetails", {
+                          author: speaker,
+                        })
+                      }
+                      key={idx}
+                      style={styles.speaker}
+                    >
+                      <View style={styles.imageContainer}>
+                        {speaker?.profile_picture ? (
+                          <Image
+                            source={{ uri: speaker.profile_picture }}
+                            style={styles.profilePicture}
+                          />
+                        ) : (
+                          <SVGAvatar width={32} height={32} />
+                        )}
+                      </View>
+                      <View style={styles.speakerInfo}>
+                        <Text stylesProp={styles.displayName}>
+                          {speaker.display_name}
+                        </Text>
+
+                        <Text stylesProp={styles.companyName}>
+                          {speaker.company_name}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <></>
+                  );
+                })}
+              </View>
+            ) : null}
+            <View style={styles.ratingsFooter}>
+              <Text bold stylesProp={styles.footerHeading}>
+                What do you think about this lecture?
+              </Text>
+              <Text stylesProp={styles.footerSecondaryHeading}>
+                We are interested in hearing your feedback
+              </Text>
+              <View style={styles.footerTop}>
+                {session?.rateable ? (
+                  <TouchableOpacity
+                    style={{ ...styles.actionButton, ...styles.rateBtn }}
+                    onPress={() => {
+                      setShowModal(true);
+                    }}
+                  >
+                    <Text bold stylesProp={styles.btnLabel}>
+                      Rate the lecture
+                    </Text>
+                  </TouchableOpacity>
+                ) : null}
+                {session.can_share ? (
+                  <TouchableOpacity
+                    onPress={() =>
+                      onShare(session?.share_link || "https://www.sfscon.it/")
+                    }
+                    style={{ ...styles.actionButton, ...styles.shareBtn }}
+                  >
+                    <Text bold stylesProp={styles.btnLabel}>
+                      Share the lecture
+                    </Text>
+                  </TouchableOpacity>
+                ) : null}
+              </View>
+            </View>
+          </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+    </>
   );
 };

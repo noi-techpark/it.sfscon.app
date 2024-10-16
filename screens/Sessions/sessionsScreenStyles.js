@@ -6,6 +6,7 @@ const getStyles = (theme) => {
       flex: 1,
       flexDirection: "row",
     },
+
     sessionContainer: {
       flex: 1,
       flexDirection: "row",
@@ -57,24 +58,27 @@ const getStyles = (theme) => {
       marginBottom: 15,
       borderRadius: 10,
       marginLeft: 8,
-      paddingVertical: 15,
+      paddingTop: 8,
       paddingHorizontal: 8,
     },
 
     headerTrack: {
       fontSize: 12,
-      marginBottom: 7,
+      marginBottom: 8,
       fontWeight: "600",
     },
 
     sessionTitle: {
       fontSize: 14,
+      marginBottom: 8,
       fontWeight: "600",
-      marginBottom: 24,
+    },
+
+    sessionAbstract: {
+      marginBottom: 8,
     },
 
     trackContainer: {
-      paddingVertical: 6,
       flexDirection: "row",
       alignItems: "center",
     },
@@ -87,13 +91,12 @@ const getStyles = (theme) => {
 
     speaker: {
       flexDirection: "row",
-      marginBottom: 8,
     },
 
     speakersTitle: {
       fontSize: 10,
       color: theme.text,
-      marginBottom: 7,
+      marginBottom: 8,
     },
 
     imageContainer: {

@@ -8,7 +8,7 @@ import {
   Pressable,
   Keyboard,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorsScreenStyles";
 import { getTheme } from "../../tools/getTheme";
@@ -18,11 +18,13 @@ import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
 import EmptyScreenSVG from "../../assets/icons/empty.svg";
 import EmptyScreen from "../../components/EmptyScreen";
+import { toggleTabBarVisibility } from "../../store/actions/AppActions";
 
 export default AuthorsScreen = ({ navigation }) => {
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
   const db = useSelector((state) => state.app.db);
   const lecturers = db?.conference?.db?.lecturers;
@@ -60,6 +62,7 @@ export default AuthorsScreen = ({ navigation }) => {
   }, [isFocused]);
 
   const navigateToAuthorDetails = (author) => {
+    dispatch(toggleTabBarVisibility("hidden"));
     navigation.navigate("AuthorDetails", { author });
   };
 

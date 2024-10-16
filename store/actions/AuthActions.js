@@ -8,8 +8,6 @@ export const authorizeUser = (cb) => async (dispatch) => {
 
     const jwt = await storageGetItem("jwt");
 
-    console.log(jwt == true)
-
     if (jwt) {
       return;
     }

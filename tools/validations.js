@@ -9,6 +9,10 @@ export const checkForToken = async (setAuth) => {
   return setAuth(jwt);
 };
 
+export const roundNumber = (num = 0) => {
+  return num.toFixed(2);
+};
+
 export const filterObject = (objToFilter) => {
   return Object.keys(objToFilter)
     .filter((s) => {

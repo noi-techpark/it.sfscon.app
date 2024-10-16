@@ -1,16 +1,20 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useLayoutEffect } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
 import { useSelector, useDispatch } from "react-redux";
-import { getMySchedules, setMySchedule } from "../../store/actions/AppActions";
+import {
+  getMySchedules,
+  setMySchedule,
+  toggleTabBarVisibility,
+} from "../../store/actions/AppActions";
 import getStyles from "./myScheduleScreenStyles";
 import moment from "moment";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import EmptyScreenSVG from "../../assets/icons/empty.svg";
 import { getData } from "../../tools/sessions";
 import AppLoader from "../../components/AppLoader";
 import EmptyScreen from "../../components/EmptyScreen";
+import { useFocusEffect, CommonActions } from "@react-navigation/native";
 
 export default MyscheduleScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -25,6 +29,7 @@ export default MyscheduleScreen = ({ navigation }) => {
   const [schedules, setSchedules] = useState({});
 
   const goToDetails = (session, id) => {
+    dispatch(toggleTabBarVisibility("hidden"));
     navigation.navigate("MyScheduleSessionDetails", {
       session: {
         ...session,
@@ -89,11 +94,9 @@ export default MyscheduleScreen = ({ navigation }) => {
                             style={styles.clock}
                           />
                           <View>
-                            <Text stylesProp={styles.time}>{`${moment(
-                              session.start
-                            ).format("HH:mm")} - ${moment(session.start)
-                              .add(session.duration, "seconds")
-                              .format("HH:mm")}`}</Text>
+                            <Text stylesProp={styles.time}>
+                              {`${moment(session.start).format("HH:mm")}`}{" "}
+                            </Text>
                           </View>
                         </View>
 
@@ -119,7 +122,7 @@ export default MyscheduleScreen = ({ navigation }) => {
                                   return session?.id_lecturers?.length > 1 ? (
                                     <Text
                                       key={idx}
-                                    >{`${lecturer.display_name} ,`}</Text>
+                                    >{`${lecturer.display_name}`}</Text>
                                   ) : (
                                     <Text
                                       key={idx}

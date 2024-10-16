@@ -5,17 +5,19 @@ const getStyles = (theme) => {
     listHolder: {
       flex: 1,
     },
+
     container: {
-      marginBottom: 20,
       flex: 1,
-      paddingHorizontal: 20,
     },
 
     header: {
+      paddingHorizontal: 20,
       marginBottom: 24,
     },
 
     authorTop: {
+      paddingHorizontal: 20,
+      marginBottom: 16,
       flexDirection: "row",
       alignItems: "center",
     },
@@ -45,6 +47,10 @@ const getStyles = (theme) => {
       flex: 1,
     },
 
+    bioHolderScrollView: {
+      paddingHorizontal: 20,
+    },
+
     bio: {
       fontSize: 15,
       color: theme.textMedium,
@@ -52,10 +58,8 @@ const getStyles = (theme) => {
 
     sectionTitle: {
       marginTop: 45,
-
       fontSize: 18,
       fontWeight: "600",
-      marginBottom: 20,
     },
 
     socials: {
@@ -72,6 +76,7 @@ const getStyles = (theme) => {
     },
 
     footer: {
+      paddingBottom: 16,
       alignItems: "flex-start",
     },
 

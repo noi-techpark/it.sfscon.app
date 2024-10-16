@@ -1,4 +1,10 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { TouchableOpacity, View, TextInput } from "react-native";
 import getStyles from "./scheduleScreenStyles";
 import { getTheme } from "../../tools/getTheme";
@@ -12,8 +18,12 @@ import TracksComponent from "../../components/Tracks/TracksComponent";
 import Text from "../../components/TextComponent";
 import FilterActiveSVG from "../../assets/filter_active.svg";
 import FilterDefaultSVG from "../../assets/filter_default.svg";
-import { setSelectedTracks } from "../../store/actions/AppActions";
+import {
+  setSelectedTracks,
+  toggleTabBarVisibility,
+} from "../../store/actions/AppActions";
 import { fromObjectToArray } from "../../tools/sessions";
+import { useIsFocused } from "@react-navigation/native";
 
 export default ScheduleScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -21,6 +31,7 @@ export default ScheduleScreen = ({ navigation }) => {
   const styles = useMemo(() => getStyles(theme), [theme]);
 
   const store = useSelector((state) => state?.app?.db?.conference?.db);
+  const isFocused = useIsFocused();
 
   const { sessions, tracks } = store || {};
   const loader = useSelector((state) => state?.utils?.loader);
@@ -34,6 +45,12 @@ export default ScheduleScreen = ({ navigation }) => {
   const inputRef = useRef();
 
   const activeFiltersLabel = selectedTracks?.length > 1 ? "filters" : "filter";
+
+  useLayoutEffect(() => {
+    if (isFocused) {
+      dispatch(toggleTabBarVisibility("show"));
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (inputRef?.current) {
@@ -68,7 +85,7 @@ export default ScheduleScreen = ({ navigation }) => {
                 <TextInput
                   onChangeText={setSearchTerm}
                   ref={inputRef}
-                  placeholder="Search programme"
+                  placeholder="Search for a talk"
                   style={styles.searchInput}
                 />
 

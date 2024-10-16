@@ -7,12 +7,11 @@ import {
   TOGGLE_MY_SCHEDULE,
   GET_MY_SCHEDULE_SUCCESS,
   GET_MY_SCHEDULE_FAIL,
-  GET_RATING_SUCCESS,
-  GET_RATING_FAIL,
   SET_RATING_SUCCESS,
   SET_RATING_FAIL,
   RESET_TRACKS_AND_DAY,
   SET_UPDATE_DATA_COUNTER,
+  TOGGLE_TAB_BAR_VISIBILITY,
 } from "../constants/AppConstants";
 
 import { showLoader, hideLoader } from "./UtilsActions";
@@ -23,13 +22,12 @@ import {
 } from "../constants/UtilsConstants";
 
 import errorHandler from "../../tools/errorHandler";
-import { storageGetItem, storageSetItem } from "../../tools/secureStore";
+import { storageGetItem } from "../../tools/secureStore";
 import { Platform } from "react-native";
 
 import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
-import moment from "moment";
 
 export const setAppTheme = (theme) => (dispatch) => {
   dispatch({ type: SET_THEME, payload: theme });
@@ -69,10 +67,18 @@ export const getSfsCon =
 
       Object.keys(data?.conference?.db?.sessions).forEach((id) => {
         const session = data?.conference?.db?.sessions[id];
+        const del = ";;";
+        const searchTerms = [session.title];
+
+        if (session.abstract) {
+          searchTerms.push(session.abstract);
+        }
         session.rating =
           id in data?.ratings?.rates_by_session
             ? data?.ratings?.rates_by_session[id]
             : [0, 0];
+
+        session.searchTerms = searchTerms.join(del);
       });
 
       dispatch({ type: GET_CONFERENCE_SUCCESS, payload: data });
@@ -165,6 +171,10 @@ export const postRatings = (sessionId, rate) => async (dispatch) => {
     console.log("ERROR JE ", error);
     dispatch({ type: SET_RATING_FAIL });
   }
+};
+
+export const toggleTabBarVisibility = (visibility) => (dispatch) => {
+  dispatch({ type: TOGGLE_TAB_BAR_VISIBILITY, payload: visibility });
 };
 
 export const resetTracksAndDaysSelected = () => (dispatch) => {

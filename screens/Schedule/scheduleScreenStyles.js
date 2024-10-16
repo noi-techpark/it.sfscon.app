@@ -5,6 +5,7 @@ const getStyles = (theme) => {
     container: {
       flex: 1,
     },
+
     header: {
       marginBottom: 18,
       paddingHorizontal: 20,
@@ -15,7 +16,7 @@ const getStyles = (theme) => {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginBottom: 10,
+      marginBottom: 8,
     },
 
     searchContainer: {
@@ -101,6 +102,7 @@ const getStyles = (theme) => {
       fontSize: 18,
       fontWeight: "400",
     },
+
     filterIcon: {
       color: theme.secondaryTitle,
       alignSelf: "flex-end",

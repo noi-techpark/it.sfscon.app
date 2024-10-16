@@ -11,7 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
 import { fromObjectToArray } from "../../tools/sessions";
 import { FlatList } from "react-native-gesture-handler";
-import { getMySchedules, setMySchedule } from "../../store/actions/AppActions";
+import {
+  setMySchedule,
+  toggleTabBarVisibility,
+} from "../../store/actions/AppActions";
 import EmptyScreen from "../../components/EmptyScreen";
 
 export default SessionsComponent = ({
@@ -36,6 +39,14 @@ export default SessionsComponent = ({
   const [loader, setLoader] = useState(false);
   const [sessionsByDay, setSessionsByDay] = useState({});
 
+  const navigateToDetails = (item, track) => {
+    dispatch(toggleTabBarVisibility("hidden"));
+    navigation.navigate("Schedule", {
+      screen: "SessionDetails",
+      params: { session: item, track },
+    });
+  };
+
   const filterSessionByDay = () => {
     let filteredSessions = { ...sessions };
 
@@ -51,7 +62,7 @@ export default SessionsComponent = ({
     if (searchTerm?.length) {
       filteredSessions = Object.keys(filteredSessions).reduce((acc, key) => {
         if (
-          filteredSessions[key]?.title
+          filteredSessions[key]?.searchTerms
             .toLowerCase()
             .indexOf(searchTerm.toLowerCase()) !== -1
         ) {
@@ -121,12 +132,7 @@ export default SessionsComponent = ({
                 </Text>
               </View>
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Schedule", {
-                    screen: "SessionDetails",
-                    params: { session: item, track },
-                  })
-                }
+                onPress={() => navigateToDetails(item, track)}
                 style={styles.session}
               >
                 <Text
@@ -141,6 +147,12 @@ export default SessionsComponent = ({
                 <Text bold stylesProp={styles.sessionTitle}>
                   {item.title}
                 </Text>
+
+                {item.abstract ? (
+                  <Text stylesProp={styles.sessionAbstract}>
+                    {item.abstract}
+                  </Text>
+                ) : null}
                 {item?.id_lecturers?.length ? (
                   <View style={styles.speakers}>
                     <Text stylesProp={styles.speakersTitle}>Speakers:</Text>
@@ -214,6 +226,6 @@ export default SessionsComponent = ({
       />
     </View>
   ) : (
-    <EmptyScreen title="There are no lectures for this day according to the selected filters" />
+    <EmptyScreen title="No results were found for this day based on the filters selected." />
   );
 };

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { View } from "react-native";
+import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
 import Link from "../../components/Link";
 import getStyles from "./linksScreenStyles";
@@ -33,6 +34,11 @@ export default LinksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text bold stylesProp={styles.headerTitle}>
+          Links
+        </Text>
+      </View>
       <View style={styles.linksContainer}>
         {links.map(({ label, link, placeholder }, idx) => (
           <Link key={idx} label={label} link={link} placeholder={placeholder} />
