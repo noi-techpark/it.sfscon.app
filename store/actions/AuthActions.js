@@ -8,7 +8,11 @@ export const authorizeUser = (cb) => async (dispatch) => {
 
     const jwt = await storageGetItem("jwt");
 
-    if (jwt) throw new Error();
+    console.log(jwt == true)
+
+    if (jwt) {
+      return;
+    }
 
     const response = await api.get(url);
 
@@ -19,7 +23,7 @@ export const authorizeUser = (cb) => async (dispatch) => {
     await storageSetItem("jwt", token);
     dispatch({ type: AUTHORIZE_USER, payload: token });
   } catch (error) {
-    console.log(error);
+    console.log("OVAJ JE ERROR", error);
   } finally {
     await cb();
   }
