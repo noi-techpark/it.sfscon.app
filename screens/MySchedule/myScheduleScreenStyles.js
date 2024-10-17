@@ -28,19 +28,26 @@ const getStyles = (theme) => {
     },
 
     session: {
-      borderBottomWidth: 1,
+      paddingVertical: 8,
+      borderBottomWidth: 0.6,
       borderBottomColor: "rgba(0, 0, 0, 0.1)",
-      paddingBottom: 20,
+    },
+
+    lastSession: {
+      borderBottomWidth: 0,
     },
 
     sessionTitle: {
       fontSize: 16,
-      marginVertical: 20,
+      marginVertical: 8,
+    },
+
+    abstract: {
+      marginBottom: 8,
     },
 
     sessionDetails: {
       flexDirection: "row",
-      marginBottom: 20,
     },
 
     timeContainer: {
@@ -48,8 +55,8 @@ const getStyles = (theme) => {
       alignSelf: "center",
       alignItems: "center",
       backgroundColor: "#F0F8FD",
-      marginRight: 15,
-      padding: 10,
+      marginRight: 12,
+      padding: 6,
       borderRadius: 30,
     },
 
@@ -58,7 +65,7 @@ const getStyles = (theme) => {
       alignSelf: "center",
       alignItems: "center",
       backgroundColor: "#F0F8FD",
-      padding: 8,
+      padding: 6,
       borderRadius: 30,
     },
 
@@ -93,13 +100,12 @@ const getStyles = (theme) => {
     },
 
     bookmark: {
+      position: "absolute",
+      right: 0,
+      bottom: 8,
       flex: 1,
       alignItems: "flex-end",
       marginRight: 5,
-    },
-
-    bookmarkBtn: {
-      padding: 10,
     },
 
     bookmarkIcon: {

@@ -54,10 +54,6 @@ const getStyles = (theme) => {
       marginBottom: 20,
     },
 
-    roadSvgHolder: {
-      marginLeft: -4,
-    },
-
     eventText: {
       marginLeft: 8,
       color: theme.textMedium,

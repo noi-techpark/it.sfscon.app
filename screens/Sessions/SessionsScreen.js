@@ -16,6 +16,7 @@ import {
   toggleTabBarVisibility,
 } from "../../store/actions/AppActions";
 import EmptyScreen from "../../components/EmptyScreen";
+import Speaker from "../../components/Speaker/Speaker";
 
 export default SessionsComponent = ({
   sessions = {},
@@ -158,30 +159,7 @@ export default SessionsComponent = ({
                     <Text stylesProp={styles.speakersTitle}>Speakers:</Text>
                     {item.id_lecturers.map((lect, idx) => {
                       const lecturer = getData(store?.lecturers, lect);
-                      return (
-                        <View key={idx} style={styles.speaker}>
-                          <View style={styles.imageContainer}>
-                            {lecturer?.profile_picture ? (
-                              <Image
-                                resizeMode="cover"
-                                source={{ uri: lecturer?.profile_picture }}
-                                style={styles.profilePicture}
-                              />
-                            ) : (
-                              <SVGAvatar />
-                            )}
-                          </View>
-                          <View style={styles.speakerInfo}>
-                            <Text stylesProp={styles.speakerName}>
-                              {lecturer.display_name}
-                            </Text>
-                            <Text stylesProp={styles.companyName}>
-                              {lecturer.company_name}
-                            </Text>
-                            <Text stylesProp={styles.speakerSession}></Text>
-                          </View>
-                        </View>
-                      );
+                      return <Speaker speaker={lecturer} key={idx} />;
                     })}
                   </View>
                 ) : null}

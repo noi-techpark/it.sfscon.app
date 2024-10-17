@@ -11,10 +11,11 @@ import {
 import getStyles from "./myScheduleScreenStyles";
 import moment from "moment";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import { getData } from "../../tools/sessions";
+import { fromObjectToArray, getData } from "../../tools/sessions";
 import AppLoader from "../../components/AppLoader";
 import EmptyScreen from "../../components/EmptyScreen";
 import { useFocusEffect, CommonActions } from "@react-navigation/native";
+import Speaker from "../../components/Speaker/Speaker";
 
 export default MyscheduleScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ export default MyscheduleScreen = ({ navigation }) => {
         <AppLoader />
       ) : (
         <View style={styles.scollViewContainer}>
-          {Object.keys(schedules).length > 0 ? (
+          {fromObjectToArray(sessions).length > 0 ? (
             <ScrollView contentContainerStyle={styles.mySchedulesContainer}>
               {Object.keys(schedules).map((s, idx) => {
                 const session = sessions[s];
@@ -82,10 +83,6 @@ export default MyscheduleScreen = ({ navigation }) => {
                     onPress={() => goToDetails(session, s, track)}
                   >
                     <View style={styles.session}>
-                      <Text bold stylesProp={styles.sessionTitle}>
-                        {session.title}
-                      </Text>
-
                       <View style={styles.sessionDetails}>
                         <View style={styles.timeContainer}>
                           <AntDesign
@@ -111,26 +108,30 @@ export default MyscheduleScreen = ({ navigation }) => {
                           </Text>
                         </View>
                       </View>
+                      <Text bold stylesProp={styles.sessionTitle}>
+                        {session.title}
+                      </Text>
+
+                      {session?.abstract ? (
+                        <Text stylesProp={styles.abstract}>
+                          {session.abstract}
+                        </Text>
+                      ) : null}
 
                       <View style={styles.speakersContainer}>
-                        <Text stylesProp={styles.speakersTitle}>Speakers:</Text>
                         <View style={styles.footer}>
-                          <View stylesProp={styles.speakers}>
-                            {session?.id_lecturers.length
-                              ? session?.id_lecturers.map((lect, idx) => {
-                                  const lecturer = getData(lecturers, lect);
-                                  return session?.id_lecturers?.length > 1 ? (
-                                    <Text
-                                      key={idx}
-                                    >{`${lecturer.display_name}`}</Text>
-                                  ) : (
-                                    <Text
-                                      key={idx}
-                                    >{`${lecturer.display_name}`}</Text>
-                                  );
-                                })
-                              : null}
-                          </View>
+                          {session?.id_lecturers.length ? (
+                            <Text stylesProp={styles.speakersTitle}>
+                              Speakers:
+                            </Text>
+                          ) : null}
+
+                          {session?.id_lecturers.length
+                            ? session?.id_lecturers.map((lect, idx) => {
+                                const lecturer = getData(lecturers, lect);
+                                return <Speaker speaker={lecturer} key={idx} />;
+                              })
+                            : null}
 
                           <View style={styles.bookmark}>
                             <TouchableOpacity

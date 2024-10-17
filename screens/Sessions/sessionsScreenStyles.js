@@ -32,7 +32,7 @@ const getStyles = (theme) => {
     timeContainer: {
       backgroundColor: theme.inputBackground,
       flexBasis: "20%",
-      paddingTop: 16,
+      paddingTop: 6,
       paddingHorizontal: 8,
       alignItems: "center",
       justifyContent: "flex-start",

@@ -128,9 +128,12 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
         </View>
         <ScrollView bounces={false} style={styles.scrollView}>
           {session?.rateable ? (
-            <View style={styles.reviewContainer}>
+            <TouchableOpacity
+              onPress={() => setShowModal(true)}
+              style={styles.reviewContainer}
+            >
               <StarRating rating={rating[0]} numberOfReviews={rating[1]} />
-            </View>
+            </TouchableOpacity>
           ) : null}
 
           <View style={styles.eventDetailsContainer}>
@@ -241,7 +244,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
             ) : null}
             <View style={styles.ratingsFooter}>
               <Text bold stylesProp={styles.footerHeading}>
-                What do you think about this lecture?
+                What do you think about this talk?
               </Text>
               <Text stylesProp={styles.footerSecondaryHeading}>
                 We are interested in hearing your feedback
@@ -255,7 +258,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                     }}
                   >
                     <Text bold stylesProp={styles.btnLabel}>
-                      Rate the lecture
+                      Rate the talk
                     </Text>
                   </TouchableOpacity>
                 ) : null}
@@ -267,7 +270,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                     style={{ ...styles.actionButton, ...styles.shareBtn }}
                   >
                     <Text bold stylesProp={styles.btnLabel}>
-                      Share the lecture
+                      Share the talk
                     </Text>
                   </TouchableOpacity>
                 ) : null}

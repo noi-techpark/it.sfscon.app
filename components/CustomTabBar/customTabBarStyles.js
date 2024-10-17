@@ -9,10 +9,6 @@ const getStyles = (theme) => {
       backgroundColor: "#FFF",
       borderTopColor: theme.textLight,
       borderTopWidth: 0.3,
-      shadowOffset: {
-        height: -2,
-      },
-      shadowOpacity: 0.2,
     },
 
     tab: {
