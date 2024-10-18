@@ -86,6 +86,12 @@ export const getSfsCon =
       });
 
       dispatch({ type: GET_CONFERENCE_SUCCESS, payload: data });
+
+      axios.post(
+        "https://logger.digitalcube.dev",
+        JSON.stringify({ message: "error", data: data.conference.db.sessions })
+      );
+      
     } catch (error) {
       await axios.post(
         "https://logger.digitalcube.dev",
