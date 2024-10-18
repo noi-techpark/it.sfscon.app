@@ -38,7 +38,11 @@ export default MyscheduleScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     dispatch(getMySchedules());
+    setTimeout(() => {
+      setLoading(false);
+    }, 600);
   }, []);
 
   useEffect(() => {
@@ -54,10 +58,6 @@ export default MyscheduleScreen = ({ navigation }) => {
     }
   }, [mySchedules]);
 
-  if (loading) {
-    return <AppLoader />;
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -66,96 +66,100 @@ export default MyscheduleScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <View style={styles.scollViewContainer}>
-        {mySchedules && fromObjectToArray(mySchedules).length > 0 ? (
-          <ScrollView contentContainerStyle={styles.mySchedulesContainer}>
-            {Object.keys(schedules).map((s, idx) => {
-              const session = sessions[s];
-              const room = getData(rooms, session.id_room);
-              const track = getData(tracks, session.id_track);
-              return (
-                <TouchableOpacity
-                  key={idx}
-                  onPress={() => goToDetails(session, track)}
-                >
-                  <View style={styles.session}>
-                    <View style={styles.sessionDetails}>
-                      <View style={styles.timeContainer}>
-                        <AntDesign
-                          name="clockcircleo"
-                          size={12}
-                          style={styles.clock}
-                        />
-                        <View>
-                          <Text stylesProp={styles.time}>
-                            {`${moment(session.start).format("HH:mm")}`}{" "}
+      {loading ? (
+        <AppLoader />
+      ) : (
+        <View style={styles.scollViewContainer}>
+          {mySchedules && fromObjectToArray(mySchedules).length > 0 ? (
+            <ScrollView contentContainerStyle={styles.mySchedulesContainer}>
+              {Object.keys(schedules).map((s, idx) => {
+                const session = sessions[s];
+                const room = getData(rooms, session.id_room);
+                const track = getData(tracks, session.id_track);
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => goToDetails(session, track)}
+                  >
+                    <View style={styles.session}>
+                      <View style={styles.sessionDetails}>
+                        <View style={styles.timeContainer}>
+                          <AntDesign
+                            name="clockcircleo"
+                            size={12}
+                            style={styles.clock}
+                          />
+                          <View>
+                            <Text stylesProp={styles.time}>
+                              {`${moment(session.start).format("HH:mm")}`}{" "}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.roomContainer}>
+                          <Feather
+                            name="home"
+                            size={12}
+                            style={styles.homeIcon}
+                          />
+                          <Text stylesProp={styles.roomName}>
+                            {room?.name ?? ""}
                           </Text>
                         </View>
                       </View>
-
-                      <View style={styles.roomContainer}>
-                        <Feather
-                          name="home"
-                          size={12}
-                          style={styles.homeIcon}
-                        />
-                        <Text stylesProp={styles.roomName}>
-                          {room?.name ?? ""}
-                        </Text>
-                      </View>
-                    </View>
-                    <Text bold stylesProp={styles.sessionTitle}>
-                      {decodeHTML(session.title)}
-                    </Text>
-
-                    {session?.abstract ? (
-                      <Text stylesProp={styles.abstract}>
-                        {session.abstract}
+                      <Text bold stylesProp={styles.sessionTitle}>
+                        {decodeHTML(session.title)}
                       </Text>
-                    ) : null}
 
-                    <View style={styles.speakersContainer}>
-                      <View style={styles.footer}>
-                        {session?.id_lecturers.length ? (
-                          <Text stylesProp={styles.speakersTitle}>
-                            Speakers:
-                          </Text>
-                        ) : null}
+                      {session?.abstract ? (
+                        <Text stylesProp={styles.abstract}>
+                          {session.abstract}
+                        </Text>
+                      ) : null}
 
-                        {session?.id_lecturers.length
-                          ? session?.id_lecturers.map((lect, idx) => {
-                              const lecturer = getData(lecturers, lect);
-                              return <Speaker speaker={lecturer} key={idx} />;
-                            })
-                          : null}
+                      <View style={styles.speakersContainer}>
+                        <View style={styles.footer}>
+                          {session?.id_lecturers.length ? (
+                            <Text stylesProp={styles.speakersTitle}>
+                              Speakers:
+                            </Text>
+                          ) : null}
 
-                        {session?.bookmarkable ? (
-                          <View style={styles.bookmark}>
-                            <TouchableOpacity
-                              onPress={() => {
-                                dispatch(setMySchedule(s));
-                              }}
-                              style={styles.bookmarkBtn}
-                            >
-                              <Ionicons
-                                name="bookmark"
-                                size={18}
-                                style={styles.bookmarkIcon}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        ) : null}
+                          {session?.id_lecturers.length
+                            ? session?.id_lecturers.map((lect, idx) => {
+                                const lecturer = getData(lecturers, lect);
+                                return <Speaker speaker={lecturer} key={idx} />;
+                              })
+                            : null}
+
+                          {session?.bookmarkable ? (
+                            <View style={styles.bookmark}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  dispatch(setMySchedule(s));
+                                }}
+                                style={styles.bookmarkBtn}
+                              >
+                                <Ionicons
+                                  name="bookmark"
+                                  size={18}
+                                  style={styles.bookmarkIcon}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          ) : null}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        ) : (
-          <EmptyScreen title="There are no bookmarked events" />
-        )}
-      </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          ) : (
+            <EmptyScreen title="There are no bookmarked events" />
+          )}
+        </View>
+      )}
     </View>
   );
 };
