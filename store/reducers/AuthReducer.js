@@ -2,6 +2,7 @@ import { AUTHORIZE_USER } from "../constants/AuthConstants";
 
 const initialState = {
   token: null,
+  authorizationError: null,
   user: {},
 };
 

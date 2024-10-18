@@ -1,17 +1,13 @@
-import { AUTHORIZE_USER } from "../constants/AuthConstants";
+import {
+  AUTHORIZE_USER,
+  SET_AUTHORIZATION_ERROR,
+} from "../constants/AuthConstants";
 import api from "../../service/service";
 import { storageGetItem, storageSetItem } from "../../tools/secureStore";
 
-export const authorizeUser = (cb) => async (dispatch) => {
+export const authorize = () => async (dispatch) => {
   try {
     const url = `/api/authorize`;
-
-    const jwt = await storageGetItem("jwt");
-
-    if (jwt) {
-      return;
-    }
-
     const response = await api.get(url);
 
     const {
@@ -21,8 +17,31 @@ export const authorizeUser = (cb) => async (dispatch) => {
     await storageSetItem("jwt", token);
     dispatch({ type: AUTHORIZE_USER, payload: token });
   } catch (error) {
+    console.log(error);
+    dispatch({ type: AUTHORIZE_USER, payload: "dummy" });
     console.log("OVAJ JE ERROR", error);
-  } finally {
-    await cb();
+  }
+};
+
+export const authorizeUser = () => async (dispatch) => {
+  const jwt = await storageGetItem("jwt");
+
+  if (!jwt) return dispatch(authorize());
+
+  const tokenIsValid = await checkIfTokenIsValid();
+
+  if (!tokenIsValid) return dispatch(authorize());
+
+  dispatch({ type: AUTHORIZE_USER, payload: jwt });
+};
+
+export const checkIfTokenIsValid = async () => {
+  try {
+    const url = "/api/me";
+    const user = await api.get(url);
+    const { data } = user;
+    return data;
+  } catch (error) {
+    Promise.reject(error);
   }
 };

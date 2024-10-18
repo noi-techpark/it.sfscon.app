@@ -24,6 +24,7 @@ import {
 import { useShare } from "../../tools/useShare";
 import StarRating from "../../components/RatingStars/RatingStars";
 import RoadSVG from "../../assets/road.svg";
+import Speaker from "../../components/Speaker/Speaker";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -216,25 +217,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                       key={idx}
                       style={styles.speaker}
                     >
-                      <View style={styles.imageContainer}>
-                        {speaker?.profile_picture ? (
-                          <Image
-                            source={{ uri: speaker.profile_picture }}
-                            style={styles.profilePicture}
-                          />
-                        ) : (
-                          <SVGAvatar width={32} height={32} />
-                        )}
-                      </View>
-                      <View style={styles.speakerInfo}>
-                        <Text stylesProp={styles.displayName}>
-                          {speaker.display_name}
-                        </Text>
-
-                        <Text stylesProp={styles.companyName}>
-                          {speaker.company_name}
-                        </Text>
-                      </View>
+                      <Speaker speaker={speaker} key={idx} />
                     </TouchableOpacity>
                   ) : (
                     <></>

@@ -52,6 +52,7 @@ export const getSfsCon =
       const url = `/api/conference`;
 
       const getConferenceById = await api.get(url);
+
       const { data } = getConferenceById;
 
       dispatch(setUpdateDataCounter(data.next_try_in_ms));

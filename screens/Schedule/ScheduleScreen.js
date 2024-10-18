@@ -164,15 +164,12 @@ export default ScheduleScreen = ({ navigation }) => {
             </View>
           </View>
         </View>
-        {sessions ? (
-          <SessionsComponent
-            sessions={sessions}
-            store={store}
-            searchTerm={searchTerm}
-          />
-        ) : (
-          <></>
-        )}
+
+        <SessionsComponent
+          sessions={sessions}
+          store={store}
+          searchTerm={searchTerm}
+        />
       </>
     </View>
   );

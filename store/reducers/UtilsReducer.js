@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   toast: {},
-  loader: false,
+  loader: true,
 };
 
 export default ToastReducer = (state = initialState, action) => {

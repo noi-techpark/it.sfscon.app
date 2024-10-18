@@ -88,8 +88,9 @@ const getStyles = (theme) => {
     },
 
     description: {
+      lineHeight: 28,
+      fontSize: 16,
       color: theme.textMedium,
-      marginTop: 12,
     },
 
     speakersContainer: {

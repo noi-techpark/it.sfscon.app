@@ -17,6 +17,8 @@ import {
 } from "../../store/actions/AppActions";
 import EmptyScreen from "../../components/EmptyScreen";
 import Speaker from "../../components/Speaker/Speaker";
+import { hideLoader } from "../../store/actions/UtilsActions";
+import AppLoader from "../../components/AppLoader";
 
 export default SessionsComponent = ({
   sessions = {},
@@ -31,13 +33,12 @@ export default SessionsComponent = ({
 
   const selectedDay = useSelector((state) => state.app.selectedDay);
   const selectedTracks = useSelector((state) => state.app.selectedTracks);
-
   const mySchedules = useSelector((state) => state.app.db?.bookmarks);
 
   const navigation = useNavigation();
   const scrollRef = useRef();
 
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const [sessionsByDay, setSessionsByDay] = useState({});
 
   const navigateToDetails = (item, track) => {
@@ -102,6 +103,10 @@ export default SessionsComponent = ({
       scrollRef?.current?.scrollToOffset({ animated: false, offset: 0 });
     }, 0);
   }, [selectedDay]);
+
+  if (loader) {
+    return <AppLoader />;
+  }
 
   return Object.keys(sessionsByDay).length ? (
     <View style={styles.container}>
