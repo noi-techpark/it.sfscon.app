@@ -39,7 +39,7 @@ export default Navigation = () => {
     if (!token) return;
     if (last_updated) {
       setTimeout(() => {
-        dispatch(getSfsCon(last_updated));
+        dispatch(getSfsCon(last_updated, false));
       }, next_try_in_ms || 120000);
     } else {
       dispatch(getSfsCon());
