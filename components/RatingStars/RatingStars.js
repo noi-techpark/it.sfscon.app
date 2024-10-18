@@ -41,6 +41,7 @@ const StarRating = ({ rating = 0, numberOfReviews = 0, maxStars = 5 }) => {
         .fill()
         .map((_, index) => (
           <FontAwesome
+            key={index}
             name="star-o"
             style={styles.rateIcon}
             size={20}

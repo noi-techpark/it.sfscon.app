@@ -50,6 +50,12 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
     }
   };
 
+  const formatEndTime = () => {
+    return moment(session?.start)
+      .add(session?.duration, "seconds")
+      .format("HH:mm");
+  };
+
   const [showModal, setShowModal] = useState(false);
   const [rating, setRating] = useState([0, 0]);
 
@@ -104,20 +110,26 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
             </Text>
           </View>
 
-          <TouchableOpacity
-            onPress={() => dispatch(setMySchedule(session.id))}
-            style={styles.bookmarkBtn}
-          >
-            {mySchedules.indexOf(session.id) !== -1 ? (
-              <Ionicons name="bookmark" size={18} style={styles.bookmarkIcon} />
-            ) : (
-              <Ionicons
-                name="bookmark-outline"
-                size={18}
-                style={styles.bookmarkIconSelected}
-              />
-            )}
-          </TouchableOpacity>
+          {session?.bookmarkable ? (
+            <TouchableOpacity
+              onPress={() => dispatch(setMySchedule(session.id))}
+              style={styles.bookmarkBtn}
+            >
+              {mySchedules.indexOf(session.id) !== -1 ? (
+                <Ionicons
+                  name="bookmark"
+                  size={18}
+                  style={styles.bookmarkIcon}
+                />
+              ) : (
+                <Ionicons
+                  name="bookmark-outline"
+                  size={18}
+                  style={styles.bookmarkIconSelected}
+                />
+              )}
+            </TouchableOpacity>
+          ) : null}
         </View>
         <ScrollView bounces={false} style={styles.scrollView}>
           {session?.rateable ? (
@@ -139,19 +151,22 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
             <View style={styles.eventDetail}>
               <Feather name="clock" size={18} style={styles.eventIcon} />
               <Text numberOfLines={1} stylesProp={styles.eventText}>
-                {`${moment(session.start).format("HH:mm")}`}
+                {`${moment(session.start).format(
+                  "HH:mm"
+                )} - ${formatEndTime()}`}
               </Text>
             </View>
 
-            <View style={styles.eventDetail}>
-              <View style={styles.roadSvgHolder}>
-                <RoadSVG />
+            {track?.name ? (
+              <View style={styles.eventDetail}>
+                <View style={styles.roadSvgHolder}>
+                  <RoadSVG />
+                </View>
+                <Text numberOfLines={1} stylesProp={styles.eventText}>
+                  {track?.name}
+                </Text>
               </View>
-              {/* <Feather name="home" size={18} style={styles.eventIcon} /> */}
-              <Text numberOfLines={1} stylesProp={styles.eventText}>
-                {track?.name ?? ""}
-              </Text>
-            </View>
+            ) : null}
           </View>
 
           <View style={styles.main}>
@@ -211,9 +226,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                     >
                       <Speaker speaker={speaker} key={idx} />
                     </TouchableOpacity>
-                  ) : (
-                    <></>
-                  );
+                  ) : null;
                 })}
               </View>
             ) : null}

@@ -13,7 +13,6 @@ export default RateModal = ({ session, showModal, setShowModal }) => {
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const [ratingStars, setRatingStars] = useState([0, 0, 0, 0, 0]);
-  const [loader, setLoader] = useState(false);
   const [ratingMessage, setRatingMessage] = useState([
     "Poor",
     "Fair",

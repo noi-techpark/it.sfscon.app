@@ -1,6 +1,3 @@
-import { l } from "i18n-js";
-import { storageGetItem } from "./secureStore";
-
 export const validateEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
 
 export const validatePhoneNumber = /[- +()0-9]{7,}/;

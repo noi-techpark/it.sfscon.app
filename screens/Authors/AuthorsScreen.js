@@ -16,7 +16,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
-import EmptyScreenSVG from "../../assets/icons/empty.svg";
 import EmptyScreen from "../../components/EmptyScreen";
 import { toggleTabBarVisibility } from "../../store/actions/AppActions";
 
@@ -154,7 +153,7 @@ export default AuthorsScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.lectInfo}>
-                      <Text numberOfLines={1} stylesProp={styles.lectName}>
+                      <Text stylesProp={styles.lectName}>
                         {item.display_name}
                       </Text>
                       <Text stylesProp={styles.lectCompany}>

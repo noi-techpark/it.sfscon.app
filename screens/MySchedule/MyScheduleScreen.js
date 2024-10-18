@@ -131,20 +131,22 @@ export default MyscheduleScreen = ({ navigation }) => {
                             })
                           : null}
 
-                        <View style={styles.bookmark}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              dispatch(setMySchedule(s));
-                            }}
-                            style={styles.bookmarkBtn}
-                          >
-                            <Ionicons
-                              name="bookmark"
-                              size={18}
-                              style={styles.bookmarkIcon}
-                            />
-                          </TouchableOpacity>
-                        </View>
+                        {session?.bookmarkable ? (
+                          <View style={styles.bookmark}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                dispatch(setMySchedule(s));
+                              }}
+                              style={styles.bookmarkBtn}
+                            >
+                              <Ionicons
+                                name="bookmark"
+                                size={18}
+                                style={styles.bookmarkIcon}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        ) : null}
                       </View>
                     </View>
                   </View>
