@@ -29,13 +29,11 @@ export default MyscheduleScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [schedules, setSchedules] = useState({});
 
-  const goToDetails = (session, id) => {
+  const goToDetails = (session, track) => {
     dispatch(toggleTabBarVisibility("hidden"));
-    navigation.navigate("MyScheduleSessionDetails", {
-      session: {
-        ...session,
-        id,
-      },
+    navigation.navigate("MySchedule", {
+      screen: "MyScheduleSessionDetails",
+      params: { session: session, track },
     });
   };
 
@@ -78,7 +76,7 @@ export default MyscheduleScreen = ({ navigation }) => {
               return (
                 <TouchableOpacity
                   key={idx}
-                  onPress={() => goToDetails(session, s, track)}
+                  onPress={() => goToDetails(session, track)}
                 >
                   <View style={styles.session}>
                     <View style={styles.sessionDetails}>

@@ -157,16 +157,14 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               </Text>
             </View>
 
-            {track?.name ? (
-              <View style={styles.eventDetail}>
-                <View style={styles.roadSvgHolder}>
-                  <RoadSVG />
-                </View>
-                <Text numberOfLines={1} stylesProp={styles.eventText}>
-                  {track?.name}
-                </Text>
+            <View style={styles.eventDetail}>
+              <View style={styles.roadSvgHolder}>
+                <RoadSVG />
               </View>
-            ) : null}
+              <Text numberOfLines={1} stylesProp={styles.eventText}>
+                {track?.name}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.main}>
