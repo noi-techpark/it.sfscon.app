@@ -15,6 +15,7 @@ import { fromObjectToArray, getData } from "../../tools/sessions";
 import AppLoader from "../../components/AppLoader";
 import EmptyScreen from "../../components/EmptyScreen";
 import Speaker from "../../components/Speaker/Speaker";
+import { decodeHTML } from "../../tools/validations";
 
 export default MyscheduleScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -106,7 +107,7 @@ export default MyscheduleScreen = ({ navigation }) => {
                       </View>
                     </View>
                     <Text bold stylesProp={styles.sessionTitle}>
-                      {session.title}
+                      {decodeHTML(session.title)}
                     </Text>
 
                     {session?.abstract ? (

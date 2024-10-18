@@ -17,6 +17,7 @@ import {
 import EmptyScreen from "../../components/EmptyScreen";
 import Speaker from "../../components/Speaker/Speaker";
 import AppLoader from "../../components/AppLoader";
+import { decodeHTML } from "../../tools/validations";
 
 export default SessionsComponent = ({
   sessions = {},
@@ -150,7 +151,7 @@ export default SessionsComponent = ({
                   {track?.name}
                 </Text>
                 <Text bold stylesProp={styles.sessionTitle}>
-                  {item.title}
+                  {decodeHTML(item.title)}
                 </Text>
 
                 {item.abstract ? (

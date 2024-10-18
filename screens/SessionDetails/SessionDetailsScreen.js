@@ -1,18 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  Linking,
-} from "react-native";
+import { View, TouchableOpacity, ScrollView, Linking } from "react-native";
 import { getTheme } from "../../tools/getTheme";
 import getStyles from "./sessionDetailsScreenStyles";
 import { MaterialIcons, Feather, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../../tools/sessions";
-import SVGAvatar from "../../assets/icons/avatar.svg";
 import WebViewComponent from "../../components/WebViewComponent";
 import RatingsComponent from "../../components/RateModal/RateModal";
 import Text from "../../components/TextComponent";
@@ -25,6 +18,7 @@ import { useShare } from "../../tools/useShare";
 import StarRating from "../../components/RatingStars/RatingStars";
 import RoadSVG from "../../assets/road.svg";
 import Speaker from "../../components/Speaker/Speaker";
+import { decodeHTML } from "../../tools/validations";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -58,8 +52,6 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
 
   const [showModal, setShowModal] = useState(false);
   const [rating, setRating] = useState([0, 0]);
-
-  const reviews = new Array(5).fill(0);
 
   const { share } = useShare();
 
@@ -108,7 +100,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
           </TouchableOpacity>
           <View style={styles.titleContainer}>
             <Text numberOfLines={2} bold stylesProp={styles.title}>
-              {session?.title}
+              {decodeHTML(session?.title)}
             </Text>
           </View>
 
