@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "./BottomTabNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getSfsCon } from "../store/actions/AppActions";
 import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
-import {
-  authorizeUser,
-  checkIfTokenIsValid,
-} from "../store/actions/AuthActions";
-import moment from "moment";
-import { storageDeleteItem, storageGetItem } from "../tools/secureStore";
+import { authorizeUser } from "../store/actions/AuthActions";
 
 SplashScreen.preventAutoHideAsync();
 

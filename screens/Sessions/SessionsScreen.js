@@ -1,11 +1,10 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { View, TouchableOpacity, Image } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import moment from "moment";
 import { getTheme } from "../../tools/getTheme";
 import { getData } from "../../tools/sessions";
 import getStyles from "./sessionsScreenStyles";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import SVGAvatar from "../../assets/icons/avatar.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
@@ -17,7 +16,6 @@ import {
 } from "../../store/actions/AppActions";
 import EmptyScreen from "../../components/EmptyScreen";
 import Speaker from "../../components/Speaker/Speaker";
-import { hideLoader } from "../../store/actions/UtilsActions";
 import AppLoader from "../../components/AppLoader";
 
 export default SessionsComponent = ({
