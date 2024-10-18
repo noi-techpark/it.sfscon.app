@@ -92,7 +92,7 @@ export const getSfsCon =
         JSON.stringify({
           message: "Podaci",
           data: data.conference.db.sessions[
-            "e0983c55-713b-4618-bf19-adf022288f36"
+            "77908e70-395d-41be-8ba5-0c3c189dafa1"
           ],
         })
       );
