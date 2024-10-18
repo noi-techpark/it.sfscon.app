@@ -15,6 +15,7 @@ import {
 } from "../constants/AppConstants";
 
 const initialState = {
+  force: 0,
   language: "en",
   tabBarVisibility: "show",
   updateDataCounter: 0,
@@ -47,6 +48,7 @@ export default AppReducer = (state = initialState, action) => {
 
       return {
         ...state,
+        force: state.force + 1,
         db: action.payload,
         selectedDay: selectedDay,
         lastTimeUpdated: action.payload.last_updated,

@@ -34,6 +34,7 @@ export default SessionsComponent = ({
   const selectedDay = useSelector((state) => state.app.selectedDay);
   const selectedTracks = useSelector((state) => state.app.selectedTracks);
   const mySchedules = useSelector((state) => state.app.db?.bookmarks);
+  const force = useSelector((state) => state.app.force);
 
   const navigation = useNavigation();
   const scrollRef = useRef();
@@ -96,7 +97,7 @@ export default SessionsComponent = ({
 
   useEffect(() => {
     filterSessionByDay();
-  }, [selectedDay, selectedTracks, searchTerm]);
+  }, [force, selectedDay, selectedTracks, searchTerm]);
 
   useEffect(() => {
     setTimeout(() => {
