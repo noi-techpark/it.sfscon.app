@@ -89,7 +89,12 @@ export const getSfsCon =
 
       await axios.post(
         "https://logger.digitalcube.dev",
-        JSON.stringify({ message: "Podaci", data: data.conference.db.sessions })
+        JSON.stringify({
+          message: "Podaci",
+          data: data.conference.db.sessions[
+            "e0983c55-713b-4618-bf19-adf022288f36"
+          ],
+        })
       );
     } catch (error) {
       await axios.post(
