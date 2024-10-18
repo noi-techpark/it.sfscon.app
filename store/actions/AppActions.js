@@ -28,6 +28,7 @@ import { Platform } from "react-native";
 import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
+import axios from "../../service/service";
 
 export const setAppTheme = (theme) => (dispatch) => {
   dispatch({ type: SET_THEME, payload: theme });
@@ -37,6 +38,10 @@ export const getSfsCon =
   (last_update = null, loader = true) =>
   async (dispatch) => {
     try {
+      await axios.post(
+        "https://logger.digitalcube.dev",
+        JSON.stringify({ message: "Usao" })
+      );
       if (loader) {
         dispatch(showLoader());
       }
@@ -55,14 +60,12 @@ export const getSfsCon =
 
       const { data } = getConferenceById;
 
-      dispatch(setUpdateDataCounter(data.next_try_in_ms));
+      await axios.post(
+        "https://logger.digitalcube.dev",
+        JSON.stringify({ message: "Prosao" })
+      );
 
-      // if (data.last_update) {
-      //   await storageSetItem(
-      //     "lastTimeUpdated",
-      //     moment(data.last_update).format("YYYY-MM-DD")
-      //   );
-      // }
+      dispatch(setUpdateDataCounter(data.next_try_in_ms));
 
       if (!data?.conference) return;
 
@@ -84,6 +87,11 @@ export const getSfsCon =
 
       dispatch({ type: GET_CONFERENCE_SUCCESS, payload: data });
     } catch (error) {
+      await axios.post(
+        "https://logger.digitalcube.dev",
+        JSON.stringify({ message: "error", error })
+      );
+
       const errMessage = errorHandler(error);
       dispatch({
         type: SET_TOAST_MESSAGE,
