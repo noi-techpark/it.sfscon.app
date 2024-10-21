@@ -1,7 +1,4 @@
-import {
-  AUTHORIZE_USER,
-  SET_AUTHORIZATION_ERROR,
-} from "../constants/AuthConstants";
+import { AUTHORIZE_USER } from "../constants/AuthConstants";
 import api from "../../service/service";
 import { storageGetItem, storageSetItem } from "../../tools/secureStore";
 
@@ -24,15 +21,17 @@ export const authorize = () => async (dispatch) => {
 };
 
 export const authorizeUser = () => async (dispatch) => {
-  const jwt = await storageGetItem("jwt");
+  try {
+    const jwt = await storageGetItem("jwt");
 
-  if (!jwt) return dispatch(authorize());
+    if (!jwt) return dispatch(authorize());
 
-  const tokenIsValid = await checkIfTokenIsValid();
+    const tokenIsValid = await checkIfTokenIsValid();
 
-  if (!tokenIsValid) return dispatch(authorize());
+    if (!tokenIsValid) return dispatch(authorize());
 
-  dispatch({ type: AUTHORIZE_USER, payload: jwt });
+    dispatch({ type: AUTHORIZE_USER, payload: jwt });
+  } catch {}
 };
 
 export const checkIfTokenIsValid = async () => {

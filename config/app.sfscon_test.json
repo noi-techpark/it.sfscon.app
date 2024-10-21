@@ -46,6 +46,7 @@
         "foregroundImage": "./assets/logo_blue_adaptive.png",
         "backgroundColor": "#FFFFFF"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.digitalcube.sfs"
     },
     "web": {

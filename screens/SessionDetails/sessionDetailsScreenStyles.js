@@ -27,6 +27,7 @@ const getStyles = (theme) => {
     },
 
     title: {
+      fontWeight: "bold",
       color: theme.title,
       fontSize: 18,
     },
@@ -91,6 +92,19 @@ const getStyles = (theme) => {
       lineHeight: 28,
       fontSize: 16,
       color: theme.textMedium,
+    },
+
+    bold: {
+      fontWeight: "bold",
+    },
+
+    italic: {
+      fontStyle: "italic",
+    },
+
+    link: {
+      color: "blue",
+      textDecorationLine: "underline",
     },
 
     speakersContainer: {

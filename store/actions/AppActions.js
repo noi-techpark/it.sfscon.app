@@ -12,6 +12,7 @@ import {
   RESET_TRACKS_AND_DAY,
   SET_UPDATE_DATA_COUNTER,
   TOGGLE_TAB_BAR_VISIBILITY,
+  SET_APP_OFFLINE_MODE,
 } from "../constants/AppConstants";
 
 import { showLoader, hideLoader } from "./UtilsActions";
@@ -28,6 +29,29 @@ import { Platform } from "react-native";
 import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
+import axios from "../../service/service";
+
+const formatData = (data) => {
+  if (!data?.conference) return;
+  const sessions = data?.conference?.db?.sessions;
+
+  Object.keys(sessions).forEach((id) => {
+    const session = sessions[id];
+    const del = ";;";
+    const searchTerms = [session.title];
+
+    if (session.abstract) {
+      searchTerms.push(session.abstract);
+    }
+    session.rating =
+      id in data?.ratings?.rates_by_session
+        ? data?.ratings?.rates_by_session[id]
+        : [0, 0];
+
+    session.searchTerms = searchTerms.join(del);
+  });
+  return data;
+};
 
 export const setAppTheme = (theme) => (dispatch) => {
   dispatch({ type: SET_THEME, payload: theme });
@@ -40,6 +64,7 @@ export const getSfsCon =
       if (loader) {
         dispatch(showLoader());
       }
+
       const params = {
         app_version: APP_VERSION,
         device: Platform.OS,
@@ -51,31 +76,15 @@ export const getSfsCon =
 
       const url = `/api/conference`;
 
-      const getConferenceById = await api.get(url);
+      const response = await api.get(url);
 
-      const { data } = getConferenceById;
+      const { data } = response;
 
       dispatch(setUpdateDataCounter(data.next_try_in_ms));
 
-      if (!data?.conference) return;
+      const formatedData = formatData(data);
 
-      Object.keys(data?.conference?.db?.sessions).forEach((id) => {
-        const session = data?.conference?.db?.sessions[id];
-        const del = ";;";
-        const searchTerms = [session.title];
-
-        if (session.abstract) {
-          searchTerms.push(session.abstract);
-        }
-        session.rating =
-          id in data?.ratings?.rates_by_session
-            ? data?.ratings?.rates_by_session[id]
-            : [0, 0];
-
-        session.searchTerms = searchTerms.join(del);
-      });
-
-      dispatch({ type: GET_CONFERENCE_SUCCESS, payload: data });
+      dispatch({ type: GET_CONFERENCE_SUCCESS, payload: formatedData });
     } catch (error) {
       const errMessage = errorHandler(error);
       dispatch({
@@ -162,7 +171,6 @@ export const postRatings = (sessionId, rate) => async (dispatch) => {
       payload: { message: "Thank you for your feedback", type: "info" },
     });
   } catch (error) {
-    console.log("ERROR JE ", error);
     dispatch({ type: SET_RATING_FAIL });
   }
 };
@@ -177,4 +185,37 @@ export const resetTracksAndDaysSelected = () => (dispatch) => {
 
 export const setUpdateDataCounter = (next_try_in_ms) => (dispatch) => {
   dispatch({ type: SET_UPDATE_DATA_COUNTER, payload: next_try_in_ms });
+};
+
+export const setAppOfflineMode = () => async (dispatch) => {
+  dispatch({ type: SET_APP_OFFLINE_MODE, payload: true });
+};
+
+export const readFromBackupServer = () => async (dispatch, getState) => {
+  try {
+    const {
+      app: { db },
+    } = getState();
+
+    dispatch(setAppOfflineMode(true));
+
+    if (!db) {
+      const url = "https://documents.digitalcube.dev/opencon/sfs2024.json";
+      const response = await axios.get(url);
+
+      const { data } = response;
+
+      if (!data) return;
+
+      const formatedData = formatData(data);
+      console.log();
+
+      dispatch({
+        type: GET_CONFERENCE_SUCCESS,
+        payload: formatedData,
+      });
+    }
+  } catch (error) {
+    console.log("usao sam opet", error);
+  }
 };

@@ -12,10 +12,12 @@ import {
   SET_UPDATE_DATA_COUNTER,
   GET_RATING_SUCCESS,
   TOGGLE_TAB_BAR_VISIBILITY,
+  SET_APP_OFFLINE_MODE,
 } from "../constants/AppConstants";
 
 const initialState = {
   force: 0,
+  offlineMode: false,
   language: "en",
   tabBarVisibility: "show",
   updateDataCounter: 0,
@@ -136,6 +138,12 @@ export default AppReducer = (state = initialState, action) => {
       return {
         ...state,
         tabBarVisibility: action.payload,
+      };
+
+    case SET_APP_OFFLINE_MODE:
+      return {
+        ...state,
+        offlineMode: true,
       };
 
     default:

@@ -1,5 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
-import { View, TouchableOpacity, ScrollView, Linking } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+  Text,
+} from "react-native";
 import { getTheme } from "../../tools/getTheme";
 import getStyles from "./sessionDetailsScreenStyles";
 import { MaterialIcons, Feather, Ionicons } from "@expo/vector-icons";
@@ -8,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../../tools/sessions";
 import WebViewComponent from "../../components/WebViewComponent";
 import RatingsComponent from "../../components/RateModal/RateModal";
-import Text from "../../components/TextComponent";
+// import Text from "../../components/TextComponent";
 import {
   getMySchedules,
   setMySchedule,
@@ -18,7 +24,7 @@ import { useShare } from "../../tools/useShare";
 import StarRating from "../../components/RatingStars/RatingStars";
 import RoadSVG from "../../assets/road.svg";
 import Speaker from "../../components/Speaker/Speaker";
-import { decodeHTML } from "../../tools/validations";
+import { decodeHTML, parseTextWithStyles } from "../../tools/validations";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -60,6 +66,70 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   const [rating, setRating] = useState([0, 0]);
 
   const { share } = useShare();
+
+  const parseTextWithStyles = (text) => {
+    const components = [];
+
+    const parsedText = text
+      .replace(/<Text style={styles.bold}>/g, "__BOLD_START__")
+      .replace(/<\/Text>/g, "__BOLD_END__")
+      .replace(/<Text style={styles.italic}>/g, "__ITALIC_START__")
+      .replace(/<a href=/g, "__LINK_START__")
+      .replace(/<\/a>/g, "__LINK_END__");
+
+    const splitText = parsedText.split(
+      /(__BOLD_START__|__BOLD_END__|__ITALIC_START__|__ITALIC_END__|__LINK_START__|__LINK_END__)/
+    );
+
+    let isBold = false;
+    let isItalic = false;
+    let isLink = false;
+    let linkUrl = "";
+
+    splitText.forEach((part, index) => {
+      if (part === "__BOLD_START__") {
+        isBold = true;
+      } else if (part === "__BOLD_END__") {
+        isBold = false;
+      } else if (part === "__ITALIC_START__") {
+        isItalic = true;
+      } else if (part === "__ITALIC_END__") {
+        isItalic = false;
+      } else if (part === "__LINK_START__") {
+        isLink = true;
+        linkUrl = splitText[index + 1];
+      } else if (part === "__LINK_END__") {
+        isLink = false;
+      } else if (isBold) {
+        components.push(
+          <Text key={index} style={styles.bold}>
+            {part}
+          </Text>
+        );
+      } else if (isItalic) {
+        components.push(
+          <Text key={index} style={styles.italic}>
+            {part}
+          </Text>
+        );
+      } else if (isLink) {
+        components.push(
+          <Text
+            key={index}
+            style={styles.link}
+            onPress={() => Linking.openURL(linkUrl)}
+          >
+            {linkUrl}
+          </Text>
+        );
+        isLink = false;
+      } else {
+        components.push(<Text key={index}>{part}</Text>);
+      }
+    });
+
+    return components;
+  };
 
   const findSession = () => {
     if (session?.id in rates_by_session) {
@@ -105,7 +175,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
             />
           </TouchableOpacity>
           <View style={styles.titleContainer}>
-            <Text numberOfLines={2} bold stylesProp={styles.title}>
+            <Text numberOfLines={2} style={styles.title}>
               {decodeHTML(session?.title)}
             </Text>
           </View>
@@ -144,13 +214,13 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
           <View style={styles.eventDetailsContainer}>
             <View style={styles.eventDetail}>
               <Feather name="calendar" size={18} style={styles.eventIcon} />
-              <Text numberOfLines={1} stylesProp={styles.eventText}>
+              <Text numberOfLines={1} style={styles.eventText}>
                 {moment(session?.date).format("DD MMM YYYY")}
               </Text>
             </View>
             <View style={styles.eventDetail}>
               <Feather name="clock" size={18} style={styles.eventIcon} />
-              <Text numberOfLines={1} stylesProp={styles.eventText}>
+              <Text numberOfLines={1} style={styles.eventText}>
                 {`${moment(session.start).format(
                   "HH:mm"
                 )} - ${formatEndTime()}`}
@@ -161,7 +231,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               <View style={styles.roadSvgHolder}>
                 <RoadSVG />
               </View>
-              <Text numberOfLines={1} stylesProp={styles.eventText}>
+              <Text numberOfLines={1} style={styles.eventText}>
                 {track?.name}
               </Text>
             </View>
@@ -172,13 +242,13 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               <View style={styles.streamContainer}>
                 <Text
                   bold
-                  stylesProp={{ ...styles.mainTitle, ...styles.streamTitle }}
+                  style={{ ...styles.mainTitle, ...styles.streamTitle }}
                 >
                   Location
                 </Text>
 
                 <TouchableOpacity style={styles.streamBtn} onPress={handleUrl}>
-                  <Text numberOfLines={1} stylesProp={styles.streamLink}>
+                  <Text numberOfLines={1} style={styles.streamLink}>
                     {session?.stream_link}
                   </Text>
                 </TouchableOpacity>
@@ -187,12 +257,25 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               <></>
             )}
 
-            <View style={styles.descriptionContainer}>
-              <Text bold stylesProp={styles.mainTitle}>
+            {/* <View style={styles.descriptionContainer}>
+              <Text bold style={styles.mainTitle}>
                 Description
               </Text>
               {session.description ? (
                 <WebViewComponent source={session?.description} margin={20} />
+              ) : (
+                <Text>No description</Text>
+              )}
+            </View> */}
+
+            <View style={styles.descriptionContainer}>
+              <Text bold style={styles.mainTitle}>
+                Description
+              </Text>
+              {session.description ? (
+                <Text style={styles.description}>
+                  {parseTextWithStyles(decodeHTML(session.description))}
+                </Text>
               ) : (
                 <Text>No description</Text>
               )}
@@ -202,7 +285,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               <View style={styles.speakersContainer}>
                 <Text
                   bold
-                  stylesProp={{
+                  style={{
                     ...styles.mainTitle,
                     ...styles.speakersTitle,
                   }}
@@ -229,10 +312,10 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               </View>
             ) : null}
             <View style={styles.ratingsFooter}>
-              <Text bold stylesProp={styles.footerHeading}>
+              <Text bold style={styles.footerHeading}>
                 What do you think about this talk?
               </Text>
-              <Text stylesProp={styles.footerSecondaryHeading}>
+              <Text style={styles.footerSecondaryHeading}>
                 We are interested in hearing your feedback
               </Text>
               <View style={styles.footerTop}>
@@ -243,7 +326,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                       setShowModal(true);
                     }}
                   >
-                    <Text bold stylesProp={styles.btnLabel}>
+                    <Text bold style={styles.btnLabel}>
                       Rate the talk
                     </Text>
                   </TouchableOpacity>
@@ -255,7 +338,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                     }
                     style={{ ...styles.actionButton, ...styles.shareBtn }}
                   >
-                    <Text bold stylesProp={styles.btnLabel}>
+                    <Text bold style={styles.btnLabel}>
                       Share the talk
                     </Text>
                   </TouchableOpacity>

@@ -32,7 +32,7 @@ export default RateModal = ({ session, showModal, setShowModal }) => {
       <View style={{ ...styles.container }}>
         <View style={styles.content}>
           <Text bold stylesProp={styles.title}>
-            What do you think about this lecture?
+            What do you think about this talk?
           </Text>
           <Text stylesProp={styles.secondaryTitle}>
             We are interested in hearing your feedback

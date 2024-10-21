@@ -23,8 +23,8 @@ const Speaker = ({ speaker }) => {
         )}
       </View>
       <View style={styles.speakerInfo}>
-        <Text stylesProp={styles.speakerName}>{speaker.display_name}</Text>
-        <Text stylesProp={styles.companyName}>{speaker.company_name}</Text>
+        <Text stylesProp={styles.speakerName}>{speaker?.display_name}</Text>
+        <Text stylesProp={styles.companyName}>{speaker?.company_name}</Text>
         <Text stylesProp={styles.speakerSession}></Text>
       </View>
     </View>

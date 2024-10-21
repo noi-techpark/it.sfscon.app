@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import Navigation from "./navigation/Navigation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { usePushNotifications } from "./notifications/usePushNotifications";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { BackHandler } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { storageSetItem } from "./tools/secureStore";
 import { API_URL } from "@env";
