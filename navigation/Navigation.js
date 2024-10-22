@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "./BottomTabNavigation";
 import { useDispatch, useSelector } from "react-redux";
-import { getSfsCon } from "../store/actions/AppActions";
+import {
+  getSfsCon,
+  setPushNotificationToken,
+} from "../store/actions/AppActions";
 import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
 import { authorizeUser } from "../store/actions/AuthActions";

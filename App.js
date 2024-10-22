@@ -10,13 +10,10 @@ import { storageSetItem } from "./tools/secureStore";
 import { API_URL } from "@env";
 import WrapperComponent from "./components/Wrapper/WrapperComponent";
 import { logger } from "./tools/logger";
+import { setPushNotificationToken } from "./store/actions/AppActions";
 
 export default function App() {
   const { expoPushToken } = usePushNotifications();
-
-  const waitForToken = async () => {
-    await logger(expoPushToken);
-  };
 
   const setServerToStore = async () => {
     try {
@@ -28,7 +25,12 @@ export default function App() {
   };
 
   useEffect(() => {
-    waitForToken();
+    if (expoPushToken) {
+      dispatch(setPushNotificationToken(token));
+    }
+  }, [expoPushToken]);
+
+  useEffect(() => {
     setServerToStore();
   }, []);
 

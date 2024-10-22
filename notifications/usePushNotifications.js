@@ -94,8 +94,6 @@ export const usePushNotifications = () => {
           })
         ).data;
 
-        await logger(token);
-
         store.dispatch(setPushNotificationToken(token));
       } catch (error) {
         await logger(error);

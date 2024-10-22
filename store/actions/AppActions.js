@@ -54,8 +54,15 @@ const formatData = (data) => {
   return data;
 };
 
-export const setPushNotificationToken = (token) => (dispatch) => {
+export const setPushNotificationToken = (token) => async (dispatch) => {
   dispatch({ type: SET_PUSH_NOTIFICATION_TOKEN, payload: token });
+};
+
+export const authorizePushNotificationToken = (token) => async (dispatch) => {
+  try {
+    const url = "/api/notication-token";
+    await api.post(url, { token });
+  } catch (error) {}
 };
 
 export const setAppTheme = (theme) => (dispatch) => {
