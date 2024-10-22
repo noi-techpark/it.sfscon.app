@@ -12,7 +12,9 @@ import { API_URL } from "@env";
 import WrapperComponent from "./components/Wrapper/WrapperComponent";
 
 export default function App() {
-  // const { expoPushToken } = usePushNotifications();
+  const { expoPushToken } = usePushNotifications();
+
+  console.log("PUSH TOKEN", expoPushToken);
 
   const setServerToStore = async () => {
     try {

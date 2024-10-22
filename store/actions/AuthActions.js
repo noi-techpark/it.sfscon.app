@@ -14,7 +14,6 @@ export const authorize = () => async (dispatch) => {
     await storageSetItem("jwt", token);
     dispatch({ type: AUTHORIZE_USER, payload: token });
   } catch (error) {
-    console.log(error);
     dispatch({ type: AUTHORIZE_USER, payload: "dummy" });
     console.log("OVAJ JE ERROR", error);
   }

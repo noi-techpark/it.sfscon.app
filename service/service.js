@@ -29,14 +29,18 @@ axios.interceptors.response.use(
     return response;
   },
   async function (error) {
-    const status = error?.response?.request?.status;
-    const { readFromBackupServer } = await import(
-      "../store/actions/AppActions"
-    );
-    if (status === 502) {
-      store.dispatch(readFromBackupServer());
+    try {
+      const status = error?.response?.request?.status;
+      const { readFromBackupServer } = await import(
+        "../store/actions/AppActions"
+      );
+      if (status === 502) {
+        await store.dispatch(readFromBackupServer());
+      }
+      return Promise.reject(error);
+    } catch (dispatchError) {
+      return Promise.reject(dispatchError);
     }
-    return Promise.reject(error);
   }
 );
 

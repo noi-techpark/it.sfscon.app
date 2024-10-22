@@ -205,10 +205,8 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
 
       const { data } = response;
 
-      if (!data) return;
-
       const formatedData = formatData(data);
-      console.log();
+      console.log("FORMATED", formatedData);
 
       dispatch({
         type: GET_CONFERENCE_SUCCESS,
@@ -217,5 +215,6 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
     }
   } catch (error) {
     console.log("usao sam opet", error);
+  } finally {
   }
 };

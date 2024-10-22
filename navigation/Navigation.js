@@ -18,42 +18,17 @@ export default Navigation = () => {
   const updateDataCounter = useSelector((state) => state.app.updateDataCounter);
   const offlineMode = useSelector((state) => state.app.offlineMode);
 
-  // const [backPressCount, setBackPressCount] = useState(0);
-
-  // console.log("COUNT", backPressCount);
-
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     if (backPressCount < 2) {
-  //       setBackPressCount((prev) => prev + 1);
-  //     } else {
-  //       BackHandler.exitApp();
-  //     }
-
-  //     return true;
-  //   };
-
-  //   const backHandler = BackHandler.addEventListener(
-  //     "hardwareBackPress",
-  //     backAction
-  //   );
-
-  //   return () => backHandler.remove();
-  // }, [backPressCount]);
-
-  console.log(offlineMode);
-
   const { last_updated, next_try_in_ms } = appInfo || {};
 
   useEffect(() => {
-    // dispatch(authorizeUser());
+    dispatch(authorizeUser());
   }, []);
 
   useEffect(() => {
     (async () => {
-      // if (token) {
-      await SplashScreen.hideAsync();
-      // }
+      if (token) {
+        await SplashScreen.hideAsync();
+      }
     })();
   }, [token]);
 
