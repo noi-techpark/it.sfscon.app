@@ -12,9 +12,7 @@ import { MaterialIcons, Feather, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../../tools/sessions";
-import WebViewComponent from "../../components/WebViewComponent";
 import RatingsComponent from "../../components/RateModal/RateModal";
-// import Text from "../../components/TextComponent";
 import {
   getMySchedules,
   setMySchedule,
@@ -24,7 +22,9 @@ import { useShare } from "../../tools/useShare";
 import StarRating from "../../components/RatingStars/RatingStars";
 import RoadSVG from "../../assets/road.svg";
 import Speaker from "../../components/Speaker/Speaker";
-import { decodeHTML, parseTextWithStyles } from "../../tools/validations";
+import { decodeHTML } from "../../tools/validations";
+import { parseTextWithStyles } from "../../tools/useHtmlParser";
+import AppLoader from "../../components/AppLoader";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -37,6 +37,9 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   const ratings = useSelector((state) => state.app.db?.ratings);
   const mySchedules = useSelector((state) => state.app.db?.bookmarks);
   const scheduleToggled = useSelector((state) => state.app.scheduleToggled);
+
+  const [showModal, setShowModal] = useState(false);
+  const [rating, setRating] = useState([0, 0]);
 
   const { session = {}, track = {} } = route?.params || {};
   const { rates_by_session = {}, my_rate_by_session = {} } = ratings || {};
@@ -62,74 +65,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
       .format("HH:mm");
   };
 
-  const [showModal, setShowModal] = useState(false);
-  const [rating, setRating] = useState([0, 0]);
-
   const { share } = useShare();
-
-  const parseTextWithStyles = (text) => {
-    const components = [];
-
-    const parsedText = text
-      .replace(/<Text style={styles.bold}>/g, "__BOLD_START__")
-      .replace(/<\/Text>/g, "__BOLD_END__")
-      .replace(/<Text style={styles.italic}>/g, "__ITALIC_START__")
-      .replace(/<a href=/g, "__LINK_START__")
-      .replace(/<\/a>/g, "__LINK_END__");
-
-    const splitText = parsedText.split(
-      /(__BOLD_START__|__BOLD_END__|__ITALIC_START__|__ITALIC_END__|__LINK_START__|__LINK_END__)/
-    );
-
-    let isBold = false;
-    let isItalic = false;
-    let isLink = false;
-    let linkUrl = "";
-
-    splitText.forEach((part, index) => {
-      if (part === "__BOLD_START__") {
-        isBold = true;
-      } else if (part === "__BOLD_END__") {
-        isBold = false;
-      } else if (part === "__ITALIC_START__") {
-        isItalic = true;
-      } else if (part === "__ITALIC_END__") {
-        isItalic = false;
-      } else if (part === "__LINK_START__") {
-        isLink = true;
-        linkUrl = splitText[index + 1];
-      } else if (part === "__LINK_END__") {
-        isLink = false;
-      } else if (isBold) {
-        components.push(
-          <Text key={index} style={styles.bold}>
-            {part}
-          </Text>
-        );
-      } else if (isItalic) {
-        components.push(
-          <Text key={index} style={styles.italic}>
-            {part}
-          </Text>
-        );
-      } else if (isLink) {
-        components.push(
-          <Text
-            key={index}
-            style={styles.link}
-            onPress={() => Linking.openURL(linkUrl)}
-          >
-            {linkUrl}
-          </Text>
-        );
-        isLink = false;
-      } else {
-        components.push(<Text key={index}>{part}</Text>);
-      }
-    });
-
-    return components;
-  };
 
   const findSession = () => {
     if (session?.id in rates_by_session) {
@@ -201,6 +137,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
             </TouchableOpacity>
           ) : null}
         </View>
+
         <ScrollView bounces={false} style={styles.scrollView}>
           {session?.rateable ? (
             <TouchableOpacity
@@ -257,7 +194,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               <></>
             )}
 
-            {/* <View style={styles.descriptionContainer}>
+            <View style={styles.descriptionContainer}>
               <Text bold style={styles.mainTitle}>
                 Description
               </Text>
@@ -266,9 +203,9 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               ) : (
                 <Text>No description</Text>
               )}
-            </View> */}
+            </View>
 
-            <View style={styles.descriptionContainer}>
+            {/* <View style={styles.descriptionContainer}>
               <Text bold style={styles.mainTitle}>
                 Description
               </Text>
@@ -279,7 +216,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               ) : (
                 <Text>No description</Text>
               )}
-            </View>
+            </View> */}
 
             {session?.id_lecturers.length ? (
               <View style={styles.speakersContainer}>
