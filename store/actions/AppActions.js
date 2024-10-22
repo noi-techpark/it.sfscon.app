@@ -61,7 +61,7 @@ export const setPushNotificationToken = (token) => async (dispatch) => {
 export const authorizePushNotificationToken = (token) => async () => {
   try {
     const url = "/api/notification-token";
-    await api.post(url, { token });
+    await api.post(url, { push_notification_token: token });
   } catch (error) {}
 };
 
