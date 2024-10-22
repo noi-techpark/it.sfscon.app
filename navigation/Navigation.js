@@ -39,14 +39,16 @@ export default Navigation = () => {
 
   useEffect(() => {
     if (offlineMode) return;
-    if (last_updated) {
-      setTimeout(() => {
-        dispatch(getSfsCon(last_updated, false));
-      }, next_try_in_ms || 300000);
-    } else {
-      dispatch(getSfsCon());
+    if (token) {
+      if (last_updated) {
+        setTimeout(() => {
+          dispatch(getSfsCon(last_updated, false));
+        }, next_try_in_ms || 300000);
+      } else {
+        dispatch(getSfsCon());
+      }
     }
-  }, [offlineMode, updateDataCounter]);
+  }, [offlineMode, token, updateDataCounter]);
 
   return (
     <NavigationContainer theme={{ colors: { background: "#FFF" } }}>
