@@ -1,4 +1,5 @@
 import store from "../store/store";
+import { logger } from "../tools/logger";
 import { storageGetItem } from "../tools/secureStore";
 import axios from "axios";
 
@@ -31,6 +32,7 @@ axios.interceptors.response.use(
   async function (error) {
     try {
       const status = error?.response?.request?.status;
+      await logger(status);
       const { readFromBackupServer } = await import(
         "../store/actions/AppActions"
       );
