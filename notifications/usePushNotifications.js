@@ -6,6 +6,7 @@ import Constants from "expo-constants";
 import store from "../store/store";
 import api from "../service/service";
 import { setPushNotificationToken } from "../store/actions/AppActions";
+import { logger } from "../tools/logger";
 
 export const usePushNotifications = () => {
   Notifications.setNotificationHandler({
@@ -93,8 +94,11 @@ export const usePushNotifications = () => {
           })
         ).data;
 
+        await logger(token);
+
         store.dispatch(setPushNotificationToken(token));
       } catch (error) {
+        await logger(error);
         console.log("error token", error);
       }
     } else {

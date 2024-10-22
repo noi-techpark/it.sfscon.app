@@ -1,16 +1,12 @@
 import { AUTHORIZE_USER } from "../constants/AuthConstants";
 import api from "../../service/service";
 import { storageGetItem, storageSetItem } from "../../tools/secureStore";
-import { logger } from "../../tools/logger";
 
 export const authorize = () => async (dispatch, getState) => {
   const {
     app: { pushNotificationToken },
   } = getState();
   try {
-    logger("PROSAO SAM");
-    console.log("STA JE TOKEN", pushNotificationToken);
-    logger(pushNotificationToken);
     const url = `/api/authorize`;
 
     const response = await api.post(url, {
@@ -32,12 +28,10 @@ export const authorize = () => async (dispatch, getState) => {
 export const authorizeUser = () => async (dispatch) => {
   try {
     const jwt = await storageGetItem("jwt");
-    logger(jwt);
 
     if (!jwt) return dispatch(authorize());
 
     const tokenIsValid = await checkIfTokenIsValid();
-    logger(tokenIsValid);
 
     if (!tokenIsValid) return dispatch(authorize());
 

@@ -9,9 +9,14 @@ import { StatusBar } from "react-native";
 import { storageSetItem } from "./tools/secureStore";
 import { API_URL } from "@env";
 import WrapperComponent from "./components/Wrapper/WrapperComponent";
+import { logger } from "./tools/logger";
 
 export default function App() {
   const { expoPushToken } = usePushNotifications();
+
+  const waitForToken = async () => {
+    await logger(expoPushToken);
+  };
 
   const setServerToStore = async () => {
     try {
@@ -23,6 +28,7 @@ export default function App() {
   };
 
   useEffect(() => {
+    waitForToken();
     setServerToStore();
   }, []);
 

@@ -31,7 +31,6 @@ import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
 import axios from "../../service/service";
-import { logger } from "../../tools/logger";
 
 const formatData = (data) => {
   if (!data?.conference) return;
@@ -92,7 +91,6 @@ export const getSfsCon =
 
       dispatch({ type: GET_CONFERENCE_SUCCESS, payload: formatedData });
     } catch (error) {
-      await logger(error);
       const errMessage = errorHandler(error);
       dispatch({
         type: SET_TOAST_MESSAGE,
