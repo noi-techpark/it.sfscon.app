@@ -25,6 +25,7 @@ import {
 } from "../../store/actions/AppActions";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
+import { logger } from "../../tools/logger";
 
 export default ScheduleScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -50,6 +51,10 @@ export default ScheduleScreen = ({ navigation }) => {
 
   const activeFiltersLabel = selectedTracks?.length > 1 ? "filters" : "filter";
 
+  const showToken = async () => {
+    await logger(pushNotificationToken);
+  };
+
   useLayoutEffect(() => {
     if (isFocused) {
       dispatch(toggleTabBarVisibility("show"));
@@ -57,9 +62,12 @@ export default ScheduleScreen = ({ navigation }) => {
   }, [isFocused]);
 
   useEffect(() => {
-    if (pushNotificationToken) {
-      dispatch(authorizePushNotificationToken(pushNotificationToken));
-    }
+    (async () => {
+      if (pushNotificationToken) {
+        dispatch(authorizePushNotificationToken(pushNotificationToken));
+      }
+      await showToken();
+    })();
   }, [pushNotificationToken]);
 
   useEffect(() => {
