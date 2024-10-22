@@ -18,6 +18,7 @@ import EmptyScreen from "../../components/EmptyScreen";
 import Speaker from "../../components/Speaker/Speaker";
 import AppLoader from "../../components/AppLoader";
 import { decodeHTML } from "../../tools/validations";
+import Dialog from "../../components/Dialog";
 
 export default SessionsComponent = ({
   sessions = {},
@@ -33,6 +34,7 @@ export default SessionsComponent = ({
   const selectedDay = useSelector((state) => state.app.selectedDay);
   const selectedTracks = useSelector((state) => state.app.selectedTracks);
   const mySchedules = useSelector((state) => state.app.db?.bookmarks);
+  const offlineMode = useSelector((state) => state.app.offlineMode);
   const force = useSelector((state) => state.app.force);
 
   const navigation = useNavigation();
@@ -40,6 +42,15 @@ export default SessionsComponent = ({
 
   const [loader, setLoader] = useState(true);
   const [sessionsByDay, setSessionsByDay] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleBookmark = (item) => {
+    if (offlineMode) {
+      setOpenDialog(true);
+      return;
+    }
+    dispatch(setMySchedule(item.id));
+  };
 
   const navigateToDetails = (item, track) => {
     dispatch(toggleTabBarVisibility("hidden"));
@@ -108,107 +119,112 @@ export default SessionsComponent = ({
     return <AppLoader />;
   }
 
-  return Object.keys(sessionsByDay).length ? (
-    <View style={styles.container}>
-      <FlatList
-        ref={scrollRef}
-        showsVerticalScrollIndicator={false}
-        onScrollToIndexFailed={() => {
-          scrollRef.current.scrollToIndex({
-            index: 0,
-            viewPosition: 0,
-          });
-        }}
-        data={fromObjectToArray(sessionsByDay)}
-        renderItem={({ item, index }) => {
-          const track = getData(tracks, item.id_track);
-          const room = getData(rooms, item.id_room);
+  return (
+    <>
+      {openDialog ? (
+        <Dialog isVisible={openDialog} setIsVisible={setOpenDialog} />
+      ) : null}
+      {Object.keys(sessionsByDay).length ? (
+        <View style={styles.container}>
+          <FlatList
+            ref={scrollRef}
+            showsVerticalScrollIndicator={false}
+            onScrollToIndexFailed={() => {
+              scrollRef.current.scrollToIndex({
+                index: 0,
+                viewPosition: 0,
+              });
+            }}
+            data={fromObjectToArray(sessionsByDay)}
+            renderItem={({ item, index }) => {
+              const track = getData(tracks, item.id_track);
+              const room = getData(rooms, item.id_room);
 
-          return (
-            <View key={index} style={styles.sessionContainer}>
-              <View
-                style={
-                  index === 0
-                    ? { ...styles.timeContainer, ...styles.topRadius }
-                    : styles.timeContainer
-                }
-              >
-                <Text bold stylesProp={styles.time}>
-                  {moment(item.start).format("HH:mm")}
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => navigateToDetails(item, track)}
-                style={styles.session}
-              >
-                <Text
-                  bold
-                  stylesProp={{
-                    ...styles.headerTrack,
-                    color: track?.color ?? theme.secondaryTitle,
-                  }}
-                >
-                  {track?.name}
-                </Text>
-                <Text bold stylesProp={styles.sessionTitle}>
-                  {decodeHTML(item.title)}
-                </Text>
-
-                {item.abstract ? (
-                  <Text stylesProp={styles.sessionAbstract}>
-                    {item.abstract}
-                  </Text>
-                ) : null}
-                {item?.id_lecturers?.length ? (
-                  <View style={styles.speakers}>
-                    <Text stylesProp={styles.speakersTitle}>Speakers:</Text>
-                    {item.id_lecturers.map((lect, idx) => {
-                      const lecturer = getData(store?.lecturers, lect);
-                      return <Speaker speaker={lecturer} key={idx} />;
-                    })}
-                  </View>
-                ) : null}
-                <View style={styles.trackContainer}>
-                  <Feather name="home" size={15} color={track.color} />
-                  <Text
-                    stylesProp={{ ...styles.trackName, color: track.color }}
+              return (
+                <View key={index} style={styles.sessionContainer}>
+                  <View
+                    style={
+                      index === 0
+                        ? { ...styles.timeContainer, ...styles.topRadius }
+                        : styles.timeContainer
+                    }
                   >
-                    {room.name}
-                  </Text>
-                  <>
-                    {item.bookmarkable ? (
-                      <View style={styles.bookmark}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            dispatch(setMySchedule(item.id));
-                          }}
-                          style={styles.bookmarkBtn}
-                        >
-                          {mySchedules.indexOf(item.id) !== -1 ? (
-                            <Ionicons
-                              name="bookmark"
-                              size={18}
-                              style={styles.bookmarkIcon}
-                            />
-                          ) : (
-                            <Ionicons
-                              name="bookmark-outline"
-                              size={18}
-                              style={styles.bookmarkIconSelected}
-                            />
-                          )}
-                        </TouchableOpacity>
+                    <Text bold stylesProp={styles.time}>
+                      {moment(item.start).format("HH:mm")}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => navigateToDetails(item, track)}
+                    style={styles.session}
+                  >
+                    <Text
+                      bold
+                      stylesProp={{
+                        ...styles.headerTrack,
+                        color: track?.color ?? theme.secondaryTitle,
+                      }}
+                    >
+                      {track?.name}
+                    </Text>
+                    <Text bold stylesProp={styles.sessionTitle}>
+                      {decodeHTML(item.title)}
+                    </Text>
+
+                    {item.abstract ? (
+                      <Text stylesProp={styles.sessionAbstract}>
+                        {item.abstract}
+                      </Text>
+                    ) : null}
+                    {item?.id_lecturers?.length ? (
+                      <View style={styles.speakers}>
+                        <Text stylesProp={styles.speakersTitle}>Speakers:</Text>
+                        {item.id_lecturers.map((lect, idx) => {
+                          const lecturer = getData(store?.lecturers, lect);
+                          return <Speaker speaker={lecturer} key={idx} />;
+                        })}
                       </View>
                     ) : null}
-                  </>
+                    <View style={styles.trackContainer}>
+                      <Feather name="home" size={15} color={track.color} />
+                      <Text
+                        stylesProp={{ ...styles.trackName, color: track.color }}
+                      >
+                        {room.name}
+                      </Text>
+                      <>
+                        {item.bookmarkable ? (
+                          <View style={styles.bookmark}>
+                            <TouchableOpacity
+                              onPress={() => handleBookmark(item)}
+                              style={styles.bookmarkBtn}
+                            >
+                              {mySchedules.indexOf(item.id) !== -1 ? (
+                                <Ionicons
+                                  name="bookmark"
+                                  size={18}
+                                  style={styles.bookmarkIcon}
+                                />
+                              ) : (
+                                <Ionicons
+                                  name="bookmark-outline"
+                                  size={18}
+                                  style={styles.bookmarkIconSelected}
+                                />
+                              )}
+                            </TouchableOpacity>
+                          </View>
+                        ) : null}
+                      </>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      />
-    </View>
-  ) : (
-    <EmptyScreen title="No results were found for this day based on the filters selected." />
+              );
+            }}
+          />
+        </View>
+      ) : (
+        <EmptyScreen title="No results were found for this day based on the filters selected." />
+      )}
+    </>
   );
 };

@@ -25,6 +25,7 @@ import Speaker from "../../components/Speaker/Speaker";
 import { decodeHTML } from "../../tools/validations";
 import { parseTextWithStyles } from "../../tools/useHtmlParser";
 import AppLoader from "../../components/AppLoader";
+import Dialog from "../../components/Dialog";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
   const theme = getTheme();
@@ -36,13 +37,23 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
   );
   const ratings = useSelector((state) => state.app.db?.ratings);
   const mySchedules = useSelector((state) => state.app.db?.bookmarks);
+  const offlineMode = useSelector((state) => state.app.offlineMode);
   const scheduleToggled = useSelector((state) => state.app.scheduleToggled);
 
   const [showModal, setShowModal] = useState(false);
   const [rating, setRating] = useState([0, 0]);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const { session = {}, track = {} } = route?.params || {};
   const { rates_by_session = {}, my_rate_by_session = {} } = ratings || {};
+
+  const handleRateTalk = () => {
+    if (offlineMode) {
+      setOpenDialog(true);
+    } else {
+      setShowModal(true);
+    }
+  };
 
   const handleUrl = async () => {
     try {
@@ -95,6 +106,9 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
 
   return (
     <>
+      {openDialog ? (
+        <Dialog isVisible={openDialog} setIsVisible={setOpenDialog} />
+      ) : null}
       <RatingsComponent
         session={session.id}
         showModal={showModal}
@@ -141,6 +155,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
         <ScrollView bounces={false} style={styles.scrollView}>
           {session?.rateable ? (
             <TouchableOpacity
+              disabled={offlineMode}
               onPress={() => setShowModal(true)}
               style={styles.reviewContainer}
             >
@@ -205,19 +220,6 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               )}
             </View>
 
-            {/* <View style={styles.descriptionContainer}>
-              <Text bold style={styles.mainTitle}>
-                Description
-              </Text>
-              {session.description ? (
-                <Text style={styles.description}>
-                  {parseTextWithStyles(decodeHTML(session.description))}
-                </Text>
-              ) : (
-                <Text>No description</Text>
-              )}
-            </View> */}
-
             {session?.id_lecturers.length ? (
               <View style={styles.speakersContainer}>
                 <Text
@@ -259,9 +261,7 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
                 {session?.rateable ? (
                   <TouchableOpacity
                     style={{ ...styles.actionButton, ...styles.rateBtn }}
-                    onPress={() => {
-                      setShowModal(true);
-                    }}
+                    onPress={handleRateTalk}
                   >
                     <Text bold style={styles.btnLabel}>
                       Rate the talk

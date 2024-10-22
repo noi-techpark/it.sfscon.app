@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 
 const getStyles = (theme) => {
   return StyleSheet.create({
+    touchable: {
+      flex: 1,
+    },
+    
     container: {
       flex: 1,
       flexDirection: "row",
