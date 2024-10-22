@@ -12,7 +12,7 @@ import { authorizeUser } from "../store/actions/AuthActions";
 
 SplashScreen.preventAutoHideAsync();
 
-export default Navigation = () => {
+export default Navigation = ({ expoPushToken }) => {
   const dispatch = useDispatch();
 
   const appInfo = useSelector((state) => state.app.db);
@@ -25,6 +25,10 @@ export default Navigation = () => {
   useEffect(() => {
     dispatch(authorizeUser());
   }, []);
+
+  useEffect(() => {
+    dispatch(setPushNotificationToken(expoPushToken));
+  }, [expoPushToken]);
 
   useEffect(() => {
     (async () => {

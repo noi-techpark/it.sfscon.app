@@ -9,8 +9,6 @@ import { StatusBar } from "react-native";
 import { storageSetItem } from "./tools/secureStore";
 import { API_URL } from "@env";
 import WrapperComponent from "./components/Wrapper/WrapperComponent";
-import { logger } from "./tools/logger";
-import { setPushNotificationToken } from "./store/actions/AppActions";
 
 export default function App() {
   const { expoPushToken } = usePushNotifications();
@@ -25,12 +23,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (expoPushToken) {
-      dispatch(setPushNotificationToken(token));
-    }
-  }, [expoPushToken]);
-
-  useEffect(() => {
     setServerToStore();
   }, []);
 
@@ -40,7 +32,7 @@ export default function App() {
         <SafeAreaProvider>
           <WrapperComponent>
             <StatusBar />
-            <Navigation />
+            <Navigation expoPushToken={expoPushToken} />
           </WrapperComponent>
         </SafeAreaProvider>
       </Provider>
