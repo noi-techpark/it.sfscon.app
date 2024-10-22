@@ -58,7 +58,7 @@ const getStyles = (theme) => {
       marginBottom: 15,
       borderRadius: 10,
       marginLeft: 8,
-      paddingTop: 8,
+      paddingVertical: 8,
       paddingHorizontal: 8,
     },
 

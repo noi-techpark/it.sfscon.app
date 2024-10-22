@@ -13,6 +13,7 @@ import {
   SET_UPDATE_DATA_COUNTER,
   TOGGLE_TAB_BAR_VISIBILITY,
   SET_APP_OFFLINE_MODE,
+  SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
 
 import { showLoader, hideLoader } from "./UtilsActions";
@@ -52,6 +53,10 @@ const formatData = (data) => {
     session.searchTerms = searchTerms.join(del);
   });
   return data;
+};
+
+export const setPushNotificationToken = (token) => (dispatch) => {
+  dispatch({ type: SET_PUSH_NOTIFICATION_TOKEN, payload: token });
 };
 
 export const setAppTheme = (theme) => (dispatch) => {

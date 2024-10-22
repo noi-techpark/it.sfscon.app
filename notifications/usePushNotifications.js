@@ -3,14 +3,9 @@ import { Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import store from "../store/store";
 import api from "../service/service";
-
-const sendPushNotificationToServer = async () => {
-  try {
-    const url = "/api/authorize";
-    await api.post(url, { push_notification_token: token });
-  } catch (error) {}
-};
+import { setPushNotificationToken } from "../store/actions/AppActions";
 
 export const usePushNotifications = () => {
   Notifications.setNotificationHandler({
@@ -98,7 +93,8 @@ export const usePushNotifications = () => {
           })
         ).data;
 
-        await sendPushNotificationToServer(token);
+        store.dispatch(setPushNotificationToken(token));
+        
       } catch (error) {
         console.log("error token", error);
       }

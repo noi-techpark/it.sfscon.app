@@ -19,10 +19,6 @@ export default Navigation = () => {
   const updateDataCounter = useSelector((state) => state.app.updateDataCounter);
   const offlineMode = useSelector((state) => state.app.offlineMode);
 
-  const deleteToken = async () => {
-    await storageDeleteItem("jwt");
-  };
-
   const { last_updated, next_try_in_ms } = appInfo || {};
 
   useEffect(() => {

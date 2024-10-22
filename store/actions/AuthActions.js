@@ -3,10 +3,15 @@ import api from "../../service/service";
 import { storageGetItem, storageSetItem } from "../../tools/secureStore";
 import { logger } from "../../tools/logger";
 
-export const authorize = () => async (dispatch) => {
+export const authorize = () => async (dispatch, getState) => {
+  const {
+    app: { pushNotificationToken },
+  } = getState();
   try {
     const url = `/api/authorize`;
-    const response = await api.post(url);
+    const response = await api.post(url, {
+      push_notification_token: pushNotificationToken,
+    });
 
     const {
       data: { token },
