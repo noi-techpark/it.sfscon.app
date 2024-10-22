@@ -6,7 +6,7 @@ import { logger } from "../../tools/logger";
 export const authorize = () => async (dispatch) => {
   try {
     const url = `/api/authorize`;
-    const response = await api.get(url);
+    const response = await api.post(url);
 
     const {
       data: { token },

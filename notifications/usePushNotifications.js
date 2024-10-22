@@ -8,7 +8,7 @@ import api from "../service/service";
 const sendPushNotificationToServer = async () => {
   try {
     const url = "/api/authorize";
-    await api.get(url, { params: { push_notification_token: token } });
+    await api.post(url, { push_notification_token: token });
   } catch (error) {}
 };
 
