@@ -2,8 +2,9 @@ import { AUTHORIZE_USER } from "../constants/AuthConstants";
 import api from "../../service/service";
 import { storageGetItem, storageSetItem } from "../../tools/secureStore";
 
-export const authorize = () => async (dispatch, getState) => {
+export const authorize = () => async (dispatch) => {
   try {
+    const url = "/api/authorize";
     const response = await api.post(url);
 
     const {
