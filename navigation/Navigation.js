@@ -7,6 +7,7 @@ import { BackHandler } from "react-native";
 import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
 import { authorizeUser } from "../store/actions/AuthActions";
+import { storageDeleteItem } from "../tools/secureStore";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,6 +18,10 @@ export default Navigation = () => {
   const token = useSelector((state) => state.auth.token);
   const updateDataCounter = useSelector((state) => state.app.updateDataCounter);
   const offlineMode = useSelector((state) => state.app.offlineMode);
+
+  const deleteToken = async () => {
+    await storageDeleteItem("jwt");
+  };
 
   const { last_updated, next_try_in_ms } = appInfo || {};
 
@@ -41,7 +46,7 @@ export default Navigation = () => {
     } else {
       dispatch(getSfsCon());
     }
-  }, [offlineMode, token, updateDataCounter]);
+  }, [offlineMode, updateDataCounter]);
 
   return (
     <NavigationContainer theme={{ colors: { background: "#FFF" } }}>

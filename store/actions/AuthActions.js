@@ -1,6 +1,7 @@
 import { AUTHORIZE_USER } from "../constants/AuthConstants";
 import api from "../../service/service";
 import { storageGetItem, storageSetItem } from "../../tools/secureStore";
+import { logger } from "../../tools/logger";
 
 export const authorize = () => async (dispatch) => {
   try {
@@ -22,10 +23,12 @@ export const authorize = () => async (dispatch) => {
 export const authorizeUser = () => async (dispatch) => {
   try {
     const jwt = await storageGetItem("jwt");
+    logger(jwt);
 
     if (!jwt) return dispatch(authorize());
 
     const tokenIsValid = await checkIfTokenIsValid();
+    logger(tokenIsValid);
 
     if (!tokenIsValid) return dispatch(authorize());
 
