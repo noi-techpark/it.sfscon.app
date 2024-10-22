@@ -3,11 +3,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "./BottomTabNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getSfsCon } from "../store/actions/AppActions";
-import { BackHandler } from "react-native";
 import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
 import { authorizeUser } from "../store/actions/AuthActions";
-import { storageDeleteItem } from "../tools/secureStore";
 
 SplashScreen.preventAutoHideAsync();
 

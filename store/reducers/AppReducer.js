@@ -43,6 +43,7 @@ export default AppReducer = (state = initialState, action) => {
         ...state,
         pushNotificationToken: action.payload,
       };
+
     case SET_THEME:
       return {
         ...state,

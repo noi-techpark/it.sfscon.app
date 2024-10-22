@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import Navigation from "./navigation/Navigation";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { usePushNotifications } from "./notifications/usePushNotifications";
-import { BackHandler } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { storageSetItem } from "./tools/secureStore";
@@ -13,8 +12,6 @@ import WrapperComponent from "./components/Wrapper/WrapperComponent";
 
 export default function App() {
   const { expoPushToken } = usePushNotifications();
-
-  console.log("PUSH TOKEN", expoPushToken);
 
   const setServerToStore = async () => {
     try {

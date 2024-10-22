@@ -94,7 +94,6 @@ export const usePushNotifications = () => {
         ).data;
 
         store.dispatch(setPushNotificationToken(token));
-        
       } catch (error) {
         console.log("error token", error);
       }

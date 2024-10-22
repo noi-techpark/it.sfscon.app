@@ -8,7 +8,11 @@ export const authorize = () => async (dispatch, getState) => {
     app: { pushNotificationToken },
   } = getState();
   try {
+    logger("PROSAO SAM");
+    console.log("STA JE TOKEN", pushNotificationToken);
+    logger(pushNotificationToken);
     const url = `/api/authorize`;
+
     const response = await api.post(url, {
       push_notification_token: pushNotificationToken,
     });
