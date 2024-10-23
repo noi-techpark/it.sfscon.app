@@ -16,7 +16,7 @@ import {
   SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
 
-import { showLoader, hideLoader } from "./UtilsActions";
+import { hideLoader } from "./UtilsActions";
 
 import {
   SET_HIDE_LOADER,
