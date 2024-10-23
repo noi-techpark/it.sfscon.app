@@ -41,6 +41,6 @@ export const checkIfTokenIsValid = async () => {
     const { data } = user;
     return data;
   } catch (error) {
-    return Promise.reject(error);
+    console.log(error);
   }
 };
