@@ -3,7 +3,7 @@ import { storageGetItem } from "../tools/secureStore";
 import axios from "axios";
 
 axios.interceptors.request.use(async (config) => {
-  const server = "https://m.opencon.prc";
+  const server = "https://m.opencon.dev";
   const jwt = await storageGetItem("jwt");
 
   const configData = {
@@ -34,7 +34,8 @@ axios.interceptors.response.use(
       const { readFromBackupServer } = await import(
         "../store/actions/AppActions"
       );
-      if (status === 502) {
+      if (status === 502 || error?.message === "Network Error") {
+        console.log("usao sam");
         await store.dispatch(readFromBackupServer());
       }
       return Promise.reject(error);

@@ -212,7 +212,7 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
     dispatch(setAppOfflineMode(true));
 
     if (!db) {
-      const url = "https://documents.digitalcube.dev/opencon/sfs2024.json";
+      const url = "https://sfscon.s3.eu-central-1.amazonaws.com/sfs2024.json";
       const response = await axios.get(url);
 
       const { data } = response;
@@ -225,7 +225,7 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
       });
     }
   } catch (error) {
-    console.log("usao sam opet", error);
+    console.log("pukao je amazon");
   } finally {
   }
 };
