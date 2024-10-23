@@ -34,7 +34,6 @@ export default function App() {
           <SafeAreaProvider>
             <WrapperComponent>
               <StatusBar />
-              <View></View>
               <Navigation />
             </WrapperComponent>
           </SafeAreaProvider>

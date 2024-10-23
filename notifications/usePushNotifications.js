@@ -6,7 +6,6 @@ import Constants from "expo-constants";
 import store from "../store/store";
 import api from "../service/service";
 import { setPushNotificationToken } from "../store/actions/AppActions";
-import { logger } from "../tools/logger";
 
 export const usePushNotifications = () => {
   Notifications.setNotificationHandler({
@@ -21,6 +20,7 @@ export const usePushNotifications = () => {
   const [channels, setChannels] = useState([]);
   const [notification, setNotification] = useState(false);
   const [loading, setLoading] = useState(true);
+
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -66,46 +66,43 @@ export const usePushNotifications = () => {
       });
     }
 
-    if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
-        return;
-      }
-
-      try {
-        const projectId =
-          Constants?.expoConfig?.extra?.eas?.projectId ??
-          Constants?.easConfig?.projectId;
-
-        if (!projectId) {
-          throw new Error("Project ID not found");
-        }
-
-        token = (
-          await Notifications.getExpoPushTokenAsync({
-            projectId,
-          })
-        ).data;
-
-        console.log("token u pushu", token);
-
-        await store.dispatch(setPushNotificationToken(token));
-      } catch (error) {
-        await logger({ error });
-
-        console.log("error token", error);
-      }
-    } else {
+    if (!Device.isDevice) {
       alert("Must use physical device for Push Notifications");
+      setLoading(false);
+      return;
     }
+
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+
+      if (!projectId) {
+        throw new Error("Project ID not found");
+      }
+
+      token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId,
+        })
+      ).data;
+
+      await store.dispatch(setPushNotificationToken(token));
+    } catch (error) {}
     setLoading(false);
 
     return token;

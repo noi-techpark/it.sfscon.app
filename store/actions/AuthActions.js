@@ -5,7 +5,6 @@ import { logger } from "../../tools/logger";
 
 export const authorize = () => async (dispatch) => {
   try {
-    await logger({ AUTORIZACIJAUSERA: "USAO" });
     const url = "/api/authorize";
     const response = await api.post(url);
 
@@ -13,13 +12,8 @@ export const authorize = () => async (dispatch) => {
       data: { token },
     } = response;
 
-    await logger({ AUTORIZACIJAUSERA: token || "NEMA TOKENA" });
-
     await storageSetItem("jwt", token);
   } catch (error) {
-    await logger({ AUTORIZACIJAUSERA: "USAO U CATCH" });
-
-    console.log(error);
   } finally {
     dispatch({ type: AUTHORIZE_USER });
   }
@@ -31,11 +25,7 @@ export const authorizeUser = () => async (dispatch) => {
 
     if (!jwt) return dispatch(authorize());
 
-    const tokenIsValid = await dispatch(checkIfTokenIsValid());
-
-    if (!tokenIsValid) return dispatch(authorize());
-
-    dispatch({ type: AUTHORIZE_USER });
+    dispatch(checkIfTokenIsValid());
   } catch (error) {
     dispatch({ type: AUTHORIZE_USER });
   }
@@ -44,9 +34,8 @@ export const authorizeUser = () => async (dispatch) => {
 export const checkIfTokenIsValid = () => async (dispatch) => {
   try {
     const url = "/api/me";
-    const user = await api.get(url);
-    const { data } = user;
-    return data;
+    await api.get(url);
+    dispatch({ type: AUTHORIZE_USER });
   } catch (error) {
     dispatch(authorize());
   }

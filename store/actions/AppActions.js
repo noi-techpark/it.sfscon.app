@@ -31,7 +31,6 @@ import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
 import axios from "axios";
-import { logger } from "../../tools/logger";
 
 const formatData = (data) => {
   if (!data?.conference) return;
@@ -61,13 +60,9 @@ export const setPushNotificationToken = (token) => async (dispatch) => {
 
 export const authorizePushNotificationToken = (token) => async () => {
   try {
-    await logger({ AUTHORIZEPUSHNOTIFICATIONTOKEN: token });
     const url = "/api/notification-token";
     await api.post(url, { push_notification_token: token });
-    await logger({ AUTHORIZEPUSHNOTIFICATIONTOKEN: "PROSAO" });
-  } catch (error) {
-    await logger({ AUTHORIZEPUSHNOTIFICATIONTOKEN: "PAO" });
-  }
+  } catch (error) {}
 };
 
 export const setAppTheme = (theme) => (dispatch) => {
@@ -224,14 +219,10 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
     dispatch(setAppOfflineMode(true));
 
     if (!db) {
-      const url = "https://documents.digitalcube.dev/opencon/sfs2024.json";
-      const response = await axios.get(url, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const url = `https://sfscon.s3.eu-central-1.amazonaws.com/sfs2024.json`;
+      const response = await fetch(url).then((res) => res.json());
 
-      const { data } = response;
-
-      const formatedData = formatData(data);
+      const formatedData = formatData(response);
 
       dispatch({
         type: GET_CONFERENCE_SUCCESS,
