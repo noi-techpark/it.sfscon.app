@@ -37,7 +37,7 @@ export const authorizeUser = () => async (dispatch) => {
 
 export const checkIfTokenIsValid = () => async (dispatch) => {
   try {
-    const url = "/api/mee";
+    const url = "/api/me";
     const user = await api.get(url);
     const { data } = user;
     return data;
