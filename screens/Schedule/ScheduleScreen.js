@@ -25,6 +25,7 @@ import {
 } from "../../store/actions/AppActions";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
+import { logger } from "../../tools/logger";
 
 export default ScheduleScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -60,6 +61,12 @@ export default ScheduleScreen = ({ navigation }) => {
     if (pushNotificationToken) {
       dispatch(authorizePushNotificationToken(pushNotificationToken));
     }
+  }, [pushNotificationToken]);
+
+  useEffect(() => {
+    (async () => {
+      await logger({ pushNotificationToken });
+    })();
   }, [pushNotificationToken]);
 
   useEffect(() => {
