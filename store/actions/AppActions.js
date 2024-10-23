@@ -184,7 +184,7 @@ export const postRatings = (sessionId, rate) => async (dispatch) => {
       type: SET_TOAST_MESSAGE,
       payload: {
         message:
-          status === "406"
+          status === 406
             ? "Attention! Rating is only possible after the talk has started."
             : "Rating error",
         type: "error",

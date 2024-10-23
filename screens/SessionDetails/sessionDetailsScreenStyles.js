@@ -155,6 +155,13 @@ const getStyles = (theme) => {
       marginBottom: 7,
     },
 
+    attentionText: {
+      fontSize: 12,
+      fontWeight: "500",
+      color: "red",
+      marginTop: 8,
+    },
+
     footerTop: {
       flexDirection: "row",
       paddingBottom: 16,
