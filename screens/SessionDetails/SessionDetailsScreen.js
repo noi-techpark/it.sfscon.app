@@ -257,9 +257,6 @@ export default SessionDetailsScreen = ({ route, navigation }) => {
               <Text style={styles.footerSecondaryHeading}>
                 We are interested in hearing your feedback
               </Text>
-              <Text bold style={styles.attentionText}>
-                Attention! Rating is only possible after the talk has started.
-              </Text>
 
               <View style={styles.footerTop}>
                 {session?.rateable ? (

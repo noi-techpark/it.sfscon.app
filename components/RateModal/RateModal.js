@@ -37,6 +37,9 @@ export default RateModal = ({ session, showModal, setShowModal }) => {
           <Text stylesProp={styles.secondaryTitle}>
             We are interested in hearing your feedback
           </Text>
+          <Text bold stylesProp={styles.attentionText}>
+            Attention! Rating is only possible after the talk has started.
+          </Text>
           <Text stylesProp={styles.answer}>
             {ratingMessage[selectedRatingIndex]}
           </Text>

@@ -28,6 +28,14 @@ const getStyles = (theme) => {
       textAlign: "center",
     },
 
+    attentionText: {
+      textAlign: "center",
+      fontSize: 12,
+      fontWeight: "500",
+      color: "red",
+      marginTop: 8,
+    },
+
     answer: {
       marginVertical: 28,
       textAlign: "center",
