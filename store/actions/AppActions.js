@@ -31,6 +31,7 @@ import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
 import axios from "axios";
+import { logger } from "../../tools/logger";
 
 const formatData = (data) => {
   if (!data?.conference) return;
@@ -60,9 +61,13 @@ export const setPushNotificationToken = (token) => async (dispatch) => {
 
 export const authorizePushNotificationToken = (token) => async () => {
   try {
+    await logger({ AUTHORIZEPUSHNOTIFICATIONTOKEN: token });
     const url = "/api/notification-token";
     await api.post(url, { push_notification_token: token });
-  } catch (error) {}
+    await logger({ AUTHORIZEPUSHNOTIFICATIONTOKEN: "PROSAO" });
+  } catch (error) {
+    await logger({ AUTHORIZEPUSHNOTIFICATIONTOKEN: "PAO" });
+  }
 };
 
 export const setAppTheme = (theme) => (dispatch) => {
