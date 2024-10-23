@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "./BottomTabNavigation";
 import { useDispatch, useSelector } from "react-redux";
-import { getSfsCon } from "../store/actions/AppActions";
-import { BackHandler } from "react-native";
+import {
+  getSfsCon,
+  setPushNotificationToken,
+} from "../store/actions/AppActions";
 import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
 import { authorizeUser } from "../store/actions/AuthActions";
 
 SplashScreen.preventAutoHideAsync();
 
-export default Navigation = () => {
+export default Navigation = ({ expoPushToken }) => {
   const dispatch = useDispatch();
 
   const appInfo = useSelector((state) => state.app.db);
@@ -25,6 +27,10 @@ export default Navigation = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(setPushNotificationToken(expoPushToken));
+  }, [expoPushToken]);
+
+  useEffect(() => {
     (async () => {
       if (token) {
         await SplashScreen.hideAsync();
@@ -34,12 +40,14 @@ export default Navigation = () => {
 
   useEffect(() => {
     if (offlineMode) return;
-    if (last_updated) {
-      setTimeout(() => {
-        dispatch(getSfsCon(last_updated, false));
-      }, next_try_in_ms || 300000);
-    } else {
-      dispatch(getSfsCon());
+    if (token) {
+      if (last_updated) {
+        setTimeout(() => {
+          dispatch(getSfsCon(last_updated, false));
+        }, next_try_in_ms || 300000);
+      } else {
+        dispatch(getSfsCon());
+      }
     }
   }, [offlineMode, token, updateDataCounter]);
 

@@ -4,8 +4,8 @@ import { storageGetItem, storageSetItem } from "../../tools/secureStore";
 
 export const authorize = () => async (dispatch) => {
   try {
-    const url = `/api/authorize`;
-    const response = await api.get(url);
+    const url = "/api/authorize";
+    const response = await api.post(url);
 
     const {
       data: { token },
@@ -15,7 +15,6 @@ export const authorize = () => async (dispatch) => {
     dispatch({ type: AUTHORIZE_USER, payload: token });
   } catch (error) {
     dispatch({ type: AUTHORIZE_USER, payload: "dummy" });
-    console.log("OVAJ JE ERROR", error);
   }
 };
 
@@ -30,7 +29,9 @@ export const authorizeUser = () => async (dispatch) => {
     if (!tokenIsValid) return dispatch(authorize());
 
     dispatch({ type: AUTHORIZE_USER, payload: jwt });
-  } catch {}
+  } catch (error) {
+    dispatch({ type: AUTHORIZE_USER, payload: "dummy" });
+  }
 };
 
 export const checkIfTokenIsValid = async () => {
@@ -40,6 +41,6 @@ export const checkIfTokenIsValid = async () => {
     const { data } = user;
     return data;
   } catch (error) {
-    Promise.reject(error);
+    console.log(error);
   }
 };

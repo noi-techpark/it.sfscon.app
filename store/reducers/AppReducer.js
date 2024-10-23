@@ -13,9 +13,11 @@ import {
   GET_RATING_SUCCESS,
   TOGGLE_TAB_BAR_VISIBILITY,
   SET_APP_OFFLINE_MODE,
+  SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
 
 const initialState = {
+  pushNotificationToken: null,
   force: 0,
   offlineMode: false,
   language: "en",
@@ -36,6 +38,12 @@ const initialState = {
 
 export default AppReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_PUSH_NOTIFICATION_TOKEN:
+      return {
+        ...state,
+        pushNotificationToken: action.payload,
+      };
+
     case SET_THEME:
       return {
         ...state,

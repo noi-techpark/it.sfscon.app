@@ -13,6 +13,7 @@ import {
   SET_UPDATE_DATA_COUNTER,
   TOGGLE_TAB_BAR_VISIBILITY,
   SET_APP_OFFLINE_MODE,
+  SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
 
 import { showLoader, hideLoader } from "./UtilsActions";
@@ -51,6 +52,17 @@ const formatData = (data) => {
     session.searchTerms = searchTerms.join(del);
   });
   return data;
+};
+
+export const setPushNotificationToken = (token) => async (dispatch) => {
+  dispatch({ type: SET_PUSH_NOTIFICATION_TOKEN, payload: token });
+};
+
+export const authorizePushNotificationToken = (token) => async () => {
+  try {
+    const url = "/api/notification-token";
+    await api.post(url, { push_notification_token: token });
+  } catch (error) {}
 };
 
 export const setAppTheme = (theme) => (dispatch) => {
@@ -206,7 +218,6 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
       const { data } = response;
 
       const formatedData = formatData(data);
-      console.log("FORMATED", formatedData);
 
       dispatch({
         type: GET_CONFERENCE_SUCCESS,
@@ -214,7 +225,7 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
       });
     }
   } catch (error) {
-    console.log("usao sam opet", error);
+    console.log("pukao je amazon");
   } finally {
   }
 };

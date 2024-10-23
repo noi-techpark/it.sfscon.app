@@ -34,7 +34,8 @@ axios.interceptors.response.use(
       const { readFromBackupServer } = await import(
         "../store/actions/AppActions"
       );
-      if (status === 502) {
+      if (status === 502 || error?.message === "Network Error") {
+        console.log("usao sam");
         await store.dispatch(readFromBackupServer());
       }
       return Promise.reject(error);

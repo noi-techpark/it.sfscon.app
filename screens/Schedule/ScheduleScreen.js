@@ -19,11 +19,13 @@ import Text from "../../components/TextComponent";
 import FilterActiveSVG from "../../assets/filter_active.svg";
 import FilterDefaultSVG from "../../assets/filter_default.svg";
 import {
+  authorizePushNotificationToken,
   setSelectedTracks,
   toggleTabBarVisibility,
 } from "../../store/actions/AppActions";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
+import { logger } from "../../tools/logger";
 
 export default ScheduleScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -36,6 +38,9 @@ export default ScheduleScreen = ({ navigation }) => {
   const { sessions, tracks } = store || {};
   const loader = useSelector((state) => state?.utils?.loader);
   const selectedTracks = useSelector((state) => state?.app?.selectedTracks);
+  const pushNotificationToken = useSelector(
+    (state) => state?.app?.pushNotificationToken
+  );
 
   const [showTracks, setShowTracks] = useState(false);
   const [clearFilters, setClearFilters] = useState(false);
@@ -46,11 +51,24 @@ export default ScheduleScreen = ({ navigation }) => {
 
   const activeFiltersLabel = selectedTracks?.length > 1 ? "filters" : "filter";
 
+  const showToken = async () => {
+    await logger(pushNotificationToken);
+  };
+
   useLayoutEffect(() => {
     if (isFocused) {
       dispatch(toggleTabBarVisibility("show"));
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    (async () => {
+      if (pushNotificationToken) {
+        dispatch(authorizePushNotificationToken(pushNotificationToken));
+      }
+      await showToken();
+    })();
+  }, [pushNotificationToken]);
 
   useEffect(() => {
     if (inputRef?.current) {
