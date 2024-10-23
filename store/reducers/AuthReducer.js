@@ -2,6 +2,7 @@ import { AUTHORIZE_USER } from "../constants/AuthConstants";
 
 const initialState = {
   token: null,
+  authorizationFinished: false,
   authorizationError: null,
   user: {},
 };
@@ -11,7 +12,7 @@ export default AuthReducer = (state = initialState, action) => {
     case AUTHORIZE_USER:
       return {
         ...state,
-        token: action.payload,
+        authorizationFinished: true,
       };
     default:
       return state;

@@ -16,7 +16,9 @@ export default Navigation = ({ expoPushToken }) => {
   const dispatch = useDispatch();
 
   const appInfo = useSelector((state) => state.app.db);
-  const token = useSelector((state) => state.auth.token);
+  const authorizationFinished = useSelector(
+    (state) => state.auth.authorizationFinished
+  );
   const updateDataCounter = useSelector((state) => state.app.updateDataCounter);
   const offlineMode = useSelector((state) => state.app.offlineMode);
 
@@ -27,29 +29,22 @@ export default Navigation = ({ expoPushToken }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(setPushNotificationToken(expoPushToken));
-  }, [expoPushToken]);
-
-  useEffect(() => {
     (async () => {
-      if (token) {
+      if (authorizationFinished) {
+        dispatch(getSfsCon(null, false));
         await SplashScreen.hideAsync();
       }
     })();
-  }, [token]);
+  }, [authorizationFinished]);
 
   useEffect(() => {
     if (offlineMode) return;
-    if (token) {
-      if (last_updated) {
-        setTimeout(() => {
-          dispatch(getSfsCon(last_updated, false));
-        }, next_try_in_ms || 300000);
-      } else {
-        dispatch(getSfsCon());
-      }
+    if (last_updated) {
+      setTimeout(() => {
+        dispatch(getSfsCon(last_updated));
+      }, next_try_in_ms || 300000);
     }
-  }, [offlineMode, token, updateDataCounter]);
+  }, [offlineMode, last_updated, updateDataCounter]);
 
   return (
     <NavigationContainer theme={{ colors: { background: "#FFF" } }}>

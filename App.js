@@ -9,9 +9,10 @@ import { StatusBar } from "react-native";
 import { storageSetItem } from "./tools/secureStore";
 import { API_URL } from "@env";
 import WrapperComponent from "./components/Wrapper/WrapperComponent";
+import { View } from "react-native";
 
 export default function App() {
-  const { expoPushToken } = usePushNotifications();
+  const { loading } = usePushNotifications();
 
   const setServerToStore = async () => {
     try {
@@ -27,15 +28,18 @@ export default function App() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <WrapperComponent>
-            <StatusBar />
-            <Navigation expoPushToken={expoPushToken} />
-          </WrapperComponent>
-        </SafeAreaProvider>
-      </Provider>
-    </GestureHandlerRootView>
+    !loading && (
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Provider store={store}>
+          <SafeAreaProvider>
+            <WrapperComponent>
+              <StatusBar />
+              <View></View>
+              <Navigation />
+            </WrapperComponent>
+          </SafeAreaProvider>
+        </Provider>
+      </GestureHandlerRootView>
+    )
   );
 }

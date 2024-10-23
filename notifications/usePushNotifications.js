@@ -20,6 +20,7 @@ export const usePushNotifications = () => {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [channels, setChannels] = useState([]);
   const [notification, setNotification] = useState(false);
+  const [loading, setLoading] = useState(true);
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -94,19 +95,24 @@ export const usePushNotifications = () => {
           })
         ).data;
 
-        store.dispatch(setPushNotificationToken(token));
+        console.log("token u pushu", token);
+
+        await store.dispatch(setPushNotificationToken(token));
       } catch (error) {
-        await logger(error);
+        await logger({ error });
+
         console.log("error token", error);
       }
     } else {
       alert("Must use physical device for Push Notifications");
     }
+    setLoading(false);
 
     return token;
   };
 
   return {
+    loading,
     expoPushToken,
     notification,
   };

@@ -30,7 +30,7 @@ import { Platform } from "react-native";
 import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
-import axios from "../../service/service";
+import axios from "axios";
 
 const formatData = (data) => {
   if (!data?.conference) return;
@@ -70,13 +70,9 @@ export const setAppTheme = (theme) => (dispatch) => {
 };
 
 export const getSfsCon =
-  (last_update = null, loader = true) =>
+  (last_update = null) =>
   async (dispatch) => {
     try {
-      if (loader) {
-        dispatch(showLoader());
-      }
-
       const params = {
         app_version: APP_VERSION,
         device: Platform.OS,
@@ -183,6 +179,17 @@ export const postRatings = (sessionId, rate) => async (dispatch) => {
       payload: { message: "Thank you for your feedback", type: "info" },
     });
   } catch (error) {
+    const status = error?.response?.request?.status;
+    dispatch({
+      type: SET_TOAST_MESSAGE,
+      payload: {
+        message:
+          status === "406"
+            ? "Attention! Rating is only possible after the talk has started."
+            : "Rating error",
+        type: "error",
+      },
+    });
     dispatch({ type: SET_RATING_FAIL });
   }
 };
@@ -213,7 +220,9 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
 
     if (!db) {
       const url = "https://sfscon.s3.eu-central-1.amazonaws.com/sfs2024.json";
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       const { data } = response;
 
@@ -225,7 +234,6 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
       });
     }
   } catch (error) {
-    console.log("pukao je amazon");
-  } finally {
+    console.log("pukao je amazon", error);
   }
 };

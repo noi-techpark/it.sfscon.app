@@ -12,9 +12,10 @@ export const authorize = () => async (dispatch) => {
     } = response;
 
     await storageSetItem("jwt", token);
-    dispatch({ type: AUTHORIZE_USER, payload: token });
   } catch (error) {
-    dispatch({ type: AUTHORIZE_USER, payload: "dummy" });
+    console.log(error);
+  } finally {
+    dispatch({ type: AUTHORIZE_USER });
   }
 };
 
@@ -24,23 +25,23 @@ export const authorizeUser = () => async (dispatch) => {
 
     if (!jwt) return dispatch(authorize());
 
-    const tokenIsValid = await checkIfTokenIsValid();
+    const tokenIsValid = await dispatch(checkIfTokenIsValid());
 
     if (!tokenIsValid) return dispatch(authorize());
 
-    dispatch({ type: AUTHORIZE_USER, payload: jwt });
+    dispatch({ type: AUTHORIZE_USER });
   } catch (error) {
-    dispatch({ type: AUTHORIZE_USER, payload: "dummy" });
+    dispatch({ type: AUTHORIZE_USER });
   }
 };
 
-export const checkIfTokenIsValid = async () => {
+export const checkIfTokenIsValid = () => async (dispatch) => {
   try {
-    const url = "/api/me";
+    const url = "/api/mee";
     const user = await api.get(url);
     const { data } = user;
     return data;
   } catch (error) {
-    console.log(error);
+    dispatch(authorize());
   }
 };

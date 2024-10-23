@@ -3,7 +3,7 @@ import { storageGetItem } from "../tools/secureStore";
 import axios from "axios";
 
 axios.interceptors.request.use(async (config) => {
-  const server = "https://m.opencon.dev";
+  const server = "https://m.opencon.prc";
   const jwt = await storageGetItem("jwt");
 
   const configData = {
