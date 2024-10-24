@@ -1,95 +1,42 @@
-import {
-  REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAIL,
-  CHECK_TOKEN_SUCCESS,
-  CHECK_TOKEN_FAIL,
-  GET_TENANT_ID_SUCCESS,
-  GET_TENANT_ID_FAIL,
-  RESET_ERROR,
-  LOGOUT,
-} from "../constants/AuthConstants";
-import {
-  storageDeleteItem,
-  storageGetItem,
-  storageSetItem,
-} from "../../tools/secureStore";
-import {
-  SET_TOAST_MESSAGE,
-  SET_HIDE_LOADER,
-  SET_SHOW_LOADER,
-} from "../constants/UtilsConstants";
-
-import errorHandler from "../../tools/errorHandler";
-
+import { AUTHORIZE_USER } from "../constants/AuthConstants";
 import api from "../../service/service";
+import { storageGetItem, storageSetItem } from "../../tools/secureStore";
+import { logger } from "../../tools/logger";
 
-export const getServerName = () => async (dispatch) => {
+export const authorize = () => async (dispatch) => {
   try {
-    const response = await api.get(`/api/tenants/code/OPENCON`);
+    const url = "/api/authorize";
+    const response = await api.post(url);
+
     const {
-      data: { id },
+      data: { token },
     } = response;
-    await storageSetItem("tenantId", id);
-    dispatch({ type: GET_TENANT_ID_SUCCESS, payload: id });
+
+    await storageSetItem("jwt", token);
   } catch (error) {
-    dispatch({ type: GET_TENANT_ID_FAIL });
+  } finally {
+    dispatch({ type: AUTHORIZE_USER });
   }
 };
 
-export const registerPretixUser =
-  (pretixCode, expoPushToken, phoneDetails) => async (dispatch) => {
-    try {
-      const conferenceId = await storageGetItem("conferenceId");
-      const url = `/api/conferences/${conferenceId}/pretix`;
+export const authorizeUser = () => async (dispatch) => {
+  try {
+    const jwt = await storageGetItem("jwt");
 
-      const response = await api.post(url, {
-        order: pretixCode,
-        pushToken: expoPushToken,
-        device: phoneDetails,
-      });
-      const { data } = response;
+    if (!jwt) return dispatch(authorize());
 
-      await storageSetItem("jwt", data.token);
-
-      dispatch({ type: REGISTER_USER_SUCCESS, payload: data });
-      dispatch(checkIfTokenIsValid());
-    } catch (error) {
-      const errMessage = errorHandler(error);
-      dispatch({
-        type: SET_TOAST_MESSAGE,
-        payload: { message: errMessage, type: "error" },
-      });
-      dispatch({ type: REGISTER_USER_FAIL });
-    }
-  };
+    dispatch(checkIfTokenIsValid());
+  } catch (error) {
+    dispatch({ type: AUTHORIZE_USER });
+  }
+};
 
 export const checkIfTokenIsValid = () => async (dispatch) => {
   try {
-    const jwt = await storageGetItem("jwt");
-    const url = `/api/tenants/me`;
-    const response = await api.get(url);
-    const { data } = response;
-    dispatch({ type: CHECK_TOKEN_SUCCESS, payload: { jwt, data } });
-  } catch (err) {
-    dispatch({ type: CHECK_TOKEN_FAIL, payload: err });
-  } finally {
-    dispatch({ type: SET_HIDE_LOADER });
+    const url = "/api/me";
+    await api.get(url);
+    dispatch({ type: AUTHORIZE_USER });
+  } catch (error) {
+    dispatch(authorize());
   }
-};
-
-export const logout = () => async (dispatch) => {
-  await storageDeleteItem("jwt");
-  dispatch({ type: LOGOUT });
-};
-
-export const resetError = () => (dispatch) => {
-  dispatch({ type: RESET_ERROR });
-};
-
-export const showLoader = () => (dispatch) => {
-  dispatch({ type: SET_SHOW_LOADER });
-};
-
-export const hideLoader = () => (dispatch) => {
-  dispatch({ type: SET_HIDE_LOADER });
 };

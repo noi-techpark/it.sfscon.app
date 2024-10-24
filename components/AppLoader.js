@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
+import React, { useMemo } from "react";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { getTheme } from "../tools/getTheme";
 
 export default LoaderComponent = ({ renderWithTabBarNav }) => {

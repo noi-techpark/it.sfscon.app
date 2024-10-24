@@ -1,24 +1,18 @@
 import { useState, useMemo, useEffect } from "react";
 import { View, Modal, TouchableOpacity } from "react-native";
 import { getTheme } from "../../tools/getTheme";
-import getStyles from "./ratingsComponentsStyles";
+import getStyles from "./rateModalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import Text from "../TextComponent";
 import SecondaryButtonComponent from "../UI/SecondaryButtonComponent";
-import { postRatings, getRatings } from "../../store/actions/AppActions";
+import { postRatings } from "../../store/actions/AppActions";
 
-export default RatingsComponent = ({
-  session,
-  myRate,
-  showModal,
-  setShowModal,
-}) => {
+export default RateModal = ({ session, showModal, setShowModal }) => {
   const dispatch = useDispatch();
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const [ratingStars, setRatingStars] = useState([0, 0, 0, 0, 0]);
-  const [loader, setLoader] = useState(false);
   const [ratingMessage, setRatingMessage] = useState([
     "Poor",
     "Fair",
@@ -27,12 +21,6 @@ export default RatingsComponent = ({
     "Excellent",
   ]);
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(-1);
-
-  useEffect(() => {
-    if (myRate) {
-      setSelectedRatingIndex(myRate - 1);
-    }
-  }, [session, myRate]);
 
   return (
     <Modal
@@ -44,10 +32,13 @@ export default RatingsComponent = ({
       <View style={{ ...styles.container }}>
         <View style={styles.content}>
           <Text bold stylesProp={styles.title}>
-            What do you think about this lecture?
+            What do you think about this talk?
           </Text>
           <Text stylesProp={styles.secondaryTitle}>
             We are interested in hearing your feedback
+          </Text>
+          <Text bold stylesProp={styles.attentionText}>
+            Attention! Rating is only possible after the talk has started.
           </Text>
           <Text stylesProp={styles.answer}>
             {ratingMessage[selectedRatingIndex]}

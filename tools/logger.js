@@ -1,17 +1,9 @@
 import axios from "axios";
-import { storageGetItem } from "./secureStore";
 
-export const logger = async (log) => {
+export const logger = async (obj) => {
   try {
-    const jwt = storageGetItem("jwt");
-    const url = "https://stage.impresaone.digitalcube.dev/svcapp/logger";
-    await axios.post(
-      url,
-      { log },
-      {
-        headers: { Authorization: `Bearer ${jwt}` },
-      }
-    );
+    const url = "https://logger.digitalcube.dev";
+    await axios.post(url, obj);
   } catch (error) {
     console.log(error);
   }

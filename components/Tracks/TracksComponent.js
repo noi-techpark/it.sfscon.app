@@ -6,7 +6,7 @@ import { Feather } from "@expo/vector-icons";
 import SecondaryButtonComponent from "../UI/SecondaryButtonComponent";
 import Text from "../TextComponent";
 import { fromObjectToArray } from "../../tools/sessions";
-import { setSelectedTracks as setTracksInStore } from "../../store/actions/AppActions";
+import { setSelectedTracks as setTracksToStore } from "../../store/actions/AppActions";
 import { useSelector, useDispatch } from "react-redux";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -14,35 +14,23 @@ export default TracksComponent = ({
   showModal,
   setShowModal,
   clearFiltersFlag,
+  tracks = {},
 }) => {
   const theme = getTheme();
   const dispatch = useDispatch();
   const styles = useMemo(() => getStyles(theme), [theme]);
 
-  const tracks = useSelector((state) => state?.app?.db?.conference?.db?.tracks);
+  const savedTracks = useSelector((state) => state.app.selectedTracks);
+
+  const [selectedTracks, setSelectedTracks] = useState([]);
 
   const sfsConId = "SFSCON";
 
-  const [selectedTracks, setSelectedTracks] = useState([]);
-  const [previouslySelectedTracks, setPreviouslySelectedTracks] =
-    useState(selectedTracks);
-
-  const [defaultFilter, setDefaultFilter] = useState(null);
-
   const insets = useSafeAreaInsets();
-
-  useMemo(() => {
-    const filters = fromObjectToArray(tracks);
-    const findFilter = filters?.find((f) => f?.name === sfsConId);
-    if (findFilter !== -1) {
-      setDefaultFilter(findFilter?.id);
-    }
-  }, []);
 
   useEffect(() => {
     if (clearFiltersFlag) {
       setSelectedTracks([]);
-      setPreviouslySelectedTracks([]);
     }
   }, [clearFiltersFlag]);
 
@@ -55,12 +43,7 @@ export default TracksComponent = ({
     }
   };
   return (
-    <Modal
-      style={styles.modal}
-      visible={showModal}
-      // transparent={true}
-      animationType={"fade"}
-    >
+    <Modal style={styles.modal} visible={showModal} animationType={"fade"}>
       <View
         style={{
           ...styles.container,
@@ -73,46 +56,44 @@ export default TracksComponent = ({
         </Text>
         <View style={styles.scrollViewContainer}>
           <ScrollView contentContainerStyle={styles.tracksContainer}>
-            {Object.keys(tracks).length > 0
-              ? fromObjectToArray(tracks)
-                  .filter((f) => {
-                    return f.name !== sfsConId;
-                  })
-                  .map((t, idx) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => checkIfAlreadyInArray(t.id)}
-                        style={
-                          selectedTracks.indexOf(t.id) === -1
-                            ? { ...styles.track, ...styles.defaultTrack }
-                            : { ...styles.track, ...styles.selectedTrack }
-                        }
-                        key={idx}
-                      >
-                        <View
-                          style={
-                            selectedTracks.indexOf(t.id) !== -1
-                              ? { ...styles.circle, ...styles.selectedCircle }
-                              : { ...styles.circle, ...styles.defaultCircle }
-                          }
-                        >
-                          {selectedTracks.indexOf(t.id) !== -1 ? (
-                            <Feather name="check" size={8} color="#FFF" />
-                          ) : null}
-                        </View>
-                        <Text
-                          stylesProp={
-                            selectedTracks.indexOf(t.id) !== -1
-                              ? { ...styles.selectedText, ...styles.trackName }
-                              : styles.trackName
-                          }
-                        >
-                          {t.name}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })
-              : null}
+            {fromObjectToArray(tracks)
+              .filter((f) => {
+                return f.name !== sfsConId;
+              })
+              .map((t, idx) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => checkIfAlreadyInArray(t.id)}
+                    style={
+                      selectedTracks.indexOf(t.id) === -1
+                        ? { ...styles.track, ...styles.defaultTrack }
+                        : { ...styles.track, ...styles.selectedTrack }
+                    }
+                    key={idx}
+                  >
+                    <View
+                      style={
+                        selectedTracks.indexOf(t.id) !== -1
+                          ? { ...styles.circle, ...styles.selectedCircle }
+                          : { ...styles.circle, ...styles.defaultCircle }
+                      }
+                    >
+                      {selectedTracks.indexOf(t.id) !== -1 ? (
+                        <Feather name="check" size={8} color="#FFF" />
+                      ) : null}
+                    </View>
+                    <Text
+                      stylesProp={
+                        selectedTracks.indexOf(t.id) !== -1
+                          ? { ...styles.selectedText, ...styles.trackName }
+                          : styles.trackName
+                      }
+                    >
+                      {t.name}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
           </ScrollView>
         </View>
 
@@ -120,18 +101,13 @@ export default TracksComponent = ({
           <SecondaryButtonComponent
             label={"Cancel"}
             handlePress={() => {
-              if (previouslySelectedTracks.length) {
-                setSelectedTracks(previouslySelectedTracks);
-              } else {
-                setSelectedTracks([]);
-              }
+              setSelectedTracks(savedTracks);
               setShowModal(false);
             }}
           />
           <TouchableOpacity
             onPress={() => {
-              dispatch(setTracksInStore(selectedTracks, defaultFilter));
-              setPreviouslySelectedTracks(selectedTracks);
+              dispatch(setTracksToStore(selectedTracks));
               setShowModal(false);
             }}
             style={styles.submitBtn}

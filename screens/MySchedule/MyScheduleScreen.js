@@ -1,53 +1,49 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
-import AuthorizedScreen from "../Authorized/AuthorizedScreen";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
 import { useSelector, useDispatch } from "react-redux";
-import { getMySchedules, setMySchedule } from "../../store/actions/AppActions";
+import {
+  getMySchedules,
+  setMySchedule,
+  toggleTabBarVisibility,
+} from "../../store/actions/AppActions";
 import getStyles from "./myScheduleScreenStyles";
 import moment from "moment";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import EmptyScreenSVG from "../../assets/icons/empty.svg";
-import { getData } from "../../tools/sessions";
+import { fromObjectToArray, getData } from "../../tools/sessions";
 import AppLoader from "../../components/AppLoader";
+import EmptyScreen from "../../components/EmptyScreen";
+import Speaker from "../../components/Speaker/Speaker";
+import { decodeHTML } from "../../tools/validations";
 
 export default MyscheduleScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
-  const mySchedules = useSelector((state) => state.app.mySchedules);
+  const mySchedules = useSelector((state) => state.app.db?.bookmarks);
   const store = useSelector((state) => state.app?.db?.conference?.db);
-  const registeredUser = useSelector((state) => state.auth.registeredUser);
 
   const { sessions, rooms, lecturers, tracks } = store || {};
 
   const [loading, setLoading] = useState(false);
   const [schedules, setSchedules] = useState({});
 
-  const goToDetails = (session, id) => {
-    navigation.navigate("MyScheduleSessionDetails", {
-      session: {
-        ...session,
-        id,
-      },
+  const goToDetails = (session, track) => {
+    dispatch(toggleTabBarVisibility("hidden"));
+    navigation.navigate("MySchedule", {
+      screen: "MyScheduleSessionDetails",
+      params: { session: session, track },
     });
   };
 
   useEffect(() => {
-    dispatch(getMySchedules());
     setLoading(true);
+    dispatch(getMySchedules());
     setTimeout(() => {
       setLoading(false);
-    }, 500);
-  }, [registeredUser?.id]);
+    }, 600);
+  }, []);
 
   useEffect(() => {
     if (sessions) {
@@ -62,89 +58,81 @@ export default MyscheduleScreen = ({ navigation }) => {
     }
   }, [mySchedules]);
 
-  return !loading ? (
-    <WrapperComponent>
-      {!registeredUser?.id ? (
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" && "padding"}
-        >
-          <AuthorizedScreen />
-        </KeyboardAvoidingView>
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text bold stylesProp={styles.title}>
+          My Schedule
+        </Text>
+      </View>
+
+      {loading ? (
+        <AppLoader />
       ) : (
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Text bold stylesProp={styles.title}>
-              My Schedule
-            </Text>
-          </View>
-          <View style={styles.scollViewContainer}>
-            {Object.keys(schedules).length > 0 ? (
-              <ScrollView contentContainerStyle={styles.mySchedulesContainer}>
-                {Object.keys(schedules).map((s, idx) => {
-                  const session = sessions[s];
-                  const room = getData(rooms, session.id_room);
-                  const track = getData(tracks, session.id_track);
-                  return (
-                    <TouchableOpacity
-                      key={idx}
-                      onPress={() => goToDetails(session, s, track)}
-                    >
-                      <View style={styles.session}>
-                        <Text bold stylesProp={styles.sessionTitle}>
-                          {session.title}
-                        </Text>
-
-                        <View style={styles.sessionDetails}>
-                          <View style={styles.timeContainer}>
-                            <AntDesign
-                              name="clockcircleo"
-                              size={12}
-                              style={styles.clock}
-                            />
-                            <View>
-                              <Text stylesProp={styles.time}>{`${moment(
-                                session.start
-                              ).format("HH:mm")} - ${moment(session.start)
-                                .add(session.duration, "seconds")
-                                .format("HH:mm")}`}</Text>
-                            </View>
-                          </View>
-
-                          <View style={styles.roomContainer}>
-                            <Feather
-                              name="home"
-                              size={12}
-                              style={styles.homeIcon}
-                            />
-                            <Text stylesProp={styles.roomName}>
-                              {room?.name ?? ""}
+        <View style={styles.scollViewContainer}>
+          {mySchedules && fromObjectToArray(mySchedules).length > 0 ? (
+            <ScrollView contentContainerStyle={styles.mySchedulesContainer}>
+              {Object.keys(schedules).map((s, idx) => {
+                const session = sessions[s];
+                const room = getData(rooms, session.id_room);
+                const track = getData(tracks, session.id_track);
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => goToDetails(session, track)}
+                  >
+                    <View style={styles.session}>
+                      <View style={styles.sessionDetails}>
+                        <View style={styles.timeContainer}>
+                          <AntDesign
+                            name="clockcircleo"
+                            size={12}
+                            style={styles.clock}
+                          />
+                          <View>
+                            <Text stylesProp={styles.time}>
+                              {`${moment(session.start).format("HH:mm")}`}{" "}
                             </Text>
                           </View>
                         </View>
 
-                        <View style={styles.speakersContainer}>
-                          <Text stylesProp={styles.speakersTitle}>
-                            Speakers:
+                        <View style={styles.roomContainer}>
+                          <Feather
+                            name="home"
+                            size={12}
+                            style={styles.homeIcon}
+                          />
+                          <Text stylesProp={styles.roomName}>
+                            {room?.name ?? ""}
                           </Text>
-                          <View style={styles.footer}>
-                            <View stylesProp={styles.speakers}>
-                              {session?.id_lecturers.length
-                                ? session?.id_lecturers.map((lect, idx) => {
-                                    const lecturer = getData(lecturers, lect);
-                                    return session?.id_lecturers?.length > 1 ? (
-                                      <Text
-                                        key={idx}
-                                      >{`${lecturer.display_name} ,`}</Text>
-                                    ) : (
-                                      <Text
-                                        key={idx}
-                                      >{`${lecturer.display_name}`}</Text>
-                                    );
-                                  })
-                                : null}
-                            </View>
+                        </View>
+                      </View>
+                      <Text bold stylesProp={styles.sessionTitle}>
+                        {decodeHTML(session.title)}
+                      </Text>
 
+                      {session?.abstract ? (
+                        <Text stylesProp={styles.abstract}>
+                          {session.abstract}
+                        </Text>
+                      ) : null}
+
+                      <View style={styles.speakersContainer}>
+                        <View style={styles.footer}>
+                          {session?.id_lecturers.length ? (
+                            <Text stylesProp={styles.speakersTitle}>
+                              Speakers:
+                            </Text>
+                          ) : null}
+
+                          {session?.id_lecturers.length
+                            ? session?.id_lecturers.map((lect, idx) => {
+                                const lecturer = getData(lecturers, lect);
+                                return <Speaker speaker={lecturer} key={idx} />;
+                              })
+                            : null}
+
+                          {session?.bookmarkable ? (
                             <View style={styles.bookmark}>
                               <TouchableOpacity
                                 onPress={() => {
@@ -159,26 +147,19 @@ export default MyscheduleScreen = ({ navigation }) => {
                                 />
                               </TouchableOpacity>
                             </View>
-                          </View>
+                          ) : null}
                         </View>
                       </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </ScrollView>
-            ) : (
-              <View style={styles.emptyContainer}>
-                <EmptyScreenSVG />
-                <Text stylesProp={styles.emptyText}>
-                  There are no bookmarked events
-                </Text>
-              </View>
-            )}
-          </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          ) : (
+            <EmptyScreen title="There are no bookmarked events" />
+          )}
         </View>
       )}
-    </WrapperComponent>
-  ) : (
-    <AppLoader />
+    </View>
   );
 };

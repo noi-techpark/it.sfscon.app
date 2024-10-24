@@ -1,5 +1,5 @@
 import AutoHeightWebView from "react-native-autoheight-webview";
-import { Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
 import { getTheme } from "../tools/getTheme";
 
 export default WebViewComponent = ({ source }) => {

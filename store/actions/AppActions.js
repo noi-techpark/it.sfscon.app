@@ -7,12 +7,16 @@ import {
   TOGGLE_MY_SCHEDULE,
   GET_MY_SCHEDULE_SUCCESS,
   GET_MY_SCHEDULE_FAIL,
-  GET_RATING_SUCCESS,
-  GET_RATING_FAIL,
   SET_RATING_SUCCESS,
   SET_RATING_FAIL,
   RESET_TRACKS_AND_DAY,
+  SET_UPDATE_DATA_COUNTER,
+  TOGGLE_TAB_BAR_VISIBILITY,
+  SET_APP_OFFLINE_MODE,
+  SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
+
+import { hideLoader } from "./UtilsActions";
 
 import {
   SET_HIDE_LOADER,
@@ -20,54 +24,75 @@ import {
 } from "../constants/UtilsConstants";
 
 import errorHandler from "../../tools/errorHandler";
-import { storageGetItem, storageSetItem } from "../../tools/secureStore";
+import { storageGetItem } from "../../tools/secureStore";
 import { Platform } from "react-native";
 
 import { APP_VERSION } from "../../constants/buildVersion";
 
 import api from "../../service/service";
+import axios from "axios";
+
+const formatData = (data) => {
+  if (!data?.conference) return;
+  const sessions = data?.conference?.db?.sessions;
+
+  Object.keys(sessions).forEach((id) => {
+    const session = sessions[id];
+    const del = ";;";
+    const searchTerms = [session.title];
+
+    if (session.abstract) {
+      searchTerms.push(session.abstract);
+    }
+    session.rating =
+      id in data?.ratings?.rates_by_session
+        ? data?.ratings?.rates_by_session[id]
+        : [0, 0];
+
+    session.searchTerms = searchTerms.join(del);
+  });
+  return data;
+};
+
+export const setPushNotificationToken = (token) => async (dispatch) => {
+  dispatch({ type: SET_PUSH_NOTIFICATION_TOKEN, payload: token });
+};
+
+export const authorizePushNotificationToken = (token) => async () => {
+  try {
+    const url = "/api/notification-token";
+    await api.post(url, { push_notification_token: token });
+  } catch (error) {}
+};
 
 export const setAppTheme = (theme) => (dispatch) => {
   dispatch({ type: SET_THEME, payload: theme });
 };
 
 export const getSfsCon =
-  (last_update = null, loggedInUser = null) =>
+  (last_update = null) =>
   async (dispatch) => {
     try {
-      const conferenceId = await api.get(
-        `/api/conferences/acronym/sfscon-latest`
-      );
-      const {
-        data: { id },
-      } = conferenceId;
-
-      await storageSetItem("conferenceId", id);
-
       const params = {
         app_version: APP_VERSION,
         device: Platform.OS,
-        id_user: loggedInUser?.id,
       };
+
       if (last_update) {
         params["last_update"] = last_update;
       }
-      const url = `/api/conferences/${id}`;
 
-      const getConferenceById = await api.get(url, { params });
-      const { data } = getConferenceById;
+      const url = `/api/conference`;
 
-      if (!data?.conference) return;
+      const response = await api.get(url);
 
-      Object.keys(data?.conference?.db?.sessions).forEach((id) => {
-        const session = data?.conference?.db?.sessions[id];
-        session.rating =
-          id in data?.conference_avg_rating?.rates_by_session
-            ? data?.conference_avg_rating?.rates_by_session[id]
-            : [0, 0];
-      });
+      const { data } = response;
 
-      dispatch({ type: GET_CONFERENCE_SUCCESS, payload: data });
+      dispatch(setUpdateDataCounter(data.next_try_in_ms));
+
+      const formatedData = formatData(data);
+
+      dispatch({ type: GET_CONFERENCE_SUCCESS, payload: formatedData });
     } catch (error) {
       const errMessage = errorHandler(error);
       dispatch({
@@ -75,8 +100,9 @@ export const getSfsCon =
         payload: { message: errMessage, type: "error" },
       });
       dispatch({ type: GET_CONFERENCE_FAIL });
+    } finally {
+      dispatch(hideLoader());
     }
-    dispatch({ type: SET_HIDE_LOADER });
   };
 
 export const setSelectedDay = (day) => (dispatch) => {
@@ -86,13 +112,15 @@ export const setSelectedDay = (day) => (dispatch) => {
   }, 1500);
 };
 
-export const setSelectedTracks = (tracks, defaultFilter) => (dispatch) => {
-  if (tracks.length) {
-    tracks = [...tracks, defaultFilter];
-  }
+export const setSelectedTracks =
+  (tracks, defaultFilter = "SFSCON") =>
+  (dispatch) => {
+    if (tracks.length) {
+      tracks = [...tracks, defaultFilter];
+    }
 
-  dispatch({ type: SET_SELECTED_TRACKS, payload: tracks });
-};
+    dispatch({ type: SET_SELECTED_TRACKS, payload: tracks });
+  };
 
 export const getMySchedules = () => async (dispatch) => {
   try {
@@ -108,7 +136,7 @@ export const getMySchedules = () => async (dispatch) => {
 
 export const setMySchedule = (sessionId) => async (dispatch) => {
   try {
-    const url = `/api/conferences/sessions/${sessionId}/toggle-bookmark`;
+    const url = `/api/sessions/${sessionId}/bookmarks/toggle`;
     const response = await api.post(url, {});
 
     const {
@@ -123,6 +151,7 @@ export const setMySchedule = (sessionId) => async (dispatch) => {
         type: "info",
       },
     });
+    dispatch(getSfsCon(null, false));
     dispatch({ type: TOGGLE_MY_SCHEDULE });
   } catch (error) {
     const errMessage = errorHandler(error);
@@ -135,38 +164,72 @@ export const setMySchedule = (sessionId) => async (dispatch) => {
 
 export const postRatings = (sessionId, rate) => async (dispatch) => {
   try {
-    const url = `/api/conferences/sessions/${sessionId}/rate`;
-    const response = await api.post(url, { rate: rate });
+    const url = `/api/sessions/${sessionId}/rate`;
+    const response = await api.post(url, { rating: rate });
     const { data } = response;
     const { avg, nr, my_rate } = data;
     dispatch({
       type: SET_RATING_SUCCESS,
       payload: { avg, nr, sessionId, my_rate },
     });
+
+    dispatch(getSfsCon(null, false));
     dispatch({
       type: SET_TOAST_MESSAGE,
       payload: { message: "Thank you for your feedback", type: "info" },
     });
   } catch (error) {
+    const status = error?.response?.request?.status;
+    dispatch({
+      type: SET_TOAST_MESSAGE,
+      payload: {
+        message:
+          status === 406
+            ? "Attention! Rating is only possible after the talk has started."
+            : "Rating error",
+        type: "error",
+      },
+    });
     dispatch({ type: SET_RATING_FAIL });
   }
 };
 
-export const getRatings = (sessionId) => async (dispatch) => {
-  try {
-    const url = `/api/conferences/sessions/${sessionId}/rate`;
-    const response = await api.get(url);
-    const { data } = response;
-    const { avg, nr, my_rate } = data;
-    dispatch({
-      type: GET_RATING_SUCCESS,
-      payload: { avg, nr, sessionId, my_rate },
-    });
-  } catch (error) {
-    dispatch({ type: GET_RATING_FAIL });
-  }
+export const toggleTabBarVisibility = (visibility) => (dispatch) => {
+  dispatch({ type: TOGGLE_TAB_BAR_VISIBILITY, payload: visibility });
 };
 
 export const resetTracksAndDaysSelected = () => (dispatch) => {
   dispatch({ type: RESET_TRACKS_AND_DAY });
+};
+
+export const setUpdateDataCounter = (next_try_in_ms) => (dispatch) => {
+  dispatch({ type: SET_UPDATE_DATA_COUNTER, payload: next_try_in_ms });
+};
+
+export const setAppOfflineMode = () => async (dispatch) => {
+  dispatch({ type: SET_APP_OFFLINE_MODE, payload: true });
+};
+
+export const readFromBackupServer = () => async (dispatch, getState) => {
+  try {
+    const {
+      app: { db },
+    } = getState();
+
+    dispatch(setAppOfflineMode(true));
+
+    if (!db) {
+      const url = `https://sfscon.s3.eu-central-1.amazonaws.com/sfs2024.json`;
+      const response = await fetch(url).then((res) => res.json());
+
+      const formatedData = formatData(response);
+
+      dispatch({
+        type: GET_CONFERENCE_SUCCESS,
+        payload: formatedData,
+      });
+    }
+  } catch (error) {
+    console.log("pukao je amazon", error);
+  }
 };

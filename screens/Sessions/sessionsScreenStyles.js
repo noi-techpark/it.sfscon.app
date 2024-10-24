@@ -2,10 +2,15 @@ import { StyleSheet } from "react-native";
 
 const getStyles = (theme) => {
   return StyleSheet.create({
+    touchable: {
+      flex: 1,
+    },
+    
     container: {
       flex: 1,
       flexDirection: "row",
     },
+
     sessionContainer: {
       flex: 1,
       flexDirection: "row",
@@ -24,7 +29,6 @@ const getStyles = (theme) => {
     },
 
     emptyText: {
-      fontSize: 18,
       textAlign: "center",
       marginTop: 20,
     },
@@ -32,7 +36,7 @@ const getStyles = (theme) => {
     timeContainer: {
       backgroundColor: theme.inputBackground,
       flexBasis: "20%",
-      paddingTop: 16,
+      paddingTop: 6,
       paddingHorizontal: 8,
       alignItems: "center",
       justifyContent: "flex-start",
@@ -58,24 +62,27 @@ const getStyles = (theme) => {
       marginBottom: 15,
       borderRadius: 10,
       marginLeft: 8,
-      paddingVertical: 15,
+      paddingVertical: 8,
       paddingHorizontal: 8,
     },
 
     headerTrack: {
       fontSize: 12,
-      marginBottom: 7,
+      marginBottom: 8,
       fontWeight: "600",
     },
 
     sessionTitle: {
       fontSize: 14,
+      marginBottom: 8,
       fontWeight: "600",
-      marginBottom: 24,
+    },
+
+    sessionAbstract: {
+      marginBottom: 8,
     },
 
     trackContainer: {
-      paddingVertical: 6,
       flexDirection: "row",
       alignItems: "center",
     },
@@ -88,19 +95,17 @@ const getStyles = (theme) => {
 
     speaker: {
       flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 8,
     },
 
     speakersTitle: {
       fontSize: 10,
       color: theme.text,
-      marginBottom: 7,
+      marginBottom: 8,
     },
 
     imageContainer: {
-      width: 32,
-      height: 32,
+      width: 40,
+      height: 40,
       borderRadius: 100,
       overflow: "hidden",
       alignItems: "center",
@@ -114,13 +119,20 @@ const getStyles = (theme) => {
     },
 
     speakerInfo: {
+      flex: 1,
       marginLeft: 6,
-      flexDirection: "row",
+      justifyContent: "center",
     },
 
     speakerName: {
       fontSize: 12,
       color: theme.title,
+    },
+
+    companyName: {
+      fontSize: 12,
+      flex: 1,
+      color: theme.textLight,
     },
 
     timelapseText: {

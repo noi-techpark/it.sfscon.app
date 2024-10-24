@@ -1,35 +1,28 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Platform } from "react-native";
 import AuthorsNavigation from "./AuthorsNavigation";
 import ScheduleNavigation from "./ScheduleNavigation";
-import MoreNavigation from "./MoreNavigation";
 import MyScheduleNavigation from "./MyScheduleNavigation";
 import { getTheme } from "../tools/getTheme";
-import { Feather, EvilIcons } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
+import LinksScreen from "../screens/Links/LinksScreen";
+import SponsorsScreen from "../screens/Sponsors/SponsorsScreen";
+import CustomTabBar from "../components/CustomTabBar/CustomTabBar";
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 export default BottomTabNavigation = () => {
   const theme = getTheme();
+
   return (
     <Tab.Navigator
+      tabBar={(props) => {
+        return <CustomTabBar {...props} />;
+      }}
       backBehavior="history"
       initialRouteName="Schedule"
-      screenOptions={({ route }) => {
-        return {
-          tabBarActiveTintColor: theme.bottomTabNavActive,
-          headerShown: false,
-          tabBarInactiveTintColor: theme.bottomTabNavInactive,
-          tabBarLabelPosition: "below-icon",
-          tabBarLabelStyle: {
-            fontSize: 10,
-            top: -4,
-          },
-          tabBarStyle: {
-            borderTopColor: theme.textLight,
-            borderTopWidth: 0.3,
-          },
-        };
-      }}
+      screenOptions={{ headerShown: false }}
     >
       <Tab.Screen
         name="Schedule"
@@ -56,7 +49,7 @@ export default BottomTabNavigation = () => {
               />
             );
           },
-          tabBarLabel: "Schedule",
+          tabBarLabel: "Programme",
         }}
       />
       <Tab.Screen
@@ -84,7 +77,7 @@ export default BottomTabNavigation = () => {
               />
             );
           },
-          tabBarLabel: "Authors",
+          tabBarLabel: "Speakers",
         }}
       />
 
@@ -109,23 +102,44 @@ export default BottomTabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="More"
-        component={MoreNavigation}
+        name="Links"
+        component={LinksScreen}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
-              <EvilIcons
-                name="navicon"
-                size={18}
+              <AntDesign
                 color={
                   focused
                     ? theme.bottomTabNavActive
                     : theme.bottomTabNavInactive
                 }
+                name="link"
+                size={18}
               />
             );
           },
-          tabBarLabel: "More",
+          tabBarLabel: "Links",
+        }}
+      />
+
+      <Tab.Screen
+        name="Supporters"
+        component={SponsorsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => {
+            return (
+              <AntDesign
+                color={
+                  focused
+                    ? theme.bottomTabNavActive
+                    : theme.bottomTabNavInactive
+                }
+                name="staro"
+                size={18}
+              />
+            );
+          },
+          tabBarLabel: "Supporters",
         }}
       />
     </Tab.Navigator>

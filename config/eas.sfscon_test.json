@@ -1,17 +1,20 @@
 {
   "cli": {
-    "version": ">= 0.51.0"
+    "version": ">= 0.51.0",
+    "appVersionSource": "local"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "development"
     },
     "test": {
       "distribution": "internal",
       "ios": {
         "simulator": true
-      }
+      },
+      "channel": "test"
     },
     "production": {
       "channel": "production"

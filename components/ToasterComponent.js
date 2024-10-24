@@ -42,5 +42,3 @@ export default ToasterComponent = ({ visibilityTime, type }) => {
     </>
   );
 };
-
-const getStyles = () => {};

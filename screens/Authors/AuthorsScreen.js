@@ -8,20 +8,22 @@ import {
   Pressable,
   Keyboard,
 } from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SVGAvatar from "../../assets/icons/avatar.svg";
 import getStyles from "./authorsScreenStyles";
 import { getTheme } from "../../tools/getTheme";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { fromObjectToArray } from "../../tools/sessions";
 import { useIsFocused } from "@react-navigation/native";
 import Text from "../../components/TextComponent";
+import EmptyScreen from "../../components/EmptyScreen";
+import { toggleTabBarVisibility } from "../../store/actions/AppActions";
 
 export default AuthorsScreen = ({ navigation }) => {
   const theme = getTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
   const db = useSelector((state) => state.app.db);
   const lecturers = db?.conference?.db?.lecturers;
@@ -59,6 +61,7 @@ export default AuthorsScreen = ({ navigation }) => {
   }, [isFocused]);
 
   const navigateToAuthorDetails = (author) => {
+    dispatch(toggleTabBarVisibility("hidden"));
     navigation.navigate("AuthorDetails", { author });
   };
 
@@ -67,7 +70,7 @@ export default AuthorsScreen = ({ navigation }) => {
   };
 
   return (
-    <WrapperComponent>
+    <View style={styles.container}>
       <Pressable style={styles.wrapper} onPress={() => Keyboard.dismiss()}>
         <View style={styles.header}>
           {showSearchInput ? (
@@ -78,13 +81,13 @@ export default AuthorsScreen = ({ navigation }) => {
                     filterAuthors(term);
                   }}
                   ref={inputRef}
-                  placeholder="Search authors"
+                  placeholder="Search speakers"
                   style={styles.searchInput}
                 />
 
-                <Feather
-                  name="search"
-                  size={24}
+                <AntDesign
+                  name="search1"
+                  size={22}
                   style={styles.searchInputIcon}
                 />
 
@@ -101,9 +104,9 @@ export default AuthorsScreen = ({ navigation }) => {
           ) : (
             <>
               <Text bold stylesProp={styles.headerTitle}>
-                Authors
+                Speakers
               </Text>
-              {!authors ? null : (
+              {!authors || authors?.length === 0 ? null : (
                 <TouchableOpacity
                   onPress={openSearchInput}
                   style={
@@ -112,50 +115,58 @@ export default AuthorsScreen = ({ navigation }) => {
                       : styles.searchBtn
                   }
                 >
-                  <Feather name="search" size={24} style={styles.searchIcon} />
+                  <AntDesign
+                    name="search1"
+                    size={22}
+                    style={styles.searchIcon}
+                  />
                 </TouchableOpacity>
               )}
             </>
           )}
         </View>
         <View style={styles.flatListContainer}>
-          <FlatList
-            data={authors}
-            contentContainerStyle={styles.flatList}
-            numColumns={2}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.lecturer}
-                  onPress={() => navigateToAuthorDetails(item)}
-                >
-                  <View style={styles.imageContainer}>
-                    {item.profile_picture ? (
-                      <Image
-                        resizeMode="cover"
-                        source={{ uri: item.profile_picture }}
-                        style={styles.lectProfilePic}
-                      />
-                    ) : (
-                      <SVGAvatar width={150} height={175} />
-                    )}
-                  </View>
+          {authors?.length === 0 || !authors ? (
+            <EmptyScreen title="No authors found" />
+          ) : (
+            <FlatList
+              data={authors}
+              contentContainerStyle={styles.flatList}
+              numColumns={2}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.lecturer}
+                    onPress={() => navigateToAuthorDetails(item)}
+                  >
+                    <View style={styles.imageContainer}>
+                      {item.profile_picture ? (
+                        <Image
+                          resizeMode="cover"
+                          source={{ uri: item.profile_picture }}
+                          style={styles.lectProfilePic}
+                        />
+                      ) : (
+                        <SVGAvatar width={150} height={175} />
+                      )}
+                    </View>
 
-                  <View style={styles.lectInfo}>
-                    <Text numberOfLines={1} stylesProp={styles.lectName}>
-                      {item.display_name}
-                    </Text>
-                    <Text stylesProp={styles.lectCompany}>
-                      {item.company_name ?? ""}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                    <View style={styles.lectInfo}>
+                      <Text stylesProp={styles.lectName}>
+                        {item.display_name}
+                      </Text>
+                      <Text stylesProp={styles.lectCompany}>
+                        {item.company_name ?? ""}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
         </View>
       </Pressable>
-    </WrapperComponent>
+    </View>
   );
 };

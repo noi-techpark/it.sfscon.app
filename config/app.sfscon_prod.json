@@ -4,11 +4,12 @@
     "owner": "s.dalvai",
     "scheme": "sfscon",
     "slug": "sfscon-registration",
-    "version": "1.3.0",
+    "version": "1.3.3",
     "orientation": "portrait",
     "icon": "./assets/logo_blue.png",
     "userInterfaceStyle": "light",
     "plugins": [
+      "expo-secure-store",
       [
         "expo-notifications",
         {
@@ -32,12 +33,12 @@
         "NSPhotoLibraryUsageDescription": "Allow sfs-con application to access your Photo library, this will allow you to set/change profile picture from your phone's photo library.",
         "NSCameraUsageDescription": "Allow sfs-con application to access Camera, this will allow you to Scan QR codes and also to change a profile picture "
       },
-      "buildNumber": "1.3.0",
+      "buildNumber": "1.3.3",
       "supportsTablet": true,
       "bundleIdentifier": "it.sfscon.app"
     },
     "android": {
-      "versionCode": 25,
+      "versionCode": 26,
       "permissions": [
         "android.permission.READ_INTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",

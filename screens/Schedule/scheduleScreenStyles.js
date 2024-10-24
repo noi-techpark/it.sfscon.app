@@ -2,24 +2,62 @@ import { StyleSheet } from "react-native";
 
 const getStyles = (theme) => {
   return StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+
     header: {
-      marginTop: 25,
       marginBottom: 18,
-      marginLeft: 20,
+      paddingHorizontal: 20,
+    },
+
+    headerTop: {
+      height: 52,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 8,
+    },
+
+    searchContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+
+    searchInput: {
+      height: 45,
+      justifyContent: "center",
+      borderRadius: 15,
+      paddingVertical: 8,
+      paddingLeft: 40,
+      paddingRight: 15,
+      flex: 1,
+      backgroundColor: theme.inputBackground,
+      color: theme.inputColor,
+    },
+
+    searchInputIcon: {
+      position: "absolute",
+      left: 10,
+      color: theme.text,
+    },
+
+    cancelBtnTxt: {
+      fontSize: 12,
+      color: theme.text,
+      marginLeft: 12,
     },
 
     headerTitle: {
       fontSize: 26,
       fontWeight: "800",
       color: theme.title,
-      marginBottom: 10,
     },
 
     filterContainer: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginRight: 24,
     },
 
     filtersHolder: {
@@ -64,6 +102,7 @@ const getStyles = (theme) => {
       fontSize: 18,
       fontWeight: "400",
     },
+
     filterIcon: {
       color: theme.secondaryTitle,
       alignSelf: "flex-end",

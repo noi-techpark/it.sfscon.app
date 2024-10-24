@@ -2,15 +2,22 @@ import { StyleSheet } from "react-native";
 
 const getStyles = (theme) => {
   return StyleSheet.create({
-    appVersion: {
+    starContainer: {
+      flexDirection: "row",
       alignItems: "center",
-      textAlign: "center",
-      paddingBottom: 20,
     },
 
-    appVersionText: {
+    rateIcon: {
+      marginRight: 4,
+    },
+
+    ratingText: {
+      marginHorizontal: 6,
       color: theme.textLight,
-      lineHeight: 18
+    },
+
+    reviewCount: {
+      color: theme.textLight,
     },
   });
 };

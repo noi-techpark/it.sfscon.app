@@ -1,13 +1,15 @@
 import { View, Image, TouchableOpacity, ScrollView } from "react-native";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
-import HeaderComponent from "../../components/Header/HeaderComponent";
 import { useSelector } from "react-redux";
+import Text from "../../components/TextComponent";
 import getStyles from "./sponsorsScreenStyles";
 import { fromObjectToArray } from "../../tools/sessions";
 import * as Linking from "expo-linking";
+import { getTheme } from "../../tools/getTheme";
+import { useMemo } from "react";
 
 export default SponsorsScreen = ({ route, navigation }) => {
-  const styles = getStyles();
+  const theme = getTheme();
+  const styles = useMemo(() => getStyles(theme), [theme]);
   const db = useSelector((state) => state.app.db);
   const sponsors = fromObjectToArray(db?.conference?.db?.sponsors);
 
@@ -16,42 +18,37 @@ export default SponsorsScreen = ({ route, navigation }) => {
   };
 
   return (
-    <WrapperComponent>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <HeaderComponent
-            handleGoBack={() => navigation.goBack()}
-            renderWithButton
-            title={"Our Supporters"}
-          />
-        </View>
-
-        <ScrollView
-          style={styles.sponsorsContainer}
-          showsVerticalScrollIndicator={true}
-        >
-          {sponsors?.length
-            ? sponsors?.map((s, idx) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => Linking.openURL(s.url)}
-                    key={idx}
-                    style={styles.sponsor}
-                  >
-                    <Image
-                      resizeMode="contain"
-                      source={{ uri: s.logo_url }}
-                      style={{
-                        width: slicePxs(s.width) / 1.1,
-                        height: slicePxs(s.height),
-                      }}
-                    />
-                  </TouchableOpacity>
-                );
-              })
-            : null}
-        </ScrollView>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text bold stylesProp={styles.headerTitle}>
+          Supporters
+        </Text>
       </View>
-    </WrapperComponent>
+      <ScrollView
+        style={styles.sponsorsContainer}
+        showsVerticalScrollIndicator={true}
+      >
+        {sponsors?.length
+          ? sponsors?.map((s, idx) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => Linking.openURL(s.url)}
+                  key={idx}
+                  style={styles.sponsor}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={{ uri: s.logo_url }}
+                    style={{
+                      width: slicePxs(s.width) / 1.1,
+                      height: slicePxs(s.height),
+                    }}
+                  />
+                </TouchableOpacity>
+              );
+            })
+          : null}
+      </ScrollView>
+    </View>
   );
 };

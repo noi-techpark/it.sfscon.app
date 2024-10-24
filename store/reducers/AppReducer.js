@@ -4,38 +4,46 @@ import {
   GET_CONFERENCE_FAIL,
   SET_SELECTED_DAY,
   SET_SELECTED_TRACKS,
-  GET_MY_SCHEDULE,
   GET_MY_SCHEDULE_SUCCESS,
   TOGGLE_MY_SCHEDULE,
   SET_RATING_SUCCESS,
   SET_SESSION_MEASUREMENT,
-  SET_SESSION_QUESTIONS,
-  GET_SESSION_QUESTIONS,
   RESET_TRACKS_AND_DAY,
-  TOGGLE_QUESTION_LIKE,
-  COUNT_MESSAGES,
   SET_UPDATE_DATA_COUNTER,
   GET_RATING_SUCCESS,
+  TOGGLE_TAB_BAR_VISIBILITY,
+  SET_APP_OFFLINE_MODE,
+  SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
 
 const initialState = {
+  pushNotificationToken: null,
+  force: 0,
+  offlineMode: false,
   language: "en",
+  tabBarVisibility: "show",
+  updateDataCounter: 0,
   theme: "light",
   db: null,
   error: {},
+  sessionRates: [],
   loader: false,
-  selectedDay: "",
+  selectedDay: null,
   selectedTracks: [],
   mySchedules: [],
   scheduleToggled: 0,
   rating: {},
-  myRate: null,
-  ratingAdded: 0,
   measurements: [],
 };
 
 export default AppReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_PUSH_NOTIFICATION_TOKEN:
+      return {
+        ...state,
+        pushNotificationToken: action.payload,
+      };
+
     case SET_THEME:
       return {
         ...state,
@@ -43,9 +51,14 @@ export default AppReducer = (state = initialState, action) => {
       };
 
     case GET_CONFERENCE_SUCCESS:
-      const selectedDay = action.payload.conference?.idx.days[0];
+      const days = action.payload.conference?.idx?.days || [];
+      const selectedDayFromStore = state.selectedDay;
+      const findIdx = days.indexOf(selectedDayFromStore);
+      const selectedDay = findIdx > -1 ? days[findIdx] : days[0];
+
       return {
         ...state,
+        force: state.force + 1,
         db: action.payload,
         selectedDay: selectedDay,
         lastTimeUpdated: action.payload.last_updated,
@@ -54,6 +67,12 @@ export default AppReducer = (state = initialState, action) => {
     case GET_CONFERENCE_FAIL:
       return {
         ...state,
+      };
+
+    case SET_UPDATE_DATA_COUNTER:
+      return {
+        ...state,
+        updateDataCounter: state.updateDataCounter + 1,
       };
 
     case SET_SELECTED_DAY:
@@ -121,6 +140,18 @@ export default AppReducer = (state = initialState, action) => {
         questions: [],
         questionAdded: 0,
         questionLiked: 0,
+      };
+
+    case TOGGLE_TAB_BAR_VISIBILITY:
+      return {
+        ...state,
+        tabBarVisibility: action.payload,
+      };
+
+    case SET_APP_OFFLINE_MODE:
+      return {
+        ...state,
+        offlineMode: true,
       };
 
     default:

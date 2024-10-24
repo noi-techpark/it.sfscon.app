@@ -2,28 +2,33 @@ import { StyleSheet, Dimensions } from "react-native";
 
 const getStyles = (theme) => {
   return StyleSheet.create({
+    container: {
+      flex: 1,
+    },
     wrapper: {
       marginHorizontal: 20,
       flex: 1,
     },
 
     header: {
-      paddingVertical: 30,
-      minHeight: 100,
+      height: 52,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      marginBottom: 24,
     },
 
     headerTitle: {
       color: theme.title,
-      fontWeight: "600",
+      fontWeight: "800",
       fontSize: 26,
     },
 
     searchInput: {
+      height: 50,
+      justifyContent: "center",
       borderRadius: 15,
-      paddingVertical: 10,
+      paddingVertical: 8,
       paddingLeft: 40,
       paddingRight: 15,
       flex: 1,
@@ -50,6 +55,12 @@ const getStyles = (theme) => {
     searchContainer: {
       flexDirection: "row",
       alignItems: "center",
+    },
+
+    emptyScreen: {
+      alignItems: "center",
+      justifyContent: "center",
+      flex: 1,
     },
 
     flatListContainer: {

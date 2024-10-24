@@ -1,9 +1,8 @@
 import { useMemo } from "react";
 import { View } from "react-native";
-import HeaderComponent from "../../components/Header/HeaderComponent";
+import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
 import Link from "../../components/Link";
-import WrapperComponent from "../../components/Wrapper/WrapperComponent";
 import getStyles from "./linksScreenStyles";
 
 export default LinksScreen = ({ navigation }) => {
@@ -22,35 +21,29 @@ export default LinksScreen = ({ navigation }) => {
       placeholder: "https://www.sfscon.it/venue",
     },
     {
-      link: "https://www.sfscon.it/programs-archive/",
-      label: "Past editions",
-      placeholder: "https://www.sfscon.it/programs-archive",
+      link: "https://www.sfscon.it/attendee-guide/",
+      label: "Attendee's Guide",
+      placeholder: "https://www.sfscon.it/attendee-guide",
+    },
+    {
+      link: "https://maps.sfscon.it",
+      label: "Conference map",
+      placeholder: "https://maps.sfscon.it",
     },
   ];
 
-  const goBack = () => {
-    navigation.navigate("MoreScreen");
-  };
-
   return (
-    <WrapperComponent>
-      <View style={styles.container}>
-        <HeaderComponent
-          renderWithButton
-          handleGoBack={goBack}
-          title={"Links"}
-        />
-        <View style={styles.linksContainer}>
-          {links.map(({ label, link, placeholder }, idx) => (
-            <Link
-              key={idx}
-              label={label}
-              link={link}
-              placeholder={placeholder}
-            />
-          ))}
-        </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text bold stylesProp={styles.headerTitle}>
+          Links
+        </Text>
       </View>
-    </WrapperComponent>
+      <View style={styles.linksContainer}>
+        {links.map(({ label, link, placeholder }, idx) => (
+          <Link key={idx} label={label} link={link} placeholder={placeholder} />
+        ))}
+      </View>
+    </View>
   );
 };

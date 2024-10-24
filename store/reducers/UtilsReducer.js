@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   toast: {},
-  loader: false,
+  loader: true,
 };
 
 export default ToastReducer = (state = initialState, action) => {
@@ -23,7 +23,6 @@ export default ToastReducer = (state = initialState, action) => {
         ...state,
         loader: true,
       };
-      d;
 
     case SET_HIDE_LOADER:
       return {
