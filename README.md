@@ -31,7 +31,8 @@ npx expo start
 - execute prepare script:
 
 ```bash
-./prepare_build.sh [option]    options: test / prod
+./switch.sh [option] options: test / prod
+./prepare_build.sh [option]    options: test / production
 ```
 
 ## Build
@@ -39,7 +40,7 @@ npx expo start
 ```bash
 ./prepare_build.sh
 rm __metro_cache__
-eas build --profile prod
+eas build --profile production
 ```
 
 - If you need to start a build on a simulator, include "simulator: true" in eas.json in desired configuration.
