@@ -6,6 +6,20 @@ const getStyles = (theme) => {
       flex: 1,
     },
 
+    section: {
+      margin: 16,
+    },
+
+    sectionHeader: {
+      marginBottom: 16,
+      paddingBottom: 8,
+    },
+
+    sectionTitle: {
+      fontSize: 18,
+      color: theme?.primary,
+    },
+
     header: {
       marginHorizontal: 20,
       height: 52,

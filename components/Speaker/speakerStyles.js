@@ -39,6 +39,7 @@ const getStyles = (theme) => {
     },
 
     companyName: {
+      maxWidth: "95%",
       fontSize: 12,
       flex: 1,
       color: theme.textLight,
