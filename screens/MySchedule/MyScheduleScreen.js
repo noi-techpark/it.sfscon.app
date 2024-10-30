@@ -95,7 +95,7 @@ export default MyscheduleScreen = ({ navigation }) => {
                   <React.Fragment key={idx}>
                     <View style={styles.section}>
                       <View style={styles.sectionHeader}>
-                        <Text bold stylesProp={styles.sectionTitle}>
+                        <Text stylesProp={styles.sectionTitle}>
                           {moment(s).format("dddd DD, MMMM YYYY")}
                         </Text>
                       </View>

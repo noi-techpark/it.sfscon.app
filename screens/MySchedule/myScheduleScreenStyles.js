@@ -6,20 +6,6 @@ const getStyles = (theme) => {
       flex: 1,
     },
 
-    section: {
-      margin: 16,
-    },
-
-    sectionHeader: {
-      marginBottom: 16,
-      paddingBottom: 8,
-    },
-
-    sectionTitle: {
-      fontSize: 18,
-      color: theme?.primary,
-    },
-
     header: {
       marginHorizontal: 20,
       height: 52,
@@ -30,6 +16,22 @@ const getStyles = (theme) => {
       fontSize: 26,
       fontWeight: "800",
       color: theme.title,
+    },
+
+    section: {
+      marginTop: 8,
+      marginBottom: 24,
+      marginHorizontal: 20,
+    },
+
+    sectionHeader: {
+      marginBottom: 16,
+      paddingBottom: 8,
+    },
+
+    sectionTitle: {
+      fontSize: 18,
+      color: theme.secondaryTitle,
     },
 
     scollViewContainer: {

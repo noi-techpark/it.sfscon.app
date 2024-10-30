@@ -69,7 +69,7 @@ export default DaysComponent = () => {
 
 const getStyles = (theme) => {
   return StyleSheet.create({
-    daysContainer: { paddingVertical: 18, flexDirection: "row" },
+    daysContainer: { paddingVertical: 16, flexDirection: "row" },
 
     selectedDate: {
       fontSize: 18,
