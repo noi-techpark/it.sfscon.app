@@ -219,7 +219,7 @@ export const readFromBackupServer = () => async (dispatch, getState) => {
     dispatch(setAppOfflineMode(true));
 
     if (!db) {
-      const url = `https://sfscon.s3.eu-central-1.amazonaws.com/sfs2024.json`;
+      const url = `http://sfscon-backend-failover.s3-website-eu-west-1.amazonaws.com/sfs2024.json`;
       const response = await fetch(url).then((res) => res.json());
 
       const formatedData = formatData(response);
