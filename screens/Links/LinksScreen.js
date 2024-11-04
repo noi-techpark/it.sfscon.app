@@ -4,6 +4,7 @@ import Text from "../../components/TextComponent";
 import { getTheme } from "../../tools/getTheme";
 import Link from "../../components/Link";
 import getStyles from "./linksScreenStyles";
+import AppVersionComponent from "../../components/AppVersion/AppVersionComponent";
 
 export default LinksScreen = ({ navigation }) => {
   const theme = getTheme();
@@ -43,6 +44,10 @@ export default LinksScreen = ({ navigation }) => {
         {links.map(({ label, link, placeholder }, idx) => (
           <Link key={idx} label={label} link={link} placeholder={placeholder} />
         ))}
+      </View>
+
+      <View style={styles.footer}>
+        <AppVersionComponent />
       </View>
     </View>
   );

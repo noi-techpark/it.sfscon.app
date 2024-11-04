@@ -18,6 +18,22 @@ const getStyles = (theme) => {
       color: theme.title,
     },
 
+    section: {
+      marginTop: 8,
+      marginBottom: 24,
+      marginHorizontal: 20,
+    },
+
+    sectionHeader: {
+      marginBottom: 16,
+      paddingBottom: 8,
+    },
+
+    sectionTitle: {
+      fontSize: 18,
+      color: theme.secondaryTitle,
+    },
+
     scollViewContainer: {
       flex: 1,
       justifyContent: "center",

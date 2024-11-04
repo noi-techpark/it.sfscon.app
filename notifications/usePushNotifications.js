@@ -4,7 +4,6 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import store from "../store/store";
-import api from "../service/service";
 import { setPushNotificationToken } from "../store/actions/AppActions";
 
 export const usePushNotifications = () => {
@@ -34,15 +33,6 @@ export const usePushNotifications = () => {
         setChannels(value ?? [])
       );
     }
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
 
     return () => {
       notificationListener.current &&

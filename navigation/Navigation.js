@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "./BottomTabNavigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,11 +9,14 @@ import {
 import ToasterComponent from "../components/ToasterComponent";
 import * as SplashScreen from "expo-splash-screen";
 import { authorizeUser } from "../store/actions/AuthActions";
+import * as Notifications from "expo-notifications";
 
 SplashScreen.preventAutoHideAsync();
 
 export default Navigation = ({}) => {
   const dispatch = useDispatch();
+
+  const navigationRef = useRef();
 
   const appInfo = useSelector((state) => state.app.db);
   const pushNotificationToken = useSelector(
@@ -26,6 +29,28 @@ export default Navigation = ({}) => {
   const offlineMode = useSelector((state) => state.app.offlineMode);
 
   const { last_updated, next_try_in_ms } = appInfo || {};
+
+  const handleNotificationRedirection = () => {
+    dispatch(getSfsCon(last_updated, false));
+    navigationRef?.current?.navigate("MySchedule");
+  };
+
+  useEffect(() => {
+    const responseSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("response", response);
+        handleNotificationRedirection();
+      });
+    const receivedNotificationSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        dispatch(getSfsCon(last_updated, false));
+      });
+
+    return () => {
+      receivedNotificationSubscription.remove();
+      responseSubscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(authorizeUser());
@@ -51,7 +76,10 @@ export default Navigation = ({}) => {
   }, [offlineMode, last_updated, updateDataCounter]);
 
   return (
-    <NavigationContainer theme={{ colors: { background: "#FFF" } }}>
+    <NavigationContainer
+      ref={navigationRef}
+      theme={{ colors: { background: "#FFF" } }}
+    >
       <BottomTabNavigation />
       <ToasterComponent />
     </NavigationContainer>
