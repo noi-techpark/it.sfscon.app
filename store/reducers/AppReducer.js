@@ -29,7 +29,7 @@ const initialState = {
   error: {},
   sessionRates: [],
   loader: false,
-  selectedDay: new Date(),
+  selectedDay: null,
   selectedTracks: [],
   mySchedules: [],
   scheduleToggled: 0,
@@ -53,7 +53,7 @@ export default AppReducer = (state = initialState, action) => {
 
     case GET_CONFERENCE_SUCCESS:
       const days = action.payload.conference?.idx?.days || [];
-      const selectedDayFromStore = moment(new Date()).format("YYYY-MM-DD");
+      const selectedDayFromStore = state.selectedDay;
       const findIdx = days.indexOf(selectedDayFromStore);
       const selectedDay = findIdx > -1 ? days[findIdx] : days[0];
 
