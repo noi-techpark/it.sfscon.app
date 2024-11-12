@@ -15,6 +15,7 @@ import {
   SET_APP_OFFLINE_MODE,
   SET_PUSH_NOTIFICATION_TOKEN,
 } from "../constants/AppConstants";
+import moment from "moment";
 
 const initialState = {
   pushNotificationToken: null,
@@ -28,7 +29,7 @@ const initialState = {
   error: {},
   sessionRates: [],
   loader: false,
-  selectedDay: null,
+  selectedDay: new Date(),
   selectedTracks: [],
   mySchedules: [],
   scheduleToggled: 0,
@@ -52,7 +53,7 @@ export default AppReducer = (state = initialState, action) => {
 
     case GET_CONFERENCE_SUCCESS:
       const days = action.payload.conference?.idx?.days || [];
-      const selectedDayFromStore = state.selectedDay;
+      const selectedDayFromStore = moment(new Date()).format("YYYY-MM-DD");
       const findIdx = days.indexOf(selectedDayFromStore);
       const selectedDay = findIdx > -1 ? days[findIdx] : days[0];
 
