@@ -38,7 +38,6 @@ export default Navigation = ({}) => {
   useEffect(() => {
     const responseSubscription =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("response", response);
         handleNotificationRedirection();
       });
     const receivedNotificationSubscription =

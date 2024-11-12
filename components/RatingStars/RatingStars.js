@@ -29,7 +29,6 @@ const StarRating = ({ rating = 0, numberOfReviews = 0, maxStars = 5 }) => {
 
       {halfStar === 1 && (
         <FontAwesome
-          key={index}
           name="star-half-full"
           style={styles.rateIcon}
           size={20}

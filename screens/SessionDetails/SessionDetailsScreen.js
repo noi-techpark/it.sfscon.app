@@ -23,8 +23,6 @@ import StarRating from "../../components/RatingStars/RatingStars";
 import RoadSVG from "../../assets/road.svg";
 import Speaker from "../../components/Speaker/Speaker";
 import { decodeHTML } from "../../tools/validations";
-import { parseTextWithStyles } from "../../tools/useHtmlParser";
-import AppLoader from "../../components/AppLoader";
 import Dialog from "../../components/Dialog";
 
 export default SessionDetailsScreen = ({ route, navigation }) => {
