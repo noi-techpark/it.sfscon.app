@@ -5,24 +5,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedDay } from "../store/actions/AppActions";
 import moment from "moment";
 import Text from "./TextComponent";
-import { showLoader } from "../store/actions/UtilsActions";
 
 export default DaysComponent = () => {
   const dispatch = useDispatch();
   const theme = getTheme();
   const days = useSelector((state) => state.app.db?.conference?.idx?.days);
+  const selectedDay = useSelector((state) => state.app.selectedDay);
   const styles = useMemo(() => getStyles(theme), [theme]);
   const [selectedBtn, setSelectedBtn] = useState(-1);
-  const currentDate = moment(new Date()).format("YYYY-MM-DD");
 
-  useMemo(() => {
-    const index = days?.findIndex((d) => moment(currentDate).isSame(d));
+  useEffect(() => {
+    const index = days?.findIndex((d) => moment(selectedDay).isSame(d));
+
     if (index !== -1) {
       setSelectedBtn(index);
     } else {
       setSelectedBtn(0);
     }
-  }, []);
+  }, [selectedDay]);
 
   return days ? (
     selectedBtn !== -1 ? (
